@@ -8,11 +8,75 @@ import { MapPin, Shield, ArrowRight, Plane, Star, Users, CheckCircle, Compass, Z
 import { useLanguage } from "@/hooks/use-language"
 import { useScrollPosition } from "@/hooks/use-scroll-position"
 
+interface ItineraryItem {
+  title: string;
+  description: string;
+  image: string;
+  rating: number;
+  reviews: number;
+}
+
+interface TestimonialItem {
+  name: string;
+  rating: number;
+  review: string;
+  date: string;
+  avatar: string;
+}
+
+interface Translations {
+  [key: string]: {
+    logo: string;
+    nav: {
+      createItinerary: string;
+      destinations: string;
+      community: string;
+      pricing: string;
+    };
+    auth: {
+      login: string;
+      signup: string;
+    };
+    hero: {
+      title: string;
+      subtitle: string;
+      cta: string;
+    };
+    howItWorks: {
+      title: string;
+      subtitle: string;
+      steps: { title: string; description: string }[];
+    };
+    features: {
+      title: string;
+      subtitle: string;
+      items: { icon: string; title: string; description: string }[];
+    };
+    popularItineraries: {
+      title: string;
+      subtitle: string;
+      viewItinerary: string;
+      items: ItineraryItem[];
+    };
+    testimonials: {
+      title: string;
+      subtitle: string;
+      items: TestimonialItem[];
+    };
+    footer: {
+      description: string;
+      copyright: string;
+      services: { title: string; items: string[] };
+      support: { title: string; items: string[] };
+    };
+  };
+}
+
 export default function HomePage() {
   const { language, changeLanguage } = useLanguage()
   useScrollPosition()
 
-  const translations = {
+  const translations: Translations = {
     ko: {
       logo: "Plan Go",
       nav: {
@@ -57,16 +121,19 @@ export default function HomePage() {
         subtitle: "Plan Go가 다른 여행 계획 서비스와 차별화되는 이유",
         items: [
           {
+            icon: "Star",
             title: "맞춤형 여정",
             description:
               "AI가 당신의 선호도, 관심사, 예산에 맞춰 완벽한 맞춤형 여행 계획을 세워드립니다. 개인의 취향을 반영한 특별한 여행을 경험하세요.",
           },
           {
+            icon: "Star",
             title: "빠르고 효율적인 계획",
             description:
               "몇 분 안에 상세한 여정을 만들어 시간과 노력을 절약하세요. 복잡한 여행 계획을 간단하게 해결합니다.",
           },
           {
+            icon: "Star",
             title: "신뢰할 수 있는 정보",
             description:
               "목적지, 명소, 여행 팁에 대한 최신 정보를 얻으세요. 검증된 정보로 안전하고 즐거운 여행을 보장합니다.",
@@ -185,16 +252,19 @@ export default function HomePage() {
         subtitle: "What makes Plan Go different from other travel planning services",
         items: [
           {
+            icon: "Star",
             title: "Personalized Journeys",
             description:
               "AI creates perfect custom travel plans based on your preferences, interests, and budget. Experience unique trips tailored to your taste.",
           },
           {
+            icon: "Star",
             title: "Fast & Efficient Planning",
             description:
               "Create detailed itineraries in minutes, saving time and effort. Simplify complex travel planning.",
           },
           {
+            icon: "Star",
             title: "Reliable Information",
             description:
               "Get the latest information about destinations, attractions, and travel tips. Ensure safe and enjoyable trips with verified information.",
@@ -313,14 +383,17 @@ export default function HomePage() {
         subtitle: "Plan Go与其他旅行规划服务的差异化优势",
         items: [
           {
+            icon: "Star",
             title: "个性化行程",
             description: "AI根据您的偏好、兴趣和预算制定完美的定制旅行计划。体验符合您品味的独特旅行。",
           },
           {
+            icon: "Star",
             title: "快速高效规划",
             description: "几分钟内创建详细行程，节省时间和精力。简化复杂的旅行规划。",
           },
           {
+            icon: "Star",
             title: "可靠信息",
             description: "获取关于目的地、景点和旅行贴士的最新信息。通过验证信息确保安全愉快的旅行。",
           },
@@ -438,15 +511,18 @@ export default function HomePage() {
         subtitle: "Plan Goが他の旅行計画サービスと差別化される理由",
         items: [
           {
+            icon: "Star",
             title: "カスタム旅程",
             description:
               "AIがあなたの好み、興味、予算に合わせて完璧なカスタム旅行計画を立てます。個人の趣味を反映した特別な旅行を体験してください。",
           },
           {
+            icon: "Star",
             title: "迅速で効率的な計画",
             description: "数分で詳細な旅程を作成し、時間と労力を節約します。複雑な旅行計画を簡単に解決します。",
           },
           {
+            icon: "Star",
             title: "信頼できる情報",
             description:
               "目的地、観光地、旅行のコツについて最新の情報を取得します。検証された情報で安全で楽しい旅行を保証します。",
@@ -565,16 +641,19 @@ export default function HomePage() {
         subtitle: "Điều gì làm Plan Go khác biệt so với các dịch vụ lập kế hoạch du lịch khác",
         items: [
           {
+            icon: "Star",
             title: "Hành Trình Cá Nhân Hóa",
             description:
               "AI tạo kế hoạch du lịch tùy chỉnh hoàn hảo dựa trên sở thích, quan tâm và ngân sách của bạn. Trải nghiệm những chuyến đi độc đáo phù hợp với gu của bạn.",
           },
           {
+            icon: "Star",
             title: "Lập Kế Hoạch Nhanh & Hiệu Quả",
             description:
               "Tạo lịch trình chi tiết trong vài phút, tiết kiệm thời gian và công sức. Đơn giản hóa việc lập kế hoạch du lịch phức tạp.",
           },
           {
+            icon: "Star",
             title: "Thông Tin Đáng Tin Cậy",
             description:
               "Nhận thông tin mới nhất về điểm đến, điểm tham quan và mẹo du lịch. Đảm bảo chuyến đi an toàn và thú vị với thông tin đã được xác minh.",
@@ -585,10 +664,56 @@ export default function HomePage() {
         title: "Lịch Trình Phổ Biến",
         subtitle: "Khám phá những tuyến đường du lịch tốt nhất được lựa chọn bởi du khách trên toàn thế giới",
         viewItinerary: "Xem Lịch Trình",
+        items: [
+          {
+            title: "Tokyo trong 4 Ngày",
+            description: "Trải nghiệm sự quyến rũ của Tokyo nơi truyền thống gặp gỡ hiện đại. Từ chùa Sensoji đến Tokyo Skytree, khám phá vẻ đẹp thực sự của Nhật Bản.",
+            image: "from-pink-400 to-red-400",
+            rating: 4.9,
+            reviews: 1234,
+          },
+          {
+            title: "Khám Phá Paris trong 5 Ngày",
+            description: "Tạo ra những khoảnh khắc lãng mạn tại thành phố tình yêu. Từ tháp Eiffel, bảo tàng Louvre đến đại lộ Champs-Élysées, tạo nên những kỷ niệm khó quên ở Paris.",
+            image: "from-blue-400 to-purple-400",
+            rating: 4.8,
+            reviews: 2156,
+          },
+          {
+            title: "Hành Trình Văn Hóa Seoul",
+            description: "Trải nghiệm cả văn hóa truyền thống và hiện đại ở Seoul. Từ cung điện Gyeongbokgung đến Gangnam, khám phá những nét quyến rũ đa dạng của Seoul.",
+            image: "from-green-400 to-teal-400",
+            rating: 4.7,
+            reviews: 892,
+          },
+        ],
       },
       testimonials: {
         title: "Đánh Giá Người Dùng",
         subtitle: "Xem đánh giá thực tế từ những du khách đã sử dụng Plan Go",
+        items: [
+          {
+            name: "Jiyeon Kim",
+            rating: 5,
+            review: "Nhờ Plan Go, tôi đã có thể lên kế hoạch cho chuyến đi Nhật Bản của mình một cách rất hiệu quả. Lên kế hoạch du lịch cùng con thường mất vài tuần, nhưng với Plan Go, tôi đã tạo ra một lịch trình hoàn hảo chỉ trong vài phút. Tôi đặc biệt thích các đề xuất nhà hàng địa phương!",
+            date: "Chuyến đi tháng 4 năm 2025",
+            avatar: "from-pink-400 to-rose-400",
+          },
+          {
+            name: "Minho Park",
+            rating: 5,
+            review: "Khi lên kế hoạch cho chuyến đi gia đình, tôi rất ngạc nhiên khi Plan Go đề xuất các lịch trình phù hợp với sở thích của con tôi. Tôi đã khám phá ra những địa điểm đặc biệt không có trong các sách hướng dẫn thông thường. Nhờ Plan Go, chúng tôi đã có một chuyến đi cân bằng mà không phải lo lắng về ngân sách.",
+            date: "Chuyến đi tháng 3 năm 2025",
+            avatar: "from-blue-400 to-cyan-400",
+          },
+          {
+            name: "Sujin Lee",
+            rating: 5,
+            review: "Saya merencanakan perjalanan backpacker solo ke Eropa dengan Plan Go. Tidak hanya merekomendasikan akomodasi dan transportasi yang aman, tetapi juga nyaman untuk memodifikasi itinerary secara real time. Saya pasti akan menggunakan Plan Go untuk perjalanan berikutnya!",
+            date: "Perjalanan Mei 2025",
+            avatar: "from-green-400 to-teal-400",
+          },
+        ],
       },
       footer: {
         description: "Trải nghiệm du lịch hoàn hảo với dịch vụ lập kế hoạch du lịch AI.",
@@ -647,16 +772,19 @@ export default function HomePage() {
         subtitle: "Apa yang membuat Plan Go berbeda dari layanan perencanaan perjalanan lainnya",
         items: [
           {
+            icon: "Star",
             title: "Perjalanan Personal",
             description:
               "AI membuat rencana perjalanan kustom sempurna berdasarkan preferensi, minat, dan budget Anda. Rasakan perjalanan unik yang disesuaikan dengan selera Anda.",
           },
           {
+            icon: "Star",
             title: "Perencanaan Cepat & Efisien",
             description:
               "Buat itinerary detail dalam hitungan menit, menghemat waktu dan tenaga. Sederhanakan perencanaan perjalanan yang kompleks.",
           },
           {
+            icon: "Star",
             title: "Informasi Terpercaya",
             description:
               "Dapatkan informasi terbaru tentang destinasi, atraksi, dan tips perjalanan. Pastikan perjalanan aman dan menyenangkan dengan informasi terverifikasi.",
@@ -667,10 +795,56 @@ export default function HomePage() {
         title: "Itinerary Populer",
         subtitle: "Temukan rute perjalanan terbaik yang dipilih oleh traveler di seluruh dunia",
         viewItinerary: "Lihat Itinerary",
+        items: [
+          {
+            title: "Tokyo dalam 4 Hari",
+            description: "Rasakan pesona Tokyo di mana tradisi bertemu modernitas. Dari Kuil Sensoji hingga Tokyo Skytree, temukan keindahan sejati Jepang.",
+            image: "from-pink-400 to-red-400",
+            rating: 4.9,
+            reviews: 1234,
+          },
+          {
+            title: "Temukan Paris dalam 5 Hari",
+            description: "Ciptakan momen romantis di kota cinta. Dari Menara Eiffel, Museum Louvre hingga Champs-Élysées, buat kenangan tak terlupakan di Paris.",
+            image: "from-blue-400 to-purple-400",
+            rating: 4.8,
+            reviews: 2156,
+          },
+          {
+            title: "Perjalanan Budaya Seoul",
+            description: "Rasakan budaya tradisional dan modern di Seoul. Dari Istana Gyeongbokgung hingga Gangnam, temukan pesona beragam Seoul.",
+            image: "from-green-400 to-teal-400",
+            rating: 4.7,
+            reviews: 892,
+          },
+        ],
       },
       testimonials: {
         title: "Ulasan Pengguna",
         subtitle: "Lihat ulasan nyata dari traveler yang telah menggunakan Plan Go",
+        items: [
+          {
+            name: "Jiyeon Kim",
+            rating: 5,
+            review: "Berkat Plan Go, saya dapat merencanakan perjalanan ke Jepang dengan sangat efisien. Merencanakan perjalanan dengan anak biasanya memakan waktu berminggu-minggu, tetapi dengan Plan Go, saya membuat itinerary sempurna hanya dalam beberapa menit. Saya sangat menyukai rekomendasi restoran lokalnya!",
+            date: "Perjalanan April 2025",
+            avatar: "from-pink-400 to-rose-400",
+          },
+          {
+            name: "Minho Park",
+            rating: 5,
+            review: "Saat merencanakan perjalanan keluarga, saya terkejut Plan Go merekomendasikan itinerary yang mempertimbangkan preferensi anak-anak saya. Saya dapat menemukan tempat-tempat istimewa yang tidak ditemukan di buku panduan biasa. Berkat Plan Go, kami menikmati perjalanan yang seimbang tanpa khawatir tentang anggaran.",
+            date: "Perjalanan Maret 2025",
+            avatar: "from-blue-400 to-cyan-400",
+          },
+          {
+            name: "Sujin Lee",
+            rating: 5,
+            review: "Saya merencanakan perjalanan backpacker solo ke Eropa dengan Plan Go. Tidak hanya merekomendasikan akomodasi dan transportasi yang aman, tetapi juga nyaman untuk memodifikasi itinerary secara real time. Saya pasti akan menggunakan Plan Go untuk perjalanan berikutnya!",
+            date: "Perjalanan Mei 2025",
+            avatar: "from-green-400 to-teal-400",
+          },
+        ],
       },
       footer: {
         description: "Rasakan perjalanan sempurna dengan layanan perencanaan perjalanan bertenaga AI.",
@@ -687,7 +861,10 @@ export default function HomePage() {
     },
   }
 
-  const t = translations[language]
+  // 언어 fallback 처리
+  const t = translations[language] && translations[language].popularItineraries?.items
+    ? translations[language]
+    : translations['ko'];
 
   return (
     <div className="min-h-screen">
@@ -938,7 +1115,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {t.popularItineraries.items.map((itinerary, index) => (
+            {t.popularItineraries.items.map((itinerary: ItineraryItem, index: number) => (
               <Card
                 key={index}
                 className="overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group hover:scale-105 border-0"
@@ -983,7 +1160,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {t.testimonials.items.map((testimonial, index) => (
+            {t.testimonials.items.map((testimonial: TestimonialItem, index: number) => (
               <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow bg-gray-50">
                 <CardContent className="p-8">
                   <div className="flex items-center mb-6">
