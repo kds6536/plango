@@ -77,10 +77,56 @@ export default function HomePage() {
         title: "인기 여행 일정",
         subtitle: "전 세계 여행자들이 선택한 베스트 여행 코스를 만나보세요",
         viewItinerary: "여정 보기",
+        items: [
+          {
+            title: "4일간의 도쿄 탐험",
+            description: "전통과 현대가 조화를 이루는 도쿄의 매력을 만끽하세요. 센소지 절부터 도쿄 스카이트리까지, 일본의 진정한 아름다움을 경험할 수 있습니다.",
+            image: "from-pink-400 to-red-400",
+            rating: 4.9,
+            reviews: 1234,
+          },
+          {
+            title: "5일간의 파리 발견",
+            description: "사랑의 도시 파리에서 로맨틱한 순간들을 만들어보세요. 에펠탑, 루브르 박물관, 샹젤리제 거리에서 특별한 추억을 쌓으세요.",
+            image: "from-blue-400 to-purple-400",
+            rating: 4.8,
+            reviews: 2156,
+          },
+          {
+            title: "서울 문화 여행",
+            description: "한국의 전통과 현대 문화를 동시에 체험하세요. 경복궁부터 강남까지, 서울의 다양한 매력을 발견할 수 있습니다.",
+            image: "from-green-400 to-teal-400",
+            rating: 4.7,
+            reviews: 892,
+          },
+        ],
       },
       testimonials: {
         title: "사용자 후기",
         subtitle: "Plan Go를 사용한 여행자들의 생생한 후기를 확인해보세요",
+        items: [
+          {
+            name: "김지연",
+            rating: 5,
+            review: "Plan Go 덕분에 일본 여행을 정말 효율적으로 계획할 수 있었어요. 아이와 함께 여행 계획을 세우는 일이 몇 주가 걸렸는데, Plan Go로는 단 몇 분만에 완벽한 일정을 만들어줬어요. 특히 숨겨진 현지 맛집 추천이 정말 좋았습니다!",
+            date: "2025년 4월 여행",
+            avatar: "from-pink-400 to-rose-400",
+          },
+          {
+            name: "박민호",
+            rating: 5,
+            review: "가족 여행을 계획하면서 Plan Go를 사용하는 데 아이들 취향까지 고려한 일정을 추천해줘서 놀랐어요. 특히 기존 가이드북에 없는 특별한 장소들을 발견할 수 있어서 좋았습니다. 덕분에 예산 조절 없이 알찬 여행을 즐길 수 있었습니다.",
+            date: "2025년 3월 여행",
+            avatar: "from-blue-400 to-cyan-400",
+          },
+          {
+            name: "이수진",
+            rating: 5,
+            review: "혼자 떠나는 유럽 배낭여행을 Plan Go로 계획했어요. 안전한 숙소와 교통편 추천은 물론이고, 실시간으로 일정을 수정할 수 있어서 편했습니다. 다음 여행도 반드시 Plan Go와 함께할 거예요!",
+            date: "2025년 5월 여행",
+            avatar: "from-green-400 to-teal-400",
+          },
+        ],
       },
       footer: {
         description: "AI 기반 여행 계획 서비스로 완벽한 여행을 경험하세요.",
@@ -159,10 +205,56 @@ export default function HomePage() {
         title: "Popular Itineraries",
         subtitle: "Discover the best travel routes chosen by travelers worldwide",
         viewItinerary: "View Itinerary",
+        items: [
+          {
+            title: "Tokyo in 4 Days",
+            description: "Experience the charm of Tokyo where tradition meets modernity. From Sensoji Temple to Tokyo Skytree, discover the true beauty of Japan.",
+            image: "from-pink-400 to-red-400",
+            rating: 4.9,
+            reviews: 1234,
+          },
+          {
+            title: "Discover Paris in 5 Days",
+            description: "Create romantic moments in the city of love. From the Eiffel Tower and Louvre Museum to the Champs-Élysées, make unforgettable memories in Paris.",
+            image: "from-blue-400 to-purple-400",
+            rating: 4.8,
+            reviews: 2156,
+          },
+          {
+            title: "Seoul Cultural Journey",
+            description: "Experience both traditional and modern culture in Seoul. From Gyeongbokgung Palace to Gangnam, discover the diverse charms of Seoul.",
+            image: "from-green-400 to-teal-400",
+            rating: 4.7,
+            reviews: 892,
+          },
+        ],
       },
       testimonials: {
         title: "User Reviews",
         subtitle: "Check out real reviews from travelers who used Plan Go",
+        items: [
+          {
+            name: "Jiyeon Kim",
+            rating: 5,
+            review: "Thanks to Plan Go, I was able to plan my trip to Japan very efficiently. Planning a trip with my child used to take weeks, but with Plan Go, I created a perfect itinerary in just a few minutes. I especially loved the hidden local restaurant recommendations!",
+            date: "April 2025 Trip",
+            avatar: "from-pink-400 to-rose-400",
+          },
+          {
+            name: "Minho Park",
+            rating: 5,
+            review: "While planning a family trip, I was surprised that Plan Go recommended itineraries considering my kids' preferences. I could discover special places not found in regular guidebooks. Thanks to Plan Go, we enjoyed a well-balanced trip without worrying about the budget.",
+            date: "March 2025 Trip",
+            avatar: "from-blue-400 to-cyan-400",
+          },
+          {
+            name: "Sujin Lee",
+            rating: 5,
+            review: "I planned my solo backpacking trip to Europe with Plan Go. Not only did it recommend safe accommodations and transportation, but it was also convenient to modify the itinerary in real time. I will definitely use Plan Go for my next trip!",
+            date: "May 2025 Trip",
+            avatar: "from-green-400 to-teal-400",
+          },
+        ],
       },
       footer: {
         description: "Experience perfect travel with AI-powered travel planning service.",
@@ -236,12 +328,58 @@ export default function HomePage() {
       },
       popularItineraries: {
         title: "热门行程",
-        subtitle: "发现全球旅行者选择的最佳旅行路线",
+        subtitle: "请查看全球旅行者选择的最佳旅行路线",
         viewItinerary: "查看行程",
+        items: [
+          {
+            title: "4天东京探索",
+            description: "尽情享受东京传统与现代交融的魅力。从浅草寺到东京晴空塔，体验日本真正的美丽。",
+            image: "from-pink-400 to-red-400",
+            rating: 4.9,
+            reviews: 1234,
+          },
+          {
+            title: "5天巴黎发现",
+            description: "在浪漫之都巴黎创造美好回忆。埃菲尔铁塔、卢浮宫、香榭丽舍大街，留下特别的回忆。",
+            image: "from-blue-400 to-purple-400",
+            rating: 4.8,
+            reviews: 2156,
+          },
+          {
+            title: "首尔文化之旅",
+            description: "同时体验韩国的传统与现代文化。从景福宫到江南，发现首尔的多样魅力。",
+            image: "from-green-400 to-teal-400",
+            rating: 4.7,
+            reviews: 892,
+          },
+        ],
       },
       testimonials: {
         title: "用户评价",
-        subtitle: "查看使用Plan Go的旅行者的真实评价",
+        subtitle: "请查看使用Plan Go的旅行者的真实评价",
+        items: [
+          {
+            name: "金智妍",
+            rating: 5,
+            review: "多亏了Plan Go，我能非常高效地规划日本之旅。和孩子一起制定旅行计划本来要花好几周，但用Plan Go只需几分钟就能生成完美行程。尤其喜欢推荐的隐藏美食店！",
+            date: "2025年4月旅行",
+            avatar: "from-pink-400 to-rose-400",
+          },
+          {
+            name: "朴敏浩",
+            rating: 5,
+            review: "计划家庭旅行时，Plan Go连孩子的喜好都考虑进去了，推荐的行程让我很惊喜。尤其发现了很多普通攻略没有的特别地点。多亏了Plan Go，我们不用担心预算也能享受充实的旅行。",
+            date: "2025年3月旅行",
+            avatar: "from-blue-400 to-cyan-400",
+          },
+          {
+            name: "李秀珍",
+            rating: 5,
+            review: "我用Plan Go规划了一个人的欧洲背包旅行。不仅推荐了安全的住宿和交通，还能实时修改行程，非常方便。下次旅行一定还会用Plan Go！",
+            date: "2025年5月旅行",
+            avatar: "from-green-400 to-teal-400",
+          },
+        ],
       },
       footer: {
         description: "通过AI驱动的旅行规划服务体验完美旅行。",
@@ -319,10 +457,56 @@ export default function HomePage() {
         title: "人気の旅程",
         subtitle: "世界中の旅行者が選んだベスト旅行コースをご覧ください",
         viewItinerary: "旅程を見る",
+        items: [
+          {
+            title: "4日間の東京探訪",
+            description: "伝統と現代が調和する東京の魅力を満喫しましょう。浅草寺から東京スカイツリーまで、日本の本当の美しさを体験できます。",
+            image: "from-pink-400 to-red-400",
+            rating: 4.9,
+            reviews: 1234,
+          },
+          {
+            title: "5日間のパリ発見",
+            description: "愛の都パリでロマンチックな瞬間を作りましょう。エッフェル塔、ルーブル美術館、シャンゼリゼ通りで特別な思い出を作ってください。",
+            image: "from-blue-400 to-purple-400",
+            rating: 4.8,
+            reviews: 2156,
+          },
+          {
+            title: "ソウル文化旅行",
+            description: "韓国の伝統と現代文化を同時に体験しましょう。景福宮から江南まで、ソウルの多様な魅力を発見できます。",
+            image: "from-green-400 to-teal-400",
+            rating: 4.7,
+            reviews: 892,
+          },
+        ],
       },
       testimonials: {
         title: "ユーザーレビュー",
-        subtitle: "Plan Goを使用した旅行者の生の声をご確認ください",
+        subtitle: "Plan Goを利用した旅行者の生の声をご確認ください",
+        items: [
+          {
+            name: "キム・ジヨン",
+            rating: 5,
+            review: "Plan Goのおかげで日本旅行を本当に効率的に計画できました。子供と一緒に旅行計画を立てるのは数週間かかりましたが、Plan Goなら数分で完璧な日程ができました。特に隠れた現地グルメのおすすめがとても良かったです！",
+            date: "2025年4月の旅行",
+            avatar: "from-pink-400 to-rose-400",
+          },
+          {
+            name: "パク・ミンホ",
+            rating: 5,
+            review: "家族旅行を計画する際、Plan Goは子供の好みまで考慮した日程を提案してくれて驚きました。特にガイドブックにない特別な場所を発見できて良かったです。おかげで予算調整なしで充実した旅行を楽しめました。",
+            date: "2025年3月の旅行",
+            avatar: "from-blue-400 to-cyan-400",
+          },
+          {
+            name: "イ・スジン",
+            rating: 5,
+            review: "一人で行くヨーロッパのバックパッカー旅行をPlan Goで計画しました。安全な宿泊先や交通手段の提案はもちろん、リアルタイムで日程を修正できて便利でした。次の旅行も必ずPlan Goと一緒に行きます！",
+            date: "2025年5月の旅行",
+            avatar: "from-green-400 to-teal-400",
+          },
+        ],
       },
       footer: {
         description: "AIベースの旅行計画サービスで完璧な旅行を体験してください。",
@@ -503,7 +687,7 @@ export default function HomePage() {
     },
   }
 
-  const t = translations[language as keyof typeof translations]
+  const t = translations[language]
 
   return (
     <div className="min-h-screen">
@@ -754,32 +938,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[
-              {
-                title: "4일간의 도쿄 탐험",
-                description:
-                  "전통과 현대가 조화를 이루는 도쿄의 매력을 만끽하세요. 센소지 절부터 도쿄 스카이트리까지, 일본의 진정한 아름다움을 경험할 수 있습니다.",
-                image: "from-pink-400 to-red-400",
-                rating: 4.9,
-                reviews: 1234,
-              },
-              {
-                title: "5일간의 파리 발견",
-                description:
-                  "사랑의 도시 파리에서 로맨틱한 순간들을 만들어보세요. 에펠탑, 루브르 박물관, 샹젤리제 거리에서 특별한 추억을 쌓으세요.",
-                image: "from-blue-400 to-purple-400",
-                rating: 4.8,
-                reviews: 2156,
-              },
-              {
-                title: "서울 문화 여행",
-                description:
-                  "한국의 전통과 현대 문화를 동시에 체험하세요. 경복궁부터 강남까지, 서울의 다양한 매력을 발견할 수 있습니다.",
-                image: "from-green-400 to-teal-400",
-                rating: 4.7,
-                reviews: 892,
-              },
-            ].map((itinerary, index) => (
+            {t.popularItineraries.items.map((itinerary, index) => (
               <Card
                 key={index}
                 className="overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group hover:scale-105 border-0"
@@ -824,32 +983,7 @@ export default function HomePage() {
           </div>
 
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {[
-              {
-                name: "김지연",
-                rating: 5,
-                review:
-                  "Plan Go 덕분에 일본 여행을 정말 효율적으로 계획할 수 있었어요. 아이와 함께 여행 계획을 세우는 일이 몇 주가 걸렸는데, Plan Go로는 단 몇 분만에 완벽한 일정을 만들어줬어요. 특히 숨겨진 현지 맛집 추천이 정말 좋았습니다!",
-                date: "2025년 4월 여행",
-                avatar: "from-pink-400 to-rose-400",
-              },
-              {
-                name: "박민호",
-                rating: 5,
-                review:
-                  "가족 여행을 계획하면서 Plan Go를 사용하는 데 아이들 취향까지 고려한 일정을 추천해줘서 놀랐어요. 특히 기존 가이드북에 없는 특별한 장소들을 발견할 수 있어서 좋았습니다. 덕분에 예산 조절 없이 알찬 여행을 즐길 수 있었습니다.",
-                date: "2025년 3월 여행",
-                avatar: "from-blue-400 to-cyan-400",
-              },
-              {
-                name: "이수진",
-                rating: 5,
-                review:
-                  "혼자 떠나는 유럽 배낭여행을 Plan Go로 계획했어요. 안전한 숙소와 교통편 추천은 물론이고, 실시간으로 일정을 수정할 수 있어서 편했습니다. 다음 여행도 반드시 Plan Go와 함께할 거예요!",
-                date: "2025년 5월 여행",
-                avatar: "from-green-400 to-teal-400",
-              },
-            ].map((testimonial, index) => (
+            {t.testimonials.items.map((testimonial, index) => (
               <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow bg-gray-50">
                 <CardContent className="p-8">
                   <div className="flex items-center mb-6">
