@@ -8,59 +8,11 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Search, Star, Users, Clock } from "lucide-react"
 import Link from "next/link"
 import { useLanguage } from "hooks/use-language"
+import { useTranslations } from "@/components/language-wrapper"
 
 export default function DestinationsPage() {
   const { language } = useLanguage()
-  const t = {
-    ko: {
-      home: "홈",
-      destinations: "인기 여행지",
-      createItinerary: "여행 계획",
-      profile: "내 계정",
-      title: "인기 여행지",
-      subtitle: "전 세계 여행자들이 사랑하는 최고의 여행 목적지를 발견하세요",
-      searchPlaceholder: "도시나 국가를 검색하세요...",
-      region: "지역 선택",
-      style: "여행 스타일",
-      asia: "아시아",
-      europe: "유럽",
-      america: "아메리카",
-      oceania: "오세아니아",
-      culture: "문화",
-      nature: "자연",
-      food: "음식",
-      romantic: "로맨틱",
-      adventure: "모험",
-      duration: "추천 기간",
-      travelers: "추천 인원",
-      createPlan: "일정 만들기",
-      viewDetail: "자세히 보기"
-    },
-    en: {
-      home: "Home",
-      destinations: "Popular Destinations",
-      createItinerary: "Create Itinerary",
-      profile: "Profile",
-      title: "Popular Destinations",
-      subtitle: "Discover the best destinations loved by travelers worldwide",
-      searchPlaceholder: "Search for a city or country...",
-      region: "Select Region",
-      style: "Travel Style",
-      asia: "Asia",
-      europe: "Europe",
-      america: "America",
-      oceania: "Oceania",
-      culture: "Culture",
-      nature: "Nature",
-      food: "Food",
-      romantic: "Romantic",
-      adventure: "Adventure",
-      duration: "Recommended Duration",
-      travelers: "Recommended Travelers",
-      createPlan: "Create Plan",
-      viewDetail: "View Details"
-    }
-  }[language]
+  const t = useTranslations()
 
   const destinations = [
     {
@@ -146,18 +98,10 @@ export default function DestinationsPage() {
             Plan Go
           </Link>
           <nav className="hidden md:flex space-x-6">
-            <Link href="/" className="text-gray-600 hover:text-gray-900">
-              {t.home}
-            </Link>
-            <Link href="/destinations" className="text-green-600 font-medium">
-              {t.destinations}
-            </Link>
-            <Link href="/create-itinerary" className="text-gray-600 hover:text-gray-900">
-              {t.createItinerary}
-            </Link>
-            <Link href="/profile" className="text-gray-600 hover:text-gray-900">
-              {t.profile}
-            </Link>
+            <Link href="/" className="text-gray-600 hover:text-gray-900">{t.nav.home}</Link>
+            <Link href="/destinations" className="text-green-600 font-medium">{t.nav.destinations}</Link>
+            <Link href="/create-itinerary" className="text-gray-600 hover:text-gray-900">{t.nav.createItinerary}</Link>
+            <Link href="/profile" className="text-gray-600 hover:text-gray-900">{t.nav.profile}</Link>
           </nav>
         </div>
       </header>
@@ -165,37 +109,37 @@ export default function DestinationsPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4">{t.title}</h1>
-          <p className="text-gray-600 text-lg mb-8">{t.subtitle}</p>
+          <h1 className="text-4xl font-bold mb-4">{t.destinations.title}</h1>
+          <p className="text-gray-600 text-lg mb-8">{t.destinations.subtitle}</p>
 
           {/* Search and Filters */}
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row gap-4 mb-6">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-5 h-5" />
-                <Input placeholder={t.searchPlaceholder} className="pl-10" />
+                <Input placeholder={t.destinations.searchPlaceholder} className="pl-10" />
               </div>
               <Select>
                 <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder={t.region} />
+                  <SelectValue placeholder={t.destinations.region} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="asia">{t.asia}</SelectItem>
-                  <SelectItem value="europe">{t.europe}</SelectItem>
-                  <SelectItem value="america">{t.america}</SelectItem>
-                  <SelectItem value="oceania">{t.oceania}</SelectItem>
+                  <SelectItem value="asia">{t.destinations.asia}</SelectItem>
+                  <SelectItem value="europe">{t.destinations.europe}</SelectItem>
+                  <SelectItem value="america">{t.destinations.america}</SelectItem>
+                  <SelectItem value="oceania">{t.destinations.oceania}</SelectItem>
                 </SelectContent>
               </Select>
               <Select>
                 <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder={t.style} />
+                  <SelectValue placeholder={t.destinations.style} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="culture">{t.culture}</SelectItem>
-                  <SelectItem value="nature">{t.nature}</SelectItem>
-                  <SelectItem value="food">{t.food}</SelectItem>
-                  <SelectItem value="romantic">{t.romantic}</SelectItem>
-                  <SelectItem value="adventure">{t.adventure}</SelectItem>
+                  <SelectItem value="culture">{t.destinations.culture}</SelectItem>
+                  <SelectItem value="nature">{t.destinations.nature}</SelectItem>
+                  <SelectItem value="food">{t.destinations.food}</SelectItem>
+                  <SelectItem value="romantic">{t.destinations.romantic}</SelectItem>
+                  <SelectItem value="adventure">{t.destinations.adventure}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -226,11 +170,11 @@ export default function DestinationsPage() {
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center text-sm text-gray-600">
                     <Clock className="w-4 h-4 mr-2" />
-                    <span>{t.duration}: {destination.duration}</span>
+                    <span>{t.destinations.duration}: {destination.duration}</span>
                   </div>
                   <div className="flex items-center text-sm text-gray-600">
                     <Users className="w-4 h-4 mr-2" />
-                    <span>{t.travelers}: {destination.travelers}</span>
+                    <span>{t.destinations.travelers}: {destination.travelers}</span>
                   </div>
                 </div>
 
@@ -243,10 +187,8 @@ export default function DestinationsPage() {
                 </div>
 
                 <div className="flex space-x-2">
-                  <Button className="flex-1 bg-green-600 hover:bg-green-700">{t.createPlan}</Button>
-                  <Button variant="outline" className="flex-1">
-                    {t.viewDetail}
-                  </Button>
+                  <Button className="flex-1 bg-green-600 hover:bg-green-700">{t.destinations.createPlan}</Button>
+                  <Button variant="outline" className="flex-1">{t.destinations.viewDetail}</Button>
                 </div>
               </CardContent>
             </Card>
@@ -255,9 +197,7 @@ export default function DestinationsPage() {
 
         {/* Load More */}
         <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
-            더 많은 여행지 보기
-          </Button>
+          <Button variant="outline" size="lg">{t.destinations.loadMore}</Button>
         </div>
       </div>
     </div>

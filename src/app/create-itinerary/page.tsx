@@ -12,8 +12,10 @@ import { CalendarIcon, Minus, Plus, X, Plane, DollarSign } from "lucide-react"
 import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import Link from "next/link"
+import { useTranslations } from "@/components/language-wrapper"
 
 export default function CreateItineraryPage() {
+  const t = useTranslations()
   const [dateRange, setDateRange] = useState<{ from?: Date; to?: Date }>({})
   const [travelers, setTravelers] = useState(2)
   const [destinations, setDestinations] = useState<string[]>([])

@@ -12,6 +12,8 @@ const translations = {
       destinations: "인기 여행지 둘러보기",
       community: "여행 커뮤니티",
       pricing: "요금제 안내",
+      home: "홈",
+      profile: "내 계정",
     },
     auth: {
       login: "로그인",
@@ -47,6 +49,89 @@ const translations = {
     welcome: {
       title: "Plan Go에 오신 것을 환영합니다!",
       subtitle: "AI와 함께 완벽한 여행을 계획해보세요",
+    },
+    destinations: {
+      title: "인기 여행지",
+      subtitle: "전 세계 여행자들이 사랑하는 최고의 여행 목적지를 발견하세요",
+      searchPlaceholder: "도시나 국가를 검색하세요...",
+      region: "지역 선택",
+      style: "여행 스타일",
+      asia: "아시아",
+      europe: "유럽",
+      america: "아메리카",
+      oceania: "오세아니아",
+      culture: "문화",
+      nature: "자연",
+      food: "음식",
+      romantic: "로맨틱",
+      adventure: "모험",
+      duration: "추천 기간",
+      travelers: "추천 인원",
+      createPlan: "일정 만들기",
+      viewDetail: "자세히 보기",
+      cards: [
+        {
+          name: "도쿄",
+          country: "일본",
+          description: "전통과 현대가 조화를 이루는 매력적인 도시"
+        },
+        {
+          name: "파리",
+          country: "프랑스",
+          description: "사랑과 예술의 도시, 로맨틱한 여행지"
+        },
+        {
+          name: "제주도",
+          country: "한국",
+          description: "아름다운 자연과 힐링이 있는 섬"
+        },
+        {
+          name: "뉴욕",
+          country: "미국",
+          description: "꿈의 도시, 무한한 가능성의 땅"
+        },
+        {
+          name: "방콕",
+          country: "태국",
+          description: "맛있는 음식과 저렴한 물가의 동남아 여행지"
+        },
+        {
+          name: "로마",
+          country: "이탈리아",
+          description: "영원한 도시, 역사와 예술의 보고"
+        }
+      ],
+      loadMore: "더 많은 여행지 보기",
+    },
+    createItinerary: {
+      title: "여행 일정 만들기",
+      subtitle: "몇 가지 정보만 입력하시면 AI가 완벽한 맞춤형 여행 일정을 생성해드립니다 🎯",
+      infoInput: "여행 정보 입력",
+      destinationLabel: "국가 선택 또는 도시 입력",
+      destinationPlaceholder: "예: 일본, 도쿄, 파리, 뉴욕...",
+      dateLabel: "여행 날짜 선택",
+      datePlaceholder: "날짜를 선택하세요",
+      travelersLabel: "인원수",
+      budgetLabel: "가능 예산",
+      budgetPlaceholder: "예: 100만원, $2000, ¥200000...",
+      budgetDesc: "숙박, 식사, 교통, 관광 등 전체 예산을 입력해주세요",
+      ageLabel: "연령대 (복수 선택 가능)",
+      ageOptions: ["10대", "20대", "30대", "40대", "50대 이상"],
+      genderLabel: "성별",
+      genderPlaceholder: "성별을 선택하세요",
+      createButton: "맞춤 여행 일정 생성하기"
+    },
+    plans: {
+      title: "여행 계획 만들기",
+      desc: "AI가 추천하는 맞춤형 여행 계획을 만들어보세요.",
+      destinationLabel: "여행지",
+      destinationPlaceholder: "여행하고 싶은 도시나 국가를 입력하세요",
+      periodLabel: "여행 기간",
+      createButton: "계획 생성하기",
+      aiRecommendCustomPlan: "AI가 추천하는 맞춤형 여행 계획을 만들어보세요.",
+      destination: "여행지",
+      enterCityOrCountry: "여행하고 싶은 도시나 국가를 입력하세요",
+      tripDuration: "여행 기간",
     },
   },
   en: {
@@ -269,6 +354,105 @@ const translations = {
       subtitle: "Rencanakan perjalanan sempurna dengan AI",
     },
   },
+}
+
+export interface Translations {
+  logo: string;
+  nav: {
+    createItinerary: string;
+    destinations: string;
+    community: string;
+    pricing: string;
+    home: string;
+    profile: string;
+  };
+  auth: {
+    login: string;
+    signup: string;
+  };
+  form: {
+    email: string;
+    emailPlaceholder: string;
+    password: string;
+    passwordPlaceholder: string;
+    forgotPassword: string;
+    or: string;
+    noAccount: string;
+    haveAccount: string;
+    firstName: string;
+    lastName: string;
+    confirmPassword: string;
+    confirmPasswordPlaceholder: string;
+    phone: string;
+    phonePlaceholder: string;
+    terms: string;
+    privacy: string;
+    marketing: string;
+  };
+  social: {
+    google: string;
+    kakao: string;
+    apple: string;
+    googleSignup: string;
+    kakaoSignup: string;
+    appleSignup: string;
+  };
+  welcome: {
+    title: string;
+    subtitle: string;
+  };
+  destinations: {
+    title: string;
+    subtitle: string;
+    searchPlaceholder: string;
+    region: string;
+    style: string;
+    asia: string;
+    europe: string;
+    america: string;
+    oceania: string;
+    culture: string;
+    nature: string;
+    food: string;
+    romantic: string;
+    adventure: string;
+    duration: string;
+    travelers: string;
+    createPlan: string;
+    viewDetail: string;
+    cards: { name: string; country: string; description: string }[];
+    loadMore: string;
+  };
+  createItinerary: {
+    title: string;
+    subtitle: string;
+    infoInput: string;
+    destinationLabel: string;
+    destinationPlaceholder: string;
+    dateLabel: string;
+    datePlaceholder: string;
+    travelersLabel: string;
+    budgetLabel: string;
+    budgetPlaceholder: string;
+    budgetDesc: string;
+    ageLabel: string;
+    ageOptions: string[];
+    genderLabel: string;
+    genderPlaceholder: string;
+    createButton: string;
+  };
+  plans: {
+    title: string;
+    desc: string;
+    destinationLabel: string;
+    destinationPlaceholder: string;
+    periodLabel: string;
+    createButton: string;
+    aiRecommendCustomPlan: string;
+    destination: string;
+    enterCityOrCountry: string;
+    tripDuration: string;
+  };
 }
 
 interface LanguageWrapperProps {

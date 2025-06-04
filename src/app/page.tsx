@@ -7,6 +7,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { MapPin, Shield, ArrowRight, Plane, Star, Users, CheckCircle, Compass, Zap, Clock } from "lucide-react"
 import { useScrollPosition } from "hooks/use-scroll-position"
 import dynamic from "next/dynamic"
+import { useTranslations } from "@/components/language-wrapper"
 
 interface ItineraryItem {
   title: string;
@@ -74,6 +75,7 @@ interface Translations {
 
 export default function HomePage() {
   useScrollPosition()
+  const t = useTranslations()
 
   const translations: Translations = {
     ko: {
