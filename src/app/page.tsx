@@ -8,6 +8,7 @@ import { MapPin, Shield, ArrowRight, Plane, Star, Users, CheckCircle, Compass, Z
 import { useScrollPosition } from "hooks/use-scroll-position"
 import dynamic from "next/dynamic"
 import { useTranslations } from "@/components/language-wrapper"
+import { useLanguage } from "hooks/use-language"
 
 interface ItineraryItem {
   title: string;
@@ -76,6 +77,7 @@ interface Translations {
 export default function HomePage() {
   useScrollPosition()
   const t = useTranslations()
+  const { language, changeLanguage } = useLanguage()
 
   const translations: Translations = {
     ko: {
