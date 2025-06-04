@@ -77,8 +77,6 @@ interface Translations {
 export default function HomePage() {
   useScrollPosition()
   const t = useTranslations()
-  const { language, changeLanguage } = useLanguage()
-
   const translations: Translations = {
     ko: {
       logo: "Plan Go",
@@ -870,6 +868,7 @@ export default function HomePage() {
     <LanguageClient>
       {(language) => {
         const t = translations[language]
+        const { changeLanguage } = useLanguage()
         return (
           <div className="min-h-screen">
             {/* Premium Header */}
