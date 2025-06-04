@@ -1,8 +1,8 @@
 "use client"
 
 import type React from "react"
-import { useLanguage } from "@/hooks/use-language"
-import { useScrollPosition } from "@/hooks/use-scroll-position"
+import { useLanguage } from "hooks/use-language"
+import { useScrollPosition } from "hooks/use-scroll-position"
 
 const translations = {
   ko: {

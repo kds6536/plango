@@ -5,7 +5,7 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Star, Users, Clock } from "lucide-react"
 import Link from "next/link"
-import { useLanguage } from "@/hooks/use-language"
+import { useLanguage } from "hooks/use-language"
 
 export default function DestinationsPage() {
   const { language } = useLanguage()

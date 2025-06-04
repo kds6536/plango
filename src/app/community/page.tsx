@@ -9,7 +9,7 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Heart, MessageCircle, Share2, Search, TrendingUp, Users, Calendar } from "lucide-react"
 import Link from "next/link"
-import { useLanguage } from "@/hooks/use-language"
+import { useLanguage } from "hooks/use-language"
 
 export default function CommunityPage() {
   const { language } = useLanguage()
