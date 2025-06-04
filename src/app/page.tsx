@@ -5,8 +5,8 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MapPin, Shield, ArrowRight, Plane, Star, Users, CheckCircle, Compass, Zap, Clock } from "lucide-react"
-import { useLanguage } from "hooks/use-language"
 import { useScrollPosition } from "hooks/use-scroll-position"
+import dynamic from "next/dynamic"
 
 interface ItineraryItem {
   title: string;
@@ -73,7 +73,6 @@ interface Translations {
 }
 
 export default function HomePage() {
-  const { language, changeLanguage } = useLanguage()
   useScrollPosition()
 
   const translations: Translations = {
@@ -861,406 +860,410 @@ export default function HomePage() {
     },
   }
 
-  // 언어 fallback 처리
-  const t = translations[language] && translations[language].popularItineraries?.items
-    ? translations[language]
-    : translations['ko'];
+  const LanguageClient = dynamic(() => import("@/components/LanguageClient"), { ssr: false })
 
   return (
-    <div className="min-h-screen">
-      {/* Premium Header */}
-      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
-        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
-          <div className="flex items-center space-x-12">
-            <Link href="/" className="flex items-center space-x-3">
-              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
-                <Plane className="w-6 h-6 text-white transform rotate-45" />
-              </div>
-              <span className="text-3xl font-light bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
-                {t.logo}
-              </span>
-            </Link>
-            <nav className="hidden md:flex space-x-8">
-              <Link
-                href="/create-itinerary"
-                className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
-              >
-                {t.nav.createItinerary}
-              </Link>
-              <Link
-                href="/destinations"
-                className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
-              >
-                {t.nav.destinations}
-              </Link>
-              <Link
-                href="/community"
-                className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
-              >
-                {t.nav.community}
-              </Link>
-              <Link
-                href="/pricing"
-                className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
-              >
-                {t.nav.pricing}
-              </Link>
-            </nav>
-          </div>
-
-          <div className="flex items-center space-x-4">
-            <Select value={language} onValueChange={changeLanguage}>
-              <SelectTrigger className="w-32 border-gray-300">
-                <SelectValue />
-              </SelectTrigger>
-              <SelectContent>
-                <SelectItem value="ko">한국어</SelectItem>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="zh">中文</SelectItem>
-                <SelectItem value="ja">日本語</SelectItem>
-                <SelectItem value="vi">Tiếng Việt</SelectItem>
-                <SelectItem value="id">Bahasa Indonesia</SelectItem>
-              </SelectContent>
-            </Select>
-            <Link href="/login">
-              <Button variant="outline" size="sm" className="border-2 border-gray-300 hover:border-blue-500 font-light">
-                {t.auth.login}
-              </Button>
-            </Link>
-            <Link href="/signup">
-              <Button
-                size="sm"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg font-light"
-              >
-                {t.auth.signup}
-              </Button>
-            </Link>
-          </div>
-        </div>
-      </header>
-
-      {/* Premium Hero Section with Scrolling Background */}
-      <section className="relative h-screen flex items-center justify-center overflow-hidden">
-        {/* Scrolling Travel-themed background */}
-        <div className="absolute inset-0">
-          <div
-            className="absolute inset-0 bg-cover bg-center bg-no-repeat"
-            style={{
-              backgroundImage: `url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2835&q=80')`,
-            }}
-          >
-            <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
-          </div>
-
-          {/* Enhanced 3D Animated travel elements */}
-          <div className="absolute inset-0 overflow-hidden">
-            {/* Floating geometric shapes with 3D effect */}
-            <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-3xl animate-float blur-sm transform rotate-12 shadow-2xl"></div>
-            <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-pink-400/30 to-red-400/30 rounded-full animate-float-delayed blur-sm shadow-2xl"></div>
-            <div className="absolute bottom-32 left-1/4 w-20 h-20 bg-gradient-to-br from-green-400/30 to-teal-400/30 rounded-2xl animate-float blur-sm transform -rotate-12 shadow-2xl"></div>
-            <div className="absolute bottom-20 right-1/3 w-36 h-36 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full animate-float-delayed blur-sm shadow-2xl"></div>
-
-            {/* 3D Travel icons with enhanced animations */}
-            <div className="absolute top-1/4 left-1/4 animate-float transform hover:scale-110 transition-transform duration-300">
-              <div className="relative">
-                <Plane className="w-12 h-12 text-white/40 transform rotate-45 drop-shadow-2xl" />
-                <div className="absolute inset-0 w-12 h-12 bg-blue-400/20 rounded-full blur-xl"></div>
-              </div>
-            </div>
-            <div className="absolute top-1/3 right-1/4 animate-float-delayed transform hover:scale-110 transition-transform duration-300">
-              <div className="relative">
-                <MapPin className="w-10 h-10 text-white/40 drop-shadow-2xl" />
-                <div className="absolute inset-0 w-10 h-10 bg-red-400/20 rounded-full blur-xl"></div>
-              </div>
-            </div>
-            <div className="absolute bottom-1/3 left-1/3 animate-float transform hover:scale-110 transition-transform duration-300">
-              <div className="relative">
-                <Compass className="w-11 h-11 text-white/40 drop-shadow-2xl" />
-                <div className="absolute inset-0 w-11 h-11 bg-green-400/20 rounded-full blur-xl"></div>
-              </div>
-            </div>
-
-            {/* Additional 3D floating elements */}
-            <div className="absolute top-1/2 left-10 w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl animate-float transform rotate-45 shadow-2xl"></div>
-            <div className="absolute top-3/4 right-10 w-12 h-12 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full animate-float-delayed shadow-2xl"></div>
-          </div>
-        </div>
-
-        <div className="relative z-10 text-center text-white px-4 max-w-6xl">
-          <h1 className="text-6xl md:text-8xl font-light mb-8 leading-tight tracking-wide">
-            <span className="block text-white drop-shadow-2xl">{t.hero.title}</span>
-          </h1>
-          <p className="text-4xl md:text-5xl mb-16 font-light leading-relaxed drop-shadow-lg max-w-5xl mx-auto tracking-wide">
-            <span className="bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 bg-clip-text text-transparent">
-              {t.hero.subtitle}
-            </span>
-          </p>
-          <Link href="/create-itinerary">
-            <Button
-              size="lg"
-              className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white px-16 py-8 text-2xl rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 font-light border-2 border-white/20 tracking-wide"
-            >
-              <Plane className="w-8 h-8 mr-4" />
-              {t.hero.cta}
-            </Button>
-          </Link>
-        </div>
-      </section>
-
-      {/* How It Works Section */}
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl font-light mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
-              {t.howItWorks.title}
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light tracking-wide">{t.howItWorks.subtitle}</p>
-          </div>
-
-          <div className="max-w-6xl mx-auto">
-            <div className="grid md:grid-cols-4 gap-8">
-              {t.howItWorks.steps.map((item, index) => (
-                <div key={index} className="text-center group">
-                  <div
-                    className={`w-20 h-20 bg-gradient-to-br ${
-                      index === 0
-                        ? "from-blue-500 to-cyan-500"
-                        : index === 1
-                          ? "from-purple-500 to-pink-500"
-                          : index === 2
-                            ? "from-green-500 to-teal-500"
-                            : "from-orange-500 to-red-500"
-                    } rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110`}
-                  >
-                    {index === 0 && <Users className="w-10 h-10 text-white" />}
-                    {index === 1 && <MapPin className="w-10 h-10 text-white" />}
-                    {index === 2 && <Zap className="w-10 h-10 text-white" />}
-                    {index === 3 && <CheckCircle className="w-10 h-10 text-white" />}
-                  </div>
-                  <div
-                    className={`w-12 h-12 bg-gradient-to-br ${
-                      index === 0
-                        ? "from-blue-500 to-cyan-500"
-                        : index === 1
-                          ? "from-purple-500 to-pink-500"
-                          : index === 2
-                            ? "from-green-500 to-teal-500"
-                            : "from-orange-500 to-red-500"
-                    } rounded-full flex items-center justify-center mx-auto mb-4 text-white font-light text-lg`}
-                  >
-                    {index + 1}
-                  </div>
-                  <h3 className="text-xl font-medium mb-3 text-gray-800 tracking-wide">{item.title}</h3>
-                  <p className="text-gray-600 leading-relaxed font-light tracking-wide">{item.description}</p>
-                </div>
-              ))}
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* Plan Go의 특별함을 경험하세요 Section */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl font-light mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent tracking-wide">
-              {t.features.title}
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light tracking-wide">{t.features.subtitle}</p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
-            {t.features.items.map((feature, index) => (
-              <Card
-                key={index}
-                className={`${
-                  index === 0 ? "bg-blue-50" : index === 1 ? "bg-purple-50" : "bg-green-50"
-                } border-0 shadow-lg hover:shadow-2xl transition-all duration-300 group hover:scale-105`}
-              >
-                <CardContent className="p-8 text-center">
-                  <div
-                    className={`w-20 h-20 bg-gradient-to-br ${
-                      index === 0
-                        ? "from-blue-500 to-cyan-500"
-                        : index === 1
-                          ? "from-purple-500 to-pink-500"
-                          : "from-green-500 to-teal-500"
-                    } rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow`}
-                  >
-                    {index === 0 && <Compass className="w-10 h-10 text-white" />}
-                    {index === 1 && <Clock className="w-10 h-10 text-white" />}
-                    {index === 2 && <Shield className="w-10 h-10 text-white" />}
-                  </div>
-                  <h3 className="text-2xl font-medium mb-4 text-gray-800 tracking-wide">{feature.title}</h3>
-                  <p className="text-gray-600 leading-relaxed text-lg font-light tracking-wide">
-                    {feature.description}
-                  </p>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Popular Itineraries Section */}
-      <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl font-light mb-6 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent tracking-wide">
-              {t.popularItineraries.title}
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light tracking-wide">
-              {t.popularItineraries.subtitle}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {t.popularItineraries.items.map((itinerary: ItineraryItem, index: number) => (
-              <Card
-                key={index}
-                className="overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group hover:scale-105 border-0"
-              >
-                <div className={`aspect-video bg-gradient-to-r ${itinerary.image} relative`}>
-                  <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
-                  <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
-                    <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                    <span className="text-sm font-medium">{itinerary.rating}</span>
-                    <span className="text-xs text-gray-600">({itinerary.reviews})</span>
-                  </div>
-                </div>
-                <CardContent className="p-6">
-                  <h3 className="text-xl font-medium mb-3 text-gray-800 tracking-wide">{itinerary.title}</h3>
-                  <p className="text-gray-600 mb-6 leading-relaxed font-light tracking-wide">{itinerary.description}</p>
-                  <Link href="/itinerary-results">
-                    <Button
-                      variant="ghost"
-                      className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 p-0 h-auto font-light group"
+    <LanguageClient>
+      {(language) => {
+        const t = translations[language]
+        return (
+          <div className="min-h-screen">
+            {/* Premium Header */}
+            <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
+              <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+                <div className="flex items-center space-x-12">
+                  <Link href="/" className="flex items-center space-x-3">
+                    <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                      <Plane className="w-6 h-6 text-white transform rotate-45" />
+                    </div>
+                    <span className="text-3xl font-light bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+                      {t.logo}
+                    </span>
+                  </Link>
+                  <nav className="hidden md:flex space-x-8">
+                    <Link
+                      href="/create-itinerary"
+                      className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
                     >
-                      {t.popularItineraries.viewItinerary}
-                      <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                      {t.nav.createItinerary}
+                    </Link>
+                    <Link
+                      href="/destinations"
+                      className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
+                    >
+                      {t.nav.destinations}
+                    </Link>
+                    <Link
+                      href="/community"
+                      className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
+                    >
+                      {t.nav.community}
+                    </Link>
+                    <Link
+                      href="/pricing"
+                      className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
+                    >
+                      {t.nav.pricing}
+                    </Link>
+                  </nav>
+                </div>
+
+                <div className="flex items-center space-x-4">
+                  <Select value={language} onValueChange={changeLanguage}>
+                    <SelectTrigger className="w-32 border-gray-300">
+                      <SelectValue />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ko">한국어</SelectItem>
+                      <SelectItem value="en">English</SelectItem>
+                      <SelectItem value="zh">中文</SelectItem>
+                      <SelectItem value="ja">日本語</SelectItem>
+                      <SelectItem value="vi">Tiếng Việt</SelectItem>
+                      <SelectItem value="id">Bahasa Indonesia</SelectItem>
+                    </SelectContent>
+                  </Select>
+                  <Link href="/login">
+                    <Button variant="outline" size="sm" className="border-2 border-gray-300 hover:border-blue-500 font-light">
+                      {t.auth.login}
                     </Button>
                   </Link>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Testimonials Section */}
-      <section className="py-24 bg-white">
-        <div className="container mx-auto px-4">
-          <div className="text-center mb-20">
-            <h2 className="text-5xl font-light mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent tracking-wide">
-              {t.testimonials.title}
-            </h2>
-            <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light tracking-wide">
-              {t.testimonials.subtitle}
-            </p>
-          </div>
-
-          <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-            {t.testimonials.items.map((testimonial: TestimonialItem, index: number) => (
-              <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow bg-gray-50">
-                <CardContent className="p-8">
-                  <div className="flex items-center mb-6">
-                    <div
-                      className={`w-12 h-12 bg-gradient-to-br ${testimonial.avatar} rounded-full flex items-center justify-center text-white font-light mr-4`}
+                  <Link href="/signup">
+                    <Button
+                      size="sm"
+                      className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg font-light"
                     >
-                      {testimonial.name[0]}
-                    </div>
-                    <div>
-                      <h4 className="font-medium text-gray-800 tracking-wide">{testimonial.name}</h4>
-                      <div className="flex items-center">
-                        {[...Array(testimonial.rating)].map((_, i) => (
-                          <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
-                        ))}
-                      </div>
-                    </div>
-                  </div>
-                  <p className="text-gray-600 leading-relaxed mb-4 font-light tracking-wide">"{testimonial.review}"</p>
-                  <div className="flex justify-end">
-                    <p className="text-sm text-gray-500 font-light">{testimonial.date}</p>
-                  </div>
-                </CardContent>
-              </Card>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* Fixed Footer */}
-      <footer className="bg-gray-900 py-16">
-        <div className="container mx-auto px-4">
-          <div className="grid md:grid-cols-3 gap-8">
-            <div>
-              <div className="flex items-center space-x-3 mb-4">
-                <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-400 rounded-xl flex items-center justify-center">
-                  <Plane className="w-6 h-6 text-white transform rotate-45" />
+                      {t.auth.signup}
+                    </Button>
+                  </Link>
                 </div>
-                <span className="text-3xl font-light text-white tracking-wide">{t.logo}</span>
               </div>
-              <p className="text-gray-300 mb-6 font-light tracking-wide">{t.footer.description}</p>
-            </div>
+            </header>
 
-            <div>
-              <h3 className="text-lg font-medium mb-4 text-white tracking-wide">{t.footer.services.title}</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li>
-                  <Link
-                    href="/create-itinerary"
-                    className="hover:text-white transition-colors font-light tracking-wide"
+            {/* Premium Hero Section with Scrolling Background */}
+            <section className="relative h-screen flex items-center justify-center overflow-hidden">
+              {/* Scrolling Travel-themed background */}
+              <div className="absolute inset-0">
+                <div
+                  className="absolute inset-0 bg-cover bg-center bg-no-repeat"
+                  style={{
+                    backgroundImage: `url('https://images.unsplash.com/photo-1488646953014-85cb44e25828?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=2835&q=80')`,
+                  }}
+                >
+                  <div className="absolute inset-0 bg-gradient-to-r from-black/60 via-black/40 to-black/60"></div>
+                </div>
+
+                {/* Enhanced 3D Animated travel elements */}
+                <div className="absolute inset-0 overflow-hidden">
+                  {/* Floating geometric shapes with 3D effect */}
+                  <div className="absolute top-20 left-10 w-32 h-32 bg-gradient-to-br from-blue-400/30 to-purple-400/30 rounded-3xl animate-float blur-sm transform rotate-12 shadow-2xl"></div>
+                  <div className="absolute top-40 right-20 w-24 h-24 bg-gradient-to-br from-pink-400/30 to-red-400/30 rounded-full animate-float-delayed blur-sm shadow-2xl"></div>
+                  <div className="absolute bottom-32 left-1/4 w-20 h-20 bg-gradient-to-br from-green-400/30 to-teal-400/30 rounded-2xl animate-float blur-sm transform -rotate-12 shadow-2xl"></div>
+                  <div className="absolute bottom-20 right-1/3 w-36 h-36 bg-gradient-to-br from-yellow-400/20 to-orange-400/20 rounded-full animate-float-delayed blur-sm shadow-2xl"></div>
+
+                  {/* 3D Travel icons with enhanced animations */}
+                  <div className="absolute top-1/4 left-1/4 animate-float transform hover:scale-110 transition-transform duration-300">
+                    <div className="relative">
+                      <Plane className="w-12 h-12 text-white/40 transform rotate-45 drop-shadow-2xl" />
+                      <div className="absolute inset-0 w-12 h-12 bg-blue-400/20 rounded-full blur-xl"></div>
+                    </div>
+                  </div>
+                  <div className="absolute top-1/3 right-1/4 animate-float-delayed transform hover:scale-110 transition-transform duration-300">
+                    <div className="relative">
+                      <MapPin className="w-10 h-10 text-white/40 drop-shadow-2xl" />
+                      <div className="absolute inset-0 w-10 h-10 bg-red-400/20 rounded-full blur-xl"></div>
+                    </div>
+                  </div>
+                  <div className="absolute bottom-1/3 left-1/3 animate-float transform hover:scale-110 transition-transform duration-300">
+                    <div className="relative">
+                      <Compass className="w-11 h-11 text-white/40 drop-shadow-2xl" />
+                      <div className="absolute inset-0 w-11 h-11 bg-green-400/20 rounded-full blur-xl"></div>
+                    </div>
+                  </div>
+
+                  {/* Additional 3D floating elements */}
+                  <div className="absolute top-1/2 left-10 w-16 h-16 bg-gradient-to-br from-purple-500/20 to-pink-500/20 rounded-xl animate-float transform rotate-45 shadow-2xl"></div>
+                  <div className="absolute top-3/4 right-10 w-12 h-12 bg-gradient-to-br from-blue-500/20 to-cyan-500/20 rounded-full animate-float-delayed shadow-2xl"></div>
+                </div>
+              </div>
+
+              <div className="relative z-10 text-center text-white px-4 max-w-6xl">
+                <h1 className="text-6xl md:text-8xl font-light mb-8 leading-tight tracking-wide">
+                  <span className="block text-white drop-shadow-2xl">{t.hero.title}</span>
+                </h1>
+                <p className="text-4xl md:text-5xl mb-16 font-light leading-relaxed drop-shadow-lg max-w-5xl mx-auto tracking-wide">
+                  <span className="bg-gradient-to-r from-blue-300 via-purple-300 to-pink-300 bg-clip-text text-transparent">
+                    {t.hero.subtitle}
+                  </span>
+                </p>
+                <Link href="/create-itinerary">
+                  <Button
+                    size="lg"
+                    className="bg-gradient-to-r from-blue-600 via-purple-600 to-pink-600 hover:from-blue-700 hover:via-purple-700 hover:to-pink-700 text-white px-16 py-8 text-2xl rounded-full shadow-2xl transform hover:scale-105 transition-all duration-300 font-light border-2 border-white/20 tracking-wide"
                   >
-                    {t.footer.services.items[0]}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/pricing" className="hover:text-white transition-colors font-light tracking-wide">
-                    {t.footer.services.items[1]}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/destinations" className="hover:text-white transition-colors font-light tracking-wide">
-                    {t.footer.services.items[2]}
-                  </Link>
-                </li>
-              </ul>
-            </div>
+                    <Plane className="w-8 h-8 mr-4" />
+                    {t.hero.cta}
+                  </Button>
+                </Link>
+              </div>
+            </section>
 
-            <div>
-              <h3 className="text-lg font-medium mb-4 text-white tracking-wide">{t.footer.support.title}</h3>
-              <ul className="space-y-2 text-gray-300">
-                <li>
-                  <Link href="/support/faq" className="hover:text-white transition-colors font-light tracking-wide">
-                    {t.footer.support.items[0]}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/support/contact" className="hover:text-white transition-colors font-light tracking-wide">
-                    {t.footer.support.items[1]}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/support/terms" className="hover:text-white transition-colors font-light tracking-wide">
-                    {t.footer.support.items[2]}
-                  </Link>
-                </li>
-                <li>
-                  <Link href="/support/privacy" className="hover:text-white transition-colors font-light tracking-wide">
-                    {t.footer.support.items[3]}
-                  </Link>
-                </li>
-              </ul>
-            </div>
-          </div>
+            {/* How It Works Section */}
+            <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+              <div className="container mx-auto px-4">
+                <div className="text-center mb-20">
+                  <h2 className="text-5xl font-light mb-6 bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+                    {t.howItWorks.title}
+                  </h2>
+                  <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light tracking-wide">{t.howItWorks.subtitle}</p>
+                </div>
 
-          <div className="border-t border-gray-700 pt-8 mt-12">
-            <div className="flex flex-col md:flex-row justify-between items-center">
-              <p className="text-gray-400 text-sm font-light tracking-wide">{t.footer.copyright}</p>
-            </div>
+                <div className="max-w-6xl mx-auto">
+                  <div className="grid md:grid-cols-4 gap-8">
+                    {t.howItWorks.steps.map((item, index) => (
+                      <div key={index} className="text-center group">
+                        <div
+                          className={`w-20 h-20 bg-gradient-to-br ${
+                            index === 0
+                              ? "from-blue-500 to-cyan-500"
+                              : index === 1
+                                ? "from-purple-500 to-pink-500"
+                                : index === 2
+                                  ? "from-green-500 to-teal-500"
+                                  : "from-orange-500 to-red-500"
+                          } rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-xl group-hover:shadow-2xl transition-all duration-300 group-hover:scale-110`}
+                        >
+                          {index === 0 && <Users className="w-10 h-10 text-white" />}
+                          {index === 1 && <MapPin className="w-10 h-10 text-white" />}
+                          {index === 2 && <Zap className="w-10 h-10 text-white" />}
+                          {index === 3 && <CheckCircle className="w-10 h-10 text-white" />}
+                        </div>
+                        <div
+                          className={`w-12 h-12 bg-gradient-to-br ${
+                            index === 0
+                              ? "from-blue-500 to-cyan-500"
+                              : index === 1
+                                ? "from-purple-500 to-pink-500"
+                                : index === 2
+                                  ? "from-green-500 to-teal-500"
+                                  : "from-orange-500 to-red-500"
+                          } rounded-full flex items-center justify-center mx-auto mb-4 text-white font-light text-lg`}
+                        >
+                          {index + 1}
+                        </div>
+                        <h3 className="text-xl font-medium mb-3 text-gray-800 tracking-wide">{item.title}</h3>
+                        <p className="text-gray-600 leading-relaxed font-light tracking-wide">{item.description}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              </div>
+            </section>
+
+            {/* Plan Go의 특별함을 경험하세요 Section */}
+            <section className="py-24 bg-white">
+              <div className="container mx-auto px-4">
+                <div className="text-center mb-20">
+                  <h2 className="text-5xl font-light mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent tracking-wide">
+                    {t.features.title}
+                  </h2>
+                  <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light tracking-wide">{t.features.subtitle}</p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-12 max-w-6xl mx-auto">
+                  {t.features.items.map((feature, index) => (
+                    <Card
+                      key={index}
+                      className={`${
+                        index === 0 ? "bg-blue-50" : index === 1 ? "bg-purple-50" : "bg-green-50"
+                      } border-0 shadow-lg hover:shadow-2xl transition-all duration-300 group hover:scale-105`}
+                    >
+                      <CardContent className="p-8 text-center">
+                        <div
+                          className={`w-20 h-20 bg-gradient-to-br ${
+                            index === 0
+                              ? "from-blue-500 to-cyan-500"
+                              : index === 1
+                                ? "from-purple-500 to-pink-500"
+                                : "from-green-500 to-teal-500"
+                          } rounded-2xl flex items-center justify-center mx-auto mb-6 shadow-lg group-hover:shadow-xl transition-shadow`}
+                        >
+                          {index === 0 && <Compass className="w-10 h-10 text-white" />}
+                          {index === 1 && <Clock className="w-10 h-10 text-white" />}
+                          {index === 2 && <Shield className="w-10 h-10 text-white" />}
+                        </div>
+                        <h3 className="text-2xl font-medium mb-4 text-gray-800 tracking-wide">{feature.title}</h3>
+                        <p className="text-gray-600 leading-relaxed text-lg font-light tracking-wide">
+                          {feature.description}
+                        </p>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Popular Itineraries Section */}
+            <section className="py-24 bg-gradient-to-b from-gray-50 to-white">
+              <div className="container mx-auto px-4">
+                <div className="text-center mb-20">
+                  <h2 className="text-5xl font-light mb-6 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent tracking-wide">
+                    {t.popularItineraries.title}
+                  </h2>
+                  <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light tracking-wide">
+                    {t.popularItineraries.subtitle}
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                  {t.popularItineraries.items.map((itinerary: ItineraryItem, index: number) => (
+                    <Card
+                      key={index}
+                      className="overflow-hidden shadow-xl hover:shadow-2xl transition-all duration-300 group hover:scale-105 border-0"
+                    >
+                      <div className={`aspect-video bg-gradient-to-r ${itinerary.image} relative`}>
+                        <div className="absolute inset-0 bg-black/20 group-hover:bg-black/10 transition-colors"></div>
+                        <div className="absolute top-4 right-4 bg-white/90 backdrop-blur-sm rounded-full px-3 py-1 flex items-center space-x-1">
+                          <Star className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                          <span className="text-sm font-medium">{itinerary.rating}</span>
+                          <span className="text-xs text-gray-600">({itinerary.reviews})</span>
+                        </div>
+                      </div>
+                      <CardContent className="p-6">
+                        <h3 className="text-xl font-medium mb-3 text-gray-800 tracking-wide">{itinerary.title}</h3>
+                        <p className="text-gray-600 mb-6 leading-relaxed font-light tracking-wide">{itinerary.description}</p>
+                        <Link href="/itinerary-results">
+                          <Button
+                            variant="ghost"
+                            className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 p-0 h-auto font-light group"
+                          >
+                            {t.popularItineraries.viewItinerary}
+                            <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
+                          </Button>
+                        </Link>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Testimonials Section */}
+            <section className="py-24 bg-white">
+              <div className="container mx-auto px-4">
+                <div className="text-center mb-20">
+                  <h2 className="text-5xl font-light mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent tracking-wide">
+                    {t.testimonials.title}
+                  </h2>
+                  <p className="text-xl text-gray-600 max-w-3xl mx-auto font-light tracking-wide">
+                    {t.testimonials.subtitle}
+                  </p>
+                </div>
+
+                <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
+                  {t.testimonials.items.map((testimonial: TestimonialItem, index: number) => (
+                    <Card key={index} className="border-0 shadow-lg hover:shadow-xl transition-shadow bg-gray-50">
+                      <CardContent className="p-8">
+                        <div className="flex items-center mb-6">
+                          <div
+                            className={`w-12 h-12 bg-gradient-to-br ${testimonial.avatar} rounded-full flex items-center justify-center text-white font-light mr-4`}
+                          >
+                            {testimonial.name[0]}
+                          </div>
+                          <div>
+                            <h4 className="font-medium text-gray-800 tracking-wide">{testimonial.name}</h4>
+                            <div className="flex items-center">
+                              {[...Array(testimonial.rating)].map((_, i) => (
+                                <Star key={i} className="w-4 h-4 fill-yellow-400 text-yellow-400" />
+                              ))}
+                            </div>
+                          </div>
+                        </div>
+                        <p className="text-gray-600 leading-relaxed mb-4 font-light tracking-wide">"{testimonial.review}"</p>
+                        <div className="flex justify-end">
+                          <p className="text-sm text-gray-500 font-light">{testimonial.date}</p>
+                        </div>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </div>
+              </div>
+            </section>
+
+            {/* Fixed Footer */}
+            <footer className="bg-gray-900 py-16">
+              <div className="container mx-auto px-4">
+                <div className="grid md:grid-cols-3 gap-8">
+                  <div>
+                    <div className="flex items-center space-x-3 mb-4">
+                      <div className="w-10 h-10 bg-gradient-to-br from-blue-400 to-purple-400 rounded-xl flex items-center justify-center">
+                        <Plane className="w-6 h-6 text-white transform rotate-45" />
+                      </div>
+                      <span className="text-3xl font-light text-white tracking-wide">{t.logo}</span>
+                    </div>
+                    <p className="text-gray-300 mb-6 font-light tracking-wide">{t.footer.description}</p>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium mb-4 text-white tracking-wide">{t.footer.services.title}</h3>
+                    <ul className="space-y-2 text-gray-300">
+                      <li>
+                        <Link
+                          href="/create-itinerary"
+                          className="hover:text-white transition-colors font-light tracking-wide"
+                        >
+                          {t.footer.services.items[0]}
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/pricing" className="hover:text-white transition-colors font-light tracking-wide">
+                          {t.footer.services.items[1]}
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/destinations" className="hover:text-white transition-colors font-light tracking-wide">
+                          {t.footer.services.items[2]}
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+
+                  <div>
+                    <h3 className="text-lg font-medium mb-4 text-white tracking-wide">{t.footer.support.title}</h3>
+                    <ul className="space-y-2 text-gray-300">
+                      <li>
+                        <Link href="/support/faq" className="hover:text-white transition-colors font-light tracking-wide">
+                          {t.footer.support.items[0]}
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/support/contact" className="hover:text-white transition-colors font-light tracking-wide">
+                          {t.footer.support.items[1]}
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/support/terms" className="hover:text-white transition-colors font-light tracking-wide">
+                          {t.footer.support.items[2]}
+                        </Link>
+                      </li>
+                      <li>
+                        <Link href="/support/privacy" className="hover:text-white transition-colors font-light tracking-wide">
+                          {t.footer.support.items[3]}
+                        </Link>
+                      </li>
+                    </ul>
+                  </div>
+                </div>
+
+                <div className="border-t border-gray-700 pt-8 mt-12">
+                  <div className="flex flex-col md:flex-row justify-between items-center">
+                    <p className="text-gray-400 text-sm font-light tracking-wide">{t.footer.copyright}</p>
+                  </div>
+                </div>
+              </div>
+            </footer>
           </div>
-        </div>
-      </footer>
-    </div>
+        )
+      }}
+    </LanguageClient>
   )
 }
