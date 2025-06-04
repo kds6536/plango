@@ -1,3 +1,6 @@
+"use client"
+export const dynamic = "force-dynamic";
+
 import { useTranslations } from "@/components/language-wrapper"
 
 export default function PlansPage() {
