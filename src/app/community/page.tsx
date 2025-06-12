@@ -115,16 +115,16 @@ export default function CommunityPage() {
           </Link>
           <nav className="hidden md:flex space-x-6">
             <Link href="/" className="text-gray-600 hover:text-gray-900">
-              {t.home}
+              {t?.home ?? "홈"}
             </Link>
             <Link href="/destinations" className="text-gray-600 hover:text-gray-900">
-              {t.destinations}
+              {t?.destinations ?? "인기 여행지"}
             </Link>
             <Link href="/community" className="text-green-600 font-medium">
-              {t.community}
+              {t?.community ?? "여행 커뮤니티"}
             </Link>
             <Link href="/profile" className="text-gray-600 hover:text-gray-900">
-              {t.profile}
+              {t?.profile ?? "내 계정"}
             </Link>
           </nav>
         </div>
@@ -139,7 +139,7 @@ export default function CommunityPage() {
               <CardContent className="p-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-gray-400 w-4 h-4" />
-                  <Input placeholder={t.searchPlaceholder} className="pl-10" />
+                  <Input placeholder={t?.searchPlaceholder ?? "게시글 검색..."} className="pl-10" />
                 </div>
               </CardContent>
             </Card>
@@ -149,7 +149,7 @@ export default function CommunityPage() {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <TrendingUp className="w-5 h-5 mr-2" />
-                  {t.trending}
+                  {t?.trending ?? "인기 토픽"}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -167,20 +167,20 @@ export default function CommunityPage() {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Users className="w-5 h-5 mr-2" />
-                  {t.stats}
+                  {t?.stats ?? "커뮤니티 현황"}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-sm">{t.totalMembers}</span>
+                  <span className="text-sm">{t?.totalMembers ?? "총 회원수"}</span>
                   <span className="font-semibold">12,345명</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm">{t.todayPosts}</span>
+                  <span className="text-sm">{t?.todayPosts ?? "오늘 게시글"}</span>
                   <span className="font-semibold">89개</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm">{t.activeUsers}</span>
+                  <span className="text-sm">{t?.activeUsers ?? "활성 사용자"}</span>
                   <span className="font-semibold">1,234명</span>
                 </div>
               </CardContent>
@@ -190,16 +190,16 @@ export default function CommunityPage() {
           {/* Main Content */}
           <div className="lg:col-span-3">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold">{t.title}</h1>
-              <Button className="bg-green-600 hover:bg-green-700">{t.writePost}</Button>
+              <h1 className="text-3xl font-bold">{t?.title ?? "여행 커뮤니티"}</h1>
+              <Button className="bg-green-600 hover:bg-green-700">{t?.writePost ?? "글 작성하기"}</Button>
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="popular">{t.popular}</TabsTrigger>
-                <TabsTrigger value="recent">{t.recent}</TabsTrigger>
-                <TabsTrigger value="questions">{t.questions}</TabsTrigger>
-                <TabsTrigger value="reviews">{t.reviews}</TabsTrigger>
+                <TabsTrigger value="popular">{t?.popular ?? "인기글"}</TabsTrigger>
+                <TabsTrigger value="recent">{t?.recent ?? "최신글"}</TabsTrigger>
+                <TabsTrigger value="questions">{t?.questions ?? "질문"}</TabsTrigger>
+                <TabsTrigger value="reviews">{t?.reviews ?? "후기"}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="popular" className="space-y-6">
