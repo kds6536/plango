@@ -13,10 +13,12 @@ import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import Link from "next/link"
 import { useTranslations } from "@/components/language-wrapper"
+import { DayPicker } from "react-day-picker"
+import type { DateRange } from "react-day-picker"
 
 export default function CreateItineraryPage() {
   const t = useTranslations()
-  const [dateRange, setDateRange] = useState<{ from?: Date; to?: Date }>({})
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [travelers, setTravelers] = useState(2)
   const [destinations, setDestinations] = useState<string[]>([])
   const [currentDestination, setCurrentDestination] = useState("")
@@ -110,7 +112,7 @@ export default function CreateItineraryPage() {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-full justify-start text-left font-normal h-12">
                     <CalendarIcon className="mr-2 h-5 w-5" />
-                    {dateRange.from ? (
+                    {dateRange && dateRange.from ? (
                       dateRange.to ? (
                         <>
                           {format(dateRange.from, "PPP", { locale: ko })} -{" "}
