@@ -1,12 +1,12 @@
 "use client"
 
 import Link from "next/link"
-import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
+import { Button } from "../../components/ui/button"
+import { Card, CardContent } from "../../components/ui/card"
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "../../components/ui/select"
 import { MapPin, Shield, ArrowRight, Plane, Star, Users, CheckCircle, Compass, Zap, Clock } from "lucide-react"
-import { useLanguage } from "@/hooks/use-language"
-import { useScrollPosition } from "@/hooks/use-scroll-position"
+import { useLanguage } from "../../hooks/use-language"
+import { useScrollPosition } from "../../hooks/use-scroll-position"
 
 export default function HomePage() {
   const { language, changeLanguage } = useLanguage()
