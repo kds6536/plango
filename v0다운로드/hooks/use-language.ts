@@ -1,7 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
-import { getLanguage, setLanguage } from "@/lib/language-store"
+import { getLanguage, setLanguage } from "../../lib/language-store"
 
 export const useLanguage = () => {
   const [language, setLanguageState] = useState("ko")

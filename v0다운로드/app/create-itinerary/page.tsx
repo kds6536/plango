@@ -12,9 +12,10 @@ import { CalendarIcon, Minus, Plus, X, Plane, DollarSign } from "lucide-react"
 import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import Link from "next/link"
+import type { DateRange } from "react-day-picker"
 
 export default function CreateItineraryPage() {
-  const [dateRange, setDateRange] = useState<{ from?: Date; to?: Date }>({})
+  const [dateRange, setDateRange] = useState<DateRange | undefined>(undefined)
   const [travelers, setTravelers] = useState(2)
   const [destinations, setDestinations] = useState<string[]>([])
   const [currentDestination, setCurrentDestination] = useState("")
@@ -108,8 +109,8 @@ export default function CreateItineraryPage() {
                 <PopoverTrigger asChild>
                   <Button variant="outline" className="w-full justify-start text-left font-normal h-12">
                     <CalendarIcon className="mr-2 h-5 w-5" />
-                    {dateRange.from ? (
-                      dateRange.to ? (
+                    {dateRange?.from ? (
+                      dateRange?.to ? (
                         <>
                           {format(dateRange.from, "PPP", { locale: ko })} -{" "}
                           {format(dateRange.to, "PPP", { locale: ko })}
