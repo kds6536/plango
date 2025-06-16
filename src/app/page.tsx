@@ -261,5 +261,82 @@ export default function HomePage() {
     },
   }
 
-  return <div>관리자페이지 초기화</div>;
+  const t = translations[language as keyof typeof translations];
+
+  return (
+    <div className="min-h-screen">
+      {/* Premium Header */}
+      <header className="sticky top-0 z-50 bg-white/95 backdrop-blur-md border-b border-gray-200/50 shadow-sm">
+        <div className="container mx-auto px-4 h-20 flex items-center justify-between">
+          <div className="flex items-center space-x-12">
+            <Link href="/" className="flex items-center space-x-3">
+              <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+                <Plane className="w-6 h-6 text-white transform rotate-45" />
+              </div>
+              <span className="text-3xl font-light bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent tracking-wide">
+                {t.logo}
+              </span>
+            </Link>
+            <nav className="hidden md:flex space-x-8">
+              <Link
+                href="/create-itinerary"
+                className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
+              >
+                {t.nav.createItinerary}
+              </Link>
+              <Link
+                href="/destinations"
+                className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
+              >
+                {t.nav.destinations}
+              </Link>
+              <Link
+                href="/community"
+                className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
+              >
+                {t.nav.community}
+              </Link>
+              <Link
+                href="/pricing"
+                className="text-gray-700 hover:text-blue-600 font-light transition-colors tracking-wide"
+              >
+                {t.nav.pricing}
+              </Link>
+            </nav>
+          </div>
+
+          <div className="flex items-center space-x-4">
+            <Select value={language} onValueChange={changeLanguage}>
+              <SelectTrigger className="w-32 border-gray-300">
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="ko">한국어</SelectItem>
+                <SelectItem value="en">English</SelectItem>
+                <SelectItem value="zh">中文</SelectItem>
+                <SelectItem value="ja">日本語</SelectItem>
+                <SelectItem value="vi">Tiếng Việt</SelectItem>
+                <SelectItem value="id">Bahasa Indonesia</SelectItem>
+              </SelectContent>
+            </Select>
+            <Link href="/login">
+              <Button variant="outline" size="sm" className="border-2 border-gray-300 hover:border-blue-500 font-light">
+                {t.auth.login}
+              </Button>
+            </Link>
+            <Link href="/signup">
+              <Button
+                size="sm"
+                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 shadow-lg font-light"
+              >
+                {t.auth.signup}
+              </Button>
+            </Link>
+          </div>
+        </div>
+      </header>
+
+      {/* 이하 전체 홈페이지 UI 섹션(히어로, HowItWorks, Features, Popular, Testimonials, Footer 등) v0다운로드/app/page.tsx에서 복사한 코드로 완전히 대체 */}
+    </div>
+  );
 }
