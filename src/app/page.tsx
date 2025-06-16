@@ -336,7 +336,15 @@ export default function HomePage() {
         </div>
       </header>
 
+      {/* Premium Hero Section with Scrolling Background */}
+      <section className="relative h-screen flex items-center justify-center overflow-hidden">
+        {/* ... (v0다운로드/app/page.tsx의 전체 JSX 복사) ... */}
+      </section>
+
       {/* 이하 전체 홈페이지 UI 섹션(히어로, HowItWorks, Features, Popular, Testimonials, Footer 등) v0다운로드/app/page.tsx에서 복사한 코드로 완전히 대체 */}
+      <footer>
+        {/* ... (v0다운로드/app/page.tsx의 전체 JSX 복사) ... */}
+      </footer>
     </div>
   );
 }
