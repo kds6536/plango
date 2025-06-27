@@ -1,3 +1,5 @@
+"use client"
+
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent } from "@/components/ui/card"
@@ -5,80 +7,83 @@ import { Badge } from "@/components/ui/badge"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Search, Star, Users, Clock } from "lucide-react"
 import Link from "next/link"
+import { LanguageWrapper, useTranslations } from "@/components/language-wrapper"
 
-export default function DestinationsPage() {
+function DestinationsContent() {
+  const t = useTranslations()
+
   const destinations = [
     {
       id: 1,
-      name: "도쿄",
-      country: "일본",
+      name: t.destinations.cities.tokyo,
+      country: t.destinations.countries.japan,
       rating: 4.8,
       reviews: 1234,
       duration: "3-5일",
       travelers: "2-4명",
-      tags: ["문화", "음식", "쇼핑"],
+      tags: [t.destinations.tags.culture, t.destinations.tags.food, t.destinations.tags.shopping],
       image: "/placeholder.svg?height=200&width=300",
-      description: "전통과 현대가 조화를 이루는 매력적인 도시",
+      description: t.destinations.descriptions.tokyo,
     },
     {
       id: 2,
-      name: "파리",
-      country: "프랑스",
+      name: t.destinations.cities.paris,
+      country: t.destinations.countries.france,
       rating: 4.9,
       reviews: 2156,
       duration: "4-7일",
       travelers: "2명",
-      tags: ["로맨틱", "예술", "역사"],
+      tags: [t.destinations.tags.romantic, t.destinations.tags.art, t.destinations.tags.history],
       image: "/placeholder.svg?height=200&width=300",
-      description: "사랑과 예술의 도시, 로맨틱한 여행지",
+      description: t.destinations.descriptions.paris,
     },
     {
       id: 3,
-      name: "제주도",
-      country: "한국",
+      name: t.destinations.cities.jeju,
+      country: t.destinations.countries.korea,
       rating: 4.7,
       reviews: 892,
       duration: "2-4일",
       travelers: "2-6명",
-      tags: ["자연", "힐링", "해변"],
+      tags: [t.destinations.tags.nature, t.destinations.tags.healing, t.destinations.tags.beach],
       image: "/placeholder.svg?height=200&width=300",
-      description: "아름다운 자연과 힐링이 있는 섬",
+      description: t.destinations.descriptions.jeju,
     },
     {
       id: 4,
-      name: "뉴욕",
-      country: "미국",
+      name: t.destinations.cities.newYork,
+      country: t.destinations.countries.usa,
       rating: 4.6,
       reviews: 3421,
       duration: "4-6일",
       travelers: "1-4명",
-      tags: ["도시", "문화", "쇼핑"],
+      tags: [t.destinations.tags.city, t.destinations.tags.culture, t.destinations.tags.shopping],
       image: "/placeholder.svg?height=200&width=300",
-      description: "꿈의 도시, 무한한 가능성의 땅",
+      description: t.destinations.descriptions.newYork,
     },
     {
       id: 5,
-      name: "방콕",
-      country: "태국",
+      name: t.destinations.cities.bangkok,
+      country: t.destinations.countries.thailand,
       rating: 4.5,
       reviews: 1876,
       duration: "3-5일",
       travelers: "2-4명",
-      tags: ["음식", "문화", "저렴"],
+      tags: [t.destinations.tags.food, t.destinations.tags.culture, t.destinations.tags.affordable],
       image: "/placeholder.svg?height=200&width=300",
-      description: "맛있는 음식과 저렴한 물가의 동남아 여행지",
+      description: t.destinations.descriptions.bangkok,
     },
     {
       id: 6,
-      name: "로마",
-      country: "이탈리아",
+      name: t.destinations.cities.rome,
+      country: t.destinations.countries.italy,
       rating: 4.8,
       reviews: 1654,
       duration: "3-5일",
       travelers: "2-4명",
-      tags: ["역사", "예술", "음식"],
+      tags: [t.destinations.tags.history, t.destinations.tags.art, t.destinations.tags.food],
       image: "/placeholder.svg?height=200&width=300",
-      description: "영원한 도시, 역사와 예술의 보고",
+      description: t.destinations.descriptions.rome,
     },
   ]
 
@@ -88,20 +93,20 @@ export default function DestinationsPage() {
       <header className="bg-background border-b border-border">
         <div className="container mx-auto px-4 h-16 flex items-center justify-between">
           <Link href="/" className="text-2xl font-bold text-green-600">
-            Plan Go
+            {t.logo}
           </Link>
           <nav className="hidden md:flex space-x-6">
             <Link href="/" className="text-muted-foreground hover:text-foreground">
-              홈
+              {t.nav.home}
             </Link>
             <Link href="/destinations" className="text-green-600 font-medium">
-              인기 여행지
+              {t.nav.destinations}
             </Link>
             <Link href="/create-itinerary" className="text-muted-foreground hover:text-foreground">
-              여행 계획
+              {t.nav.createItinerary}
             </Link>
             <Link href="/profile" className="text-muted-foreground hover:text-foreground">
-              내 계정
+              {t.nav.profile}
             </Link>
           </nav>
         </div>
@@ -110,37 +115,37 @@ export default function DestinationsPage() {
       <div className="container mx-auto px-4 py-8">
         {/* Hero Section */}
         <div className="text-center mb-12">
-          <h1 className="text-4xl font-bold mb-4 text-foreground">인기 여행지</h1>
-          <p className="text-muted-foreground text-lg mb-8">전 세계 여행자들이 사랑하는 최고의 여행 목적지를 발견하세요</p>
+          <h1 className="text-4xl font-bold mb-4 text-foreground">{t.destinations.title}</h1>
+          <p className="text-muted-foreground text-lg mb-8">{t.destinations.subtitle}</p>
 
           {/* Search and Filters */}
           <div className="max-w-4xl mx-auto">
             <div className="flex flex-col md:flex-row gap-4 mb-6">
               <div className="flex-1 relative">
                 <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-5 h-5" />
-                <Input placeholder="도시나 국가를 검색하세요..." className="pl-10" />
+                <Input placeholder={t.destinations.searchPlaceholder} className="pl-10" />
               </div>
               <Select>
                 <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="지역 선택" />
+                  <SelectValue placeholder={t.destinations.regionSelect} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="asia">아시아</SelectItem>
-                  <SelectItem value="europe">유럽</SelectItem>
-                  <SelectItem value="america">아메리카</SelectItem>
-                  <SelectItem value="oceania">오세아니아</SelectItem>
+                  <SelectItem value="asia">{t.destinations.regions.asia}</SelectItem>
+                  <SelectItem value="europe">{t.destinations.regions.europe}</SelectItem>
+                  <SelectItem value="america">{t.destinations.regions.america}</SelectItem>
+                  <SelectItem value="oceania">{t.destinations.regions.oceania}</SelectItem>
                 </SelectContent>
               </Select>
               <Select>
                 <SelectTrigger className="w-full md:w-48">
-                  <SelectValue placeholder="여행 스타일" />
+                  <SelectValue placeholder={t.destinations.styleSelect} />
                 </SelectTrigger>
                 <SelectContent>
-                  <SelectItem value="culture">문화</SelectItem>
-                  <SelectItem value="nature">자연</SelectItem>
-                  <SelectItem value="food">음식</SelectItem>
-                  <SelectItem value="romantic">로맨틱</SelectItem>
-                  <SelectItem value="adventure">모험</SelectItem>
+                  <SelectItem value="culture">{t.destinations.tags.culture}</SelectItem>
+                  <SelectItem value="nature">{t.destinations.tags.nature}</SelectItem>
+                  <SelectItem value="food">{t.destinations.tags.food}</SelectItem>
+                  <SelectItem value="romantic">{t.destinations.tags.romantic}</SelectItem>
+                  <SelectItem value="adventure">{t.destinations.tags.adventure}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
@@ -171,11 +176,11 @@ export default function DestinationsPage() {
                 <div className="space-y-2 mb-4">
                   <div className="flex items-center text-sm text-muted-foreground">
                     <Clock className="w-4 h-4 mr-2" />
-                    <span>추천 기간: {destination.duration}</span>
+                    <span>{t.destinations.recommendedDuration}: {destination.duration}</span>
                   </div>
                   <div className="flex items-center text-sm text-muted-foreground">
                     <Users className="w-4 h-4 mr-2" />
-                    <span>추천 인원: {destination.travelers}</span>
+                    <span>{t.destinations.recommendedPeople}: {destination.travelers}</span>
                   </div>
                 </div>
 
@@ -188,9 +193,9 @@ export default function DestinationsPage() {
                 </div>
 
                 <div className="flex space-x-2">
-                  <Button className="flex-1 bg-green-600 hover:bg-green-700">일정 만들기</Button>
+                  <Button className="flex-1 bg-green-600 hover:bg-green-700">{t.destinations.createItinerary}</Button>
                   <Button variant="outline" className="flex-1">
-                    자세히 보기
+                    {t.destinations.viewDetails}
                   </Button>
                 </div>
               </CardContent>
@@ -198,13 +203,21 @@ export default function DestinationsPage() {
           ))}
         </div>
 
-        {/* Load More */}
+        {/* Load More Button */}
         <div className="text-center mt-12">
-          <Button variant="outline" size="lg">
-            더 많은 여행지 보기
+          <Button variant="outline" className="px-8 py-3">
+            {t.destinations.loadMore}
           </Button>
         </div>
       </div>
     </div>
+  )
+}
+
+export default function DestinationsPage() {
+  return (
+    <LanguageWrapper>
+      <DestinationsContent />
+    </LanguageWrapper>
   )
 }

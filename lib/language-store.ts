@@ -3,7 +3,7 @@
 import { create } from 'zustand'
 import { persist } from 'zustand/middleware'
 
-type Language = 'ko' | 'en' | 'ja'
+type Language = 'ko' | 'en' | 'ja' | 'zh' | 'vi' | 'id'
 
 interface LanguageStore {
   language: Language
