@@ -182,6 +182,7 @@ const translations = {
     popularItineraries: {
       title: "인기 여행 일정",
       subtitle: "많은 여행자들이 사랑하는 여행 계획을 확인해보세요",
+      viewItinerary: "여정 보기",
       itinerary1: {
         title: "4일간의 도쿄 탐험",
         description: "전통과 현대가 조화를 이루는 도쿄의 매력을 만끽하세요. 센소지 절부터 시부야까지, 일본의 진정한 아름다움을 경험할 수 있습니다."
@@ -547,6 +548,7 @@ const translations = {
     popularItineraries: {
       title: "热门行程",
       subtitle: "探索世界各地旅行者选择的最佳旅行路线",
+      viewItinerary: "查看行程",
       itinerary1: {
         title: "4天东京探索",
         description: "体验传统与现代和谐融合的东京魅力。从浅草寺到东京晴空塔，发现日本的真正美丽。"
@@ -699,6 +701,7 @@ const translations = {
     popularItineraries: {
       title: "人気の旅程",
       subtitle: "世界中の旅行者が選ぶ最高の旅行ルートを発見してください",
+      viewItinerary: "旅程を見る",
       itinerary1: {
         title: "4日間の東京探索",
         description: "伝統とモダンが調和する東京の魅力を体験してください。浅草寺から東京スカイツリーまで、日本の真の美しさを発見できます。"
@@ -851,6 +854,7 @@ const translations = {
     popularItineraries: {
       title: "Lịch Trình Phổ Biến",
       subtitle: "Khám phá những tuyến du lịch tốt nhất được lựa chọn bởi du khách trên toàn thế giới",
+      viewItinerary: "Xem Lịch Trình",
       itinerary1: {
         title: "Khám Phá Tokyo 4 Ngày",
         description: "Trải nghiệm sự quyến rũ của Tokyo nơi truyền thống hòa quyện với hiện đại. Từ Chùa Sensoji đến Tokyo Skytree, khám phá vẻ đẹp thực sự của Nhật Bản."
@@ -1003,6 +1007,7 @@ const translations = {
     popularItineraries: {
       title: "Itinerary Populer",
       subtitle: "Temukan rute perjalanan terbaik yang dipilih oleh traveler di seluruh dunia",
+      viewItinerary: "Lihat Itinerary",
       itinerary1: {
         title: "Eksplorasi Tokyo 4 Hari",
         description: "Rasakan pesona Tokyo di mana tradisi bertemu dengan modernitas. Dari Kuil Sensoji hingga Tokyo Skytree, temukan keindahan sejati Jepang."
