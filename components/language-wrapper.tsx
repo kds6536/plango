@@ -354,6 +354,42 @@ const translations = {
         rome: "The eternal city, a treasure trove of history and art"
       }
     },
+    popularItineraries: {
+      title: "Popular Itineraries",
+      subtitle: "Discover the best travel routes chosen by travelers worldwide",
+      viewItinerary: "View Itinerary",
+      itinerary1: {
+        title: "4-Day Tokyo Exploration",
+        description: "Experience the charm of Tokyo where tradition meets modernity. From Sensoji Temple to Tokyo Skytree, discover the true beauty of Japan."
+      },
+      itinerary2: {
+        title: "5-Day Paris Discovery",
+        description: "Create romantic moments in Paris, the city of love. Build special memories at the Eiffel Tower, Louvre Museum, and Champs-Élysées."
+      },
+      itinerary3: {
+        title: "Seoul Cultural Journey",
+        description: "Experience both traditional and modern Korean culture. From Gyeongbokgung Palace to Gangnam, discover Seoul's diverse charms."
+      }
+    },
+    testimonials: {
+      title: "User Reviews",
+      subtitle: "Check out real reviews from travelers who used Plan Go",
+      user1: {
+        name: "Sarah Kim",
+        review: "Plan Go made planning my perfect trip so easy! This AI helped me discover hidden gems I would never have found on my own. Plan Go truly offers an amazing travel experience!",
+        date: "April 2025 Trip"
+      },
+      user2: {
+        name: "Michael Park",
+        review: "I used Plan Go to plan my family vacation and the kids loved it too! From child-friendly accommodations to fun activities, this amazing travel planner thought of everything we needed.",
+        date: "March 2025 Trip"
+      },
+      user3: {
+        name: "Lisa Lee",
+        review: "I recently planned a solo backpacking trip with Plan Go! The detailed schedules and affordable recommendations were all perfect. Thank you Plan Go for such a wonderful experience!",
+        date: "May 2025 Trip"
+      }
+    }
   },
   zh: {
     logo: "Plan Go",

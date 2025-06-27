@@ -755,25 +755,22 @@ export default function HomePage() {
           <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {[
               {
-                title: "4일간의 도쿄 탐험",
-                description:
-                  "전통과 현대가 조화를 이루는 도쿄의 매력을 만끽하세요. 센소지 절부터 도쿄 스카이트리까지, 일본의 진정한 아름다움을 경험할 수 있습니다.",
+                title: t.popularItineraries?.itinerary1?.title || "4일간의 도쿄 탐험",
+                description: t.popularItineraries?.itinerary1?.description || "전통과 현대가 조화를 이루는 도쿄의 매력을 만끽하세요. 센소지 절부터 도쿄 스카이트리까지, 일본의 진정한 아름다움을 경험할 수 있습니다.",
                 image: "from-pink-400 to-red-400",
                 rating: 4.9,
                 reviews: 1234,
               },
               {
-                title: "5일간의 파리 발견",
-                description:
-                  "사랑의 도시 파리에서 로맨틱한 순간들을 만들어보세요. 에펠탑, 루브르 박물관, 샹젤리제 거리에서 특별한 추억을 쌓으세요.",
+                title: t.popularItineraries?.itinerary2?.title || "5일간의 파리 발견",
+                description: t.popularItineraries?.itinerary2?.description || "사랑의 도시 파리에서 로맨틱한 순간들을 만들어보세요. 에펠탑, 루브르 박물관, 샹젤리제 거리에서 특별한 추억을 쌓으세요.",
                 image: "from-blue-400 to-purple-400",
                 rating: 4.8,
                 reviews: 2156,
               },
               {
-                title: "서울 문화 여행",
-                description:
-                  "한국의 전통과 현대 문화를 동시에 체험하세요. 경복궁부터 강남까지, 서울의 다양한 매력을 발견할 수 있습니다.",
+                title: t.popularItineraries?.itinerary3?.title || "서울 문화 여행",
+                description: t.popularItineraries?.itinerary3?.description || "한국의 전통과 현대 문화를 동시에 체험하세요. 경복궁부터 강남까지, 서울의 다양한 매력을 발견할 수 있습니다.",
                 image: "from-green-400 to-teal-400",
                 rating: 4.7,
                 reviews: 892,
@@ -825,27 +822,24 @@ export default function HomePage() {
           <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
             {[
               {
-                name: "김지연",
+                name: t.testimonials?.user1?.name || "김지연",
                 rating: 5,
-                review:
-                  "Plan Go 덕분에 일본 여행을 정말 효율적으로 계획할 수 있었어요. 아이와 함께 여행 계획을 세우는 일이 몇 주가 걸렸는데, Plan Go로는 단 몇 분만에 완벽한 일정을 만들어줬어요. 특히 숨겨진 현지 맛집 추천이 정말 좋았습니다!",
-                date: "2025년 4월 여행",
+                review: t.testimonials?.user1?.review || "Plan Go 덕분에 일본 여행을 정말 효율적으로 계획할 수 있었어요. 아이와 함께 여행 계획을 세우는 일이 몇 주가 걸렸는데, Plan Go로는 단 몇 분만에 완벽한 일정을 만들어줬어요. 특히 숨겨진 현지 맛집 추천이 정말 좋았습니다!",
+                date: t.testimonials?.user1?.date || "2025년 4월 여행",
                 avatar: "from-pink-400 to-rose-400",
               },
               {
-                name: "박민호",
+                name: t.testimonials?.user2?.name || "박민호",
                 rating: 5,
-                review:
-                  "가족 여행을 계획하면서 Plan Go를 사용하는 데 아이들 취향까지 고려한 일정을 추천해줘서 놀랐어요. 특히 기존 가이드북에 없는 특별한 장소들을 발견할 수 있어서 좋았습니다. 덕분에 예산 조절 없이 알찬 여행을 즐길 수 있었습니다.",
-                date: "2025년 3월 여행",
+                review: t.testimonials?.user2?.review || "가족 여행을 계획하면서 Plan Go를 사용하는 데 아이들 취향까지 고려한 일정을 추천해줘서 놀랐어요. 특히 기존 가이드북에 없는 특별한 장소들을 발견할 수 있어서 좋았습니다. 덕분에 예산 조절 없이 알찬 여행을 즐길 수 있었습니다.",
+                date: t.testimonials?.user2?.date || "2025년 3월 여행",
                 avatar: "from-blue-400 to-cyan-400",
               },
               {
-                name: "이수진",
+                name: t.testimonials?.user3?.name || "이수진",
                 rating: 5,
-                review:
-                  "혼자 떠나는 유럽 배낭여행을 Plan Go로 계획했어요. 안전한 숙소와 교통편 추천은 물론이고, 실시간으로 일정을 수정할 수 있어서 편했습니다. 다음 여행도 반드시 Plan Go와 함께할 거예요!",
-                date: "2025년 5월 여행",
+                review: t.testimonials?.user3?.review || "혼자 떠나는 유럽 배낭여행을 Plan Go로 계획했어요. 안전한 숙소와 교통편 추천은 물론이고, 실시간으로 일정을 수정할 수 있어서 편했습니다. 다음 여행도 반드시 Plan Go와 함께할 거예요!",
+                date: t.testimonials?.user3?.date || "2025년 5월 여행",
                 avatar: "from-green-400 to-teal-400",
               },
             ].map((testimonial, index) => (
