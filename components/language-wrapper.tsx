@@ -882,6 +882,8 @@ const translations = {
       destinations: "Điểm Đến Phổ Biến",
       community: "Cộng Đồng Du Lịch",
       pricing: "Bảng Giá",
+      home: "Trang Chủ",
+      profile: "Tài Khoản",
     },
     auth: {
       login: "Đăng Nhập",
@@ -1014,6 +1016,65 @@ const translations = {
         confirm: "Hoàn tất thanh toán"
       }
     },
+    destinations: {
+      title: "Điểm Đến Phổ Biến",
+      subtitle: "Khám phá những điểm đến hàng đầu thế giới được yêu thích bởi du khách khắp nơi",
+      searchPlaceholder: "Tìm kiếm thành phố hoặc quốc gia...",
+      regionSelect: "Chọn Khu Vực",
+      allRegions: "Tất Cả Khu Vực",
+      styleSelect: "Phong Cách Du Lịch",
+      recommendedDuration: "Thời Gian Khuyến Nghị",
+      recommendedPeople: "Kích Thước Nhóm Khuyến Nghị",
+      createItinerary: "Tạo Lịch Trình",
+      viewDetails: "Xem Chi Tiết",
+      loadMore: "Xem Thêm Điểm Đến",
+      regions: {
+        asia: "Châu Á",
+        europe: "Châu Âu",
+        northAmerica: "Bắc Mỹ",
+        southAmerica: "Nam Mỹ",
+        africa: "Châu Phi",
+        oceania: "Châu Đại Dương"
+      },
+      tags: {
+        culture: "Văn Hóa",
+        food: "Ẩm Thực",
+        shopping: "Mua Sắm",
+        romantic: "Lãng Mạn",
+        art: "Nghệ Thuật",
+        history: "Lịch Sử",
+        nature: "Thiên Nhiên",
+        healing: "Nghỉ Dưỡng",
+        beach: "Bãi Biển",
+        city: "Thành Phố",
+        affordable: "Giá Cả Phải Chăng",
+        adventure: "Phiêu Lưu"
+      },
+      cities: {
+        tokyo: "Tokyo",
+        paris: "Paris",
+        jeju: "Đảo Jeju",
+        newYork: "New York",
+        bangkok: "Bangkok",
+        rome: "Roma"
+      },
+      countries: {
+        japan: "Nhật Bản",
+        france: "Pháp",
+        korea: "Hàn Quốc",
+        usa: "Mỹ",
+        thailand: "Thái Lan",
+        italy: "Ý"
+      },
+      descriptions: {
+        tokyo: "Thành phố quyến rũ nơi truyền thống hòa quyện với hiện đại",
+        paris: "Thành phố tình yêu và nghệ thuật, điểm đến lãng mạn",
+        jeju: "Hòn đảo với thiên nhiên tuyệt đẹp và không gian nghỉ dưỡng",
+        newYork: "Thành phố của những giấc mơ, vùng đất của những khả năng vô hạn",
+        bangkok: "Điểm đến Đông Nam Á với ẩm thực ngon và giá cả phải chăng",
+        rome: "Thành phố vĩnh cửu, kho báu lịch sử và nghệ thuật"
+      }
+    },
     popularItineraries: {
       title: "Lịch Trình Phổ Biến",
       subtitle: "Khám phá những tuyến du lịch tốt nhất được lựa chọn bởi du khách trên toàn thế giới",
@@ -1070,6 +1131,8 @@ const translations = {
       destinations: "Destinasi Populer",
       community: "Komunitas Travel",
       pricing: "Harga",
+      home: "Beranda",
+      profile: "Akun Saya",
     },
     auth: {
       login: "Masuk",
@@ -1200,6 +1263,65 @@ const translations = {
         name: "Nama pemegang kartu",
         namePlaceholder: "John Doe",
         confirm: "Selesaikan pembayaran"
+      }
+    },
+    destinations: {
+      title: "Destinasi Populer",
+      subtitle: "Temukan destinasi perjalanan terbaik dunia yang dicintai oleh traveler di mana-mana",
+      searchPlaceholder: "Cari kota atau negara...",
+      regionSelect: "Pilih Wilayah",
+      allRegions: "Semua Wilayah",
+      styleSelect: "Gaya Perjalanan",
+      recommendedDuration: "Durasi Rekomendasi",
+      recommendedPeople: "Ukuran Grup Rekomendasi",
+      createItinerary: "Buat Itinerary",
+      viewDetails: "Lihat Detail",
+      loadMore: "Lihat Lebih Banyak Destinasi",
+      regions: {
+        asia: "Asia",
+        europe: "Eropa",
+        northAmerica: "Amerika Utara",
+        southAmerica: "Amerika Selatan",
+        africa: "Afrika",
+        oceania: "Oseania"
+      },
+      tags: {
+        culture: "Budaya",
+        food: "Makanan",
+        shopping: "Belanja",
+        romantic: "Romantis",
+        art: "Seni",
+        history: "Sejarah",
+        nature: "Alam",
+        healing: "Penyembuhan",
+        beach: "Pantai",
+        city: "Kota",
+        affordable: "Terjangkau",
+        adventure: "Petualangan"
+      },
+      cities: {
+        tokyo: "Tokyo",
+        paris: "Paris",
+        jeju: "Pulau Jeju",
+        newYork: "New York",
+        bangkok: "Bangkok",
+        rome: "Roma"
+      },
+      countries: {
+        japan: "Jepang",
+        france: "Prancis",
+        korea: "Korea Selatan",
+        usa: "Amerika Serikat",
+        thailand: "Thailand",
+        italy: "Italia"
+      },
+      descriptions: {
+        tokyo: "Kota menawan di mana tradisi dan modernitas berpadu harmonis",
+        paris: "Kota cinta dan seni, destinasi romantis",
+        jeju: "Pulau dengan alam indah dan energi penyembuhan",
+        newYork: "Kota impian, tanah kemungkinan tak terbatas",
+        bangkok: "Destinasi Asia Tenggara dengan makanan lezat dan harga terjangkau",
+        rome: "Kota abadi, harta karun sejarah dan seni"
       }
     },
     popularItineraries: {
