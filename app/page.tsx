@@ -796,7 +796,7 @@ export default function HomePage() {
                       variant="ghost"
                       className="text-blue-600 hover:text-blue-700 hover:bg-blue-50 dark:hover:bg-blue-950/30 p-0 h-auto font-light group"
                     >
-                      {t.popularItineraries.viewItinerary}
+                      {t.popularItineraries?.viewItinerary || "여정 보기"}
                       <ArrowRight className="w-4 h-4 ml-2 group-hover:translate-x-1 transition-transform" />
                     </Button>
                   </Link>
