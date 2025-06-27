@@ -50,6 +50,29 @@ const translations = {
       title: "Plan Go에 오신 것을 환영합니다!",
       subtitle: "AI와 함께 완벽한 여행을 계획해보세요",
     },
+    hero: {
+      title: "AI 기반 맞춤형 여정으로",
+      subtitle: "잊지 못할 여행을 만들어보세요",
+      cta: "지금 여행을 계획하세요",
+    },
+    features: {
+      title: "Plan Go의 특별함을 경험하세요",
+      subtitle: "Plan Go가 다른 여행 계획 서비스와 차별화되는 이유",
+      items: [
+        {
+          title: "맞춤형 여정",
+          description: "AI가 당신의 선호도, 관심사, 예산에 맞춰 완벽한 맞춤형 여행 계획을 세워드립니다."
+        },
+        {
+          title: "빠르고 효율적인 계획",
+          description: "몇 분 안에 상세한 여정을 만들어 시간과 노력을 절약하세요."
+        },
+        {
+          title: "신뢰할 수 있는 정보",
+          description: "목적지, 명소, 여행 팁에 대한 최신 정보를 얻으세요."
+        }
+      ]
+    },
     pricing: {
       title: "Plan Go 요금제",
       subtitle: "여행 계획의 필요에 맞는 완벽한 요금제를 선택하세요",
@@ -214,6 +237,18 @@ const translations = {
         review: "혼자 떠나는 유럽 배낭여행을 Plan Go로 계획했어요. 안전한 숙소와 교통편 추천은 물론이고, 실시간으로 일정을 수정할 수 있어서 편했습니다. Plan Go 덕분에 정말 멋진 여행이 되었어요!",
         date: "2025년 5월 여행"
       }
+    },
+    footer: {
+      description: "AI 기반 맞춤형 여행 계획으로 완벽한 여행을 만들어보세요.",
+      services: {
+        title: "서비스",
+        items: ["여행 계획 만들기", "요금제 안내", "인기 여행지"]
+      },
+      support: {
+        title: "고객 지원",
+        items: ["자주 묻는 질문", "문의하기", "이용약관", "개인정보처리방침"]
+      },
+      copyright: "© 2025 Plan Go. All rights reserved."
     }
   },
   en: {
@@ -260,6 +295,29 @@ const translations = {
     welcome: {
       title: "Welcome to Plan Go!",
       subtitle: "Plan the perfect trip with AI",
+    },
+    hero: {
+      title: "Create Unforgettable Journeys",
+      subtitle: "with AI-Powered Custom Itineraries",
+      cta: "Start Planning Your Trip",
+    },
+    features: {
+      title: "Experience Plan Go's Excellence",
+      subtitle: "What makes Plan Go different from other travel planning services",
+      items: [
+        {
+          title: "Personalized Journeys",
+          description: "AI creates perfect custom travel plans based on your preferences, interests, and budget."
+        },
+        {
+          title: "Fast & Efficient Planning",
+          description: "Create detailed itineraries in minutes, saving time and effort."
+        },
+        {
+          title: "Reliable Information",
+          description: "Get the latest information about destinations, attractions, and travel tips."
+        }
+      ]
     },
     pricing: {
       title: "Plan Go Pricing",
@@ -425,6 +483,18 @@ const translations = {
         review: "I recently planned a solo backpacking trip with Plan Go! The detailed schedules and affordable recommendations were all perfect. Thank you Plan Go for such a wonderful experience!",
         date: "May 2025 Trip"
       }
+    },
+    footer: {
+      description: "Create perfect trips with AI-powered custom travel planning.",
+      services: {
+        title: "Services",
+        items: ["Create Itinerary", "Pricing Plans", "Popular Destinations"]
+      },
+      support: {
+        title: "Support",
+        items: ["FAQ", "Contact Us", "Terms of Service", "Privacy Policy"]
+      },
+      copyright: "© 2025 Plan Go. All rights reserved."
     }
   },
   zh: {
@@ -471,6 +541,29 @@ const translations = {
     welcome: {
       title: "欢迎来到Plan Go！",
       subtitle: "与AI一起规划完美旅行",
+    },
+    hero: {
+      title: "用AI定制行程",
+      subtitle: "创造难忘的旅程",
+      cta: "立即开始规划旅行",
+    },
+    features: {
+      title: "体验Plan Go的卓越",
+      subtitle: "Plan Go与其他旅行规划服务的不同之处",
+      items: [
+        {
+          title: "个性化旅程",
+          description: "AI根据您的偏好、兴趣和预算创建完美的定制旅行计划。"
+        },
+        {
+          title: "快速高效规划",
+          description: "几分钟内创建详细行程，节省时间和精力。"
+        },
+        {
+          title: "可靠信息",
+          description: "获取关于目的地、景点和旅行贴士的最新信息。"
+        }
+      ]
     },
     pricing: {
       title: "Plan Go 价格方案",
@@ -580,6 +673,18 @@ const translations = {
         review: "我最近用Plan Go计划了一次独自背包旅行！详细的时间表和实惠的推荐都非常完美。感谢Plan Go给了我如此美好的体验！",
         date: "2025年5月旅行"
       }
+    },
+    footer: {
+      description: "使用AI驱动的定制旅行规划，打造完美旅程。",
+      services: {
+        title: "服务",
+        items: ["制定旅行计划", "价格方案", "热门目的地"]
+      },
+      support: {
+        title: "支持",
+        items: ["常见问题", "联系我们", "服务条款", "隐私政策"]
+      },
+      copyright: "© 2025 Plan Go. All rights reserved."
     }
   },
   ja: {
@@ -625,6 +730,29 @@ const translations = {
       title: "Plan Goへようこそ！",
       subtitle: "AIと一緒に完璧な旅行を計画しましょう",
     },
+    hero: {
+      title: "AI駆動のカスタム旅程で",
+      subtitle: "忘れられない旅を作りましょう",
+      cta: "今すぐ旅行を計画する",
+    },
+    features: {
+      title: "Plan Goの優秀性を体験",
+      subtitle: "Plan Goが他の旅行計画サービスと違う理由",
+      items: [
+        {
+          title: "パーソナライズされた旅程",
+          description: "AIがあなたの好み、興味、予算に基づいて完璧なカスタム旅行計画を作成します。"
+        },
+        {
+          title: "迅速で効率的な計画",
+          description: "数分で詳細な旅程を作成し、時間と労力を節約します。"
+        },
+        {
+          title: "信頼できる情報",
+          description: "目的地、観光スポット、旅行のヒントに関する最新情報を入手してください。"
+        }
+      ]
+    },
     pricing: {
       title: "Plan Go 料金プラン",
       subtitle: "あなたの旅行計画のニーズに最適な料金プランをお選びください",
@@ -658,7 +786,7 @@ const translations = {
         button: "登録",
         features: {
           unlimited: "無制限旅程生成",
-          advanced: "すべての高度なカスタマイズ機能",
+                      advanced: "すべての高度なカスタマイズ機能",
           detailedInfo: "画像、リンクなどの詳細情報を含む",
           realTimeEdit: "リアルタイム旅程編集",
           prioritySupport: "優先サポートサービス"
@@ -733,6 +861,18 @@ const translations = {
         review: "最近Plan Goで一人バックパッキング旅行を計画しました！詳細なスケジュールと手頃な価格の推奨事項はすべて完璧でした。Plan Goのおかげで素晴らしい体験ができました！",
         date: "2025年5月旅行"
       }
+    },
+    footer: {
+      description: "AI駆動のカスタム旅行計画で完璧な旅行を作成しましょう。",
+      services: {
+        title: "サービス",
+        items: ["旅行プランを作成", "料金プラン", "人気の目的地"]
+      },
+      support: {
+        title: "サポート",
+        items: ["よくある質問", "お問い合わせ", "利用規約", "プライバシーポリシー"]
+      },
+      copyright: "© 2025 Plan Go. All rights reserved."
     }
   },
   vi: {
@@ -777,6 +917,29 @@ const translations = {
     welcome: {
       title: "Chào mừng đến với Plan Go!",
       subtitle: "Lập kế hoạch du lịch hoàn hảo với AI",
+    },
+    hero: {
+      title: "Hành trình tùy chỉnh bằng AI",
+      subtitle: "Tạo những chuyến đi khó quên",
+      cta: "Lập kế hoạch du lịch ngay bây giờ",
+    },
+    features: {
+      title: "Trải nghiệm sự xuất sắc của Plan Go",
+      subtitle: "Lý do Plan Go khác biệt với các dịch vụ lập kế hoạch du lịch khác",
+      items: [
+        {
+          title: "Hành trình tùy chỉnh",
+          description: "AI tạo kế hoạch du lịch tùy chỉnh hoàn hảo dựa trên sở thích, sở thích và ngân sách của bạn."
+        },
+        {
+          title: "Lập kế hoạch nhanh chóng và hiệu quả",
+          description: "Tạo lịch trình chi tiết trong vài phút để tiết kiệm thời gian và công sức."
+        },
+        {
+          title: "Thông tin đáng tin cậy",
+          description: "Nhận thông tin cập nhật về điểm đến, điểm tham quan và mẹo du lịch."
+        }
+      ]
     },
     pricing: {
       title: "Bảng Giá Plan Go",
@@ -886,6 +1049,18 @@ const translations = {
         review: "Gần đây tôi đã lập kế hoạch cho một chuyến du lịch ba lô một mình với Plan Go! Các lịch trình chi tiết và những gợi ý giá cả phải chăng đều hoàn hảo. Cảm ơn Plan Go vì đã mang lại cho tôi trải nghiệm tuyệt vời như vậy!",
         date: "Chuyến đi tháng 5 năm 2025"
       }
+    },
+    footer: {
+      description: "Tạo chuyến đi hoàn hảo với kế hoạch du lịch tùy chỉnh bằng AI.",
+      services: {
+        title: "Dịch vụ",
+        items: ["Tạo Lịch Trình", "Bảng Giá", "Điểm Đến Phổ Biến"]
+      },
+      support: {
+        title: "Hỗ trợ",
+        items: ["Câu hỏi thường gặp", "Liên hệ", "Điều khoản Dịch vụ", "Chính sách Bảo mật"]
+      },
+      copyright: "© 2025 Plan Go. All rights reserved."
     }
   },
   id: {
@@ -930,6 +1105,29 @@ const translations = {
     welcome: {
       title: "Selamat datang di Plan Go!",
       subtitle: "Rencanakan perjalanan sempurna dengan AI",
+    },
+    hero: {
+      title: "Perjalanan kustom bertenaga AI",
+      subtitle: "Ciptakan perjalanan yang tak terlupakan",
+      cta: "Rencanakan perjalanan Anda sekarang",
+    },
+    features: {
+      title: "Rasakan Keunggulan Plan Go",
+      subtitle: "Mengapa Plan Go berbeda dari layanan perencanaan perjalanan lainnya",
+      items: [
+        {
+          title: "Perjalanan Kustom",
+          description: "AI menciptakan rencana perjalanan kustom yang sempurna berdasarkan preferensi, minat, dan anggaran Anda."
+        },
+        {
+          title: "Perencanaan Cepat dan Efisien",
+          description: "Buat itinerary detail dalam hitungan menit untuk menghemat waktu dan tenaga."
+        },
+        {
+          title: "Informasi Terpercaya",
+          description: "Dapatkan informasi terkini tentang destinasi, tempat wisata, dan tips perjalanan."
+        }
+      ]
     },
     pricing: {
       title: "Harga Plan Go",
@@ -1039,6 +1237,18 @@ const translations = {
         review: "Saya baru-baru ini merencanakan perjalanan backpacking solo dengan Plan Go! Jadwal detail dan rekomendasi terjangkau semuanya sempurna. Terima kasih Plan Go atas pengalaman luar biasa seperti itu!",
         date: "Perjalanan Mei 2025"
       }
+    },
+    footer: {
+      description: "Ciptakan perjalanan sempurna dengan perencanaan perjalanan kustom bertenaga AI.",
+      services: {
+        title: "Layanan",
+        items: ["Buat Itinerary", "Harga", "Destinasi Populer"]
+      },
+      support: {
+        title: "Dukungan",
+        items: ["FAQ", "Hubungi Kami", "Syarat Layanan", "Kebijakan Privasi"]
+      },
+      copyright: "© 2025 Plan Go. All rights reserved."
     }
   },
 }
