@@ -5,12 +5,12 @@ import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { MapPin, Shield, ArrowRight, Plane, Star, Users, CheckCircle, Compass, Zap, Clock } from "lucide-react"
-import { useLanguage } from "@/hooks/use-language"
+import { useLanguageStore } from "@/lib/language-store"
 import { useScrollPosition } from "@/hooks/use-scroll-position"
 import { ThemeToggle } from "@/components/theme-toggle"
 
 export default function HomePage() {
-  const { language, changeLanguage } = useLanguage()
+  const { language, setLanguage } = useLanguageStore()
   useScrollPosition()
 
   const translations = {
@@ -178,85 +178,6 @@ export default function HomePage() {
         copyright: "© 2025 Plan Go. All rights reserved.",
       },
     },
-    zh: {
-      logo: "Plan Go",
-      nav: {
-        createItinerary: "制定旅行计划",
-        destinations: "热门目的地",
-        community: "旅行社区",
-        pricing: "价格方案",
-      },
-      auth: {
-        login: "登录",
-        signup: "注册",
-      },
-      hero: {
-        title: "AI定制专属行程",
-        subtitle: "创造难忘的旅行体验",
-        cta: "立即开始规划旅行",
-      },
-      howItWorks: {
-        title: "Plan Go使用方法",
-        subtitle: "通过几个简单步骤创建完美的旅行计划",
-        steps: [
-          {
-            title: "注册/登录",
-            description: "轻松注册并登录，使用Plan Go的所有功能。",
-          },
-          {
-            title: "输入旅行信息",
-            description: "输入旅行日期、目的地、预算、兴趣等基本信息。",
-          },
-          {
-            title: "AI生成行程",
-            description: "AI根据您的输入信息生成最佳旅行行程。",
-          },
-          {
-            title: "查看和修改",
-            description: "查看生成的行程并根据需要自由修改。",
-          },
-        ],
-      },
-      features: {
-        title: "体验Plan Go的卓越",
-        subtitle: "Plan Go与其他旅行规划服务的差异化优势",
-        items: [
-          {
-            title: "个性化行程",
-            description: "AI根据您的偏好、兴趣和预算制定完美的定制旅行计划。体验符合您品味的独特旅行。",
-          },
-          {
-            title: "快速高效规划",
-            description: "几分钟内创建详细行程，节省时间和精力。简化复杂的旅行规划。",
-          },
-          {
-            title: "可靠信息",
-            description: "获取关于目的地、景点和旅行贴士的最新信息。通过验证信息确保安全愉快的旅行。",
-          },
-        ],
-      },
-      popularItineraries: {
-        title: "热门行程",
-        subtitle: "发现全球旅行者选择的最佳旅行路线",
-        viewItinerary: "查看行程",
-      },
-      testimonials: {
-        title: "用户评价",
-        subtitle: "查看使用Plan Go的旅行者的真实评价",
-      },
-      footer: {
-        description: "通过AI驱动的旅行规划服务体验完美旅行。",
-        services: {
-          title: "服务",
-          items: ["行程生成", "定制推荐", "旅行信息"],
-        },
-        support: {
-          title: "客户支持",
-          items: ["常见问题", "客服中心", "使用条款", "隐私政策"],
-        },
-        copyright: "© 2025 Plan Go. 版权所有。",
-      },
-    },
     ja: {
       logo: "Plan Go",
       nav: {
@@ -336,88 +257,6 @@ export default function HomePage() {
           items: ["よくある質問", "カスタマーセンター", "利用規約", "プライバシーポリシー"],
         },
         copyright: "© 2025 Plan Go. 全著作権所有。",
-      },
-    },
-    vi: {
-      logo: "Plan Go",
-      nav: {
-        createItinerary: "Tạo Lịch Trình",
-        destinations: "Điểm Đến Phổ Biến",
-        community: "Cộng Đồng Du Lịch",
-        pricing: "Bảng Giá",
-      },
-      auth: {
-        login: "Đăng Nhập",
-        signup: "Đăng Ký",
-      },
-      hero: {
-        title: "Tạo Hành Trình Khó Quên",
-        subtitle: "với Lịch Trình Tùy Chỉnh AI",
-        cta: "Bắt Đầu Lập Kế Hoạch Du Lịch",
-      },
-      howItWorks: {
-        title: "Cách Plan Go Hoạt Động",
-        subtitle: "Tạo kế hoạch du lịch hoàn hảo chỉ với vài bước đơn giản",
-        steps: [
-          {
-            title: "Đăng Ký / Đăng Nhập",
-            description: "Dễ dàng đăng ký và đăng nhập để truy cập tất cả tính năng Plan Go.",
-          },
-          {
-            title: "Nhập Thông Tin Du Lịch",
-            description: "Nhập thông tin cơ bản như ngày du lịch, điểm đến, ngân sách và sở thích.",
-          },
-          {
-            title: "AI Tạo Lịch Trình",
-            description: "AI tạo lịch trình du lịch tối ưu dựa trên thông tin bạn nhập.",
-          },
-          {
-            title: "Xem Xét & Chỉnh Sửa",
-            description: "Xem xét lịch trình được tạo và tự do chỉnh sửa theo nhu cầu.",
-          },
-        ],
-      },
-      features: {
-        title: "Trải Nghiệm Sự Xuất Sắc Của Plan Go",
-        subtitle: "Điều gì làm Plan Go khác biệt so với các dịch vụ lập kế hoạch du lịch khác",
-        items: [
-          {
-            title: "Hành Trình Cá Nhân Hóa",
-            description:
-              "AI tạo kế hoạch du lịch tùy chỉnh hoàn hảo dựa trên sở thích, quan tâm và ngân sách của bạn. Trải nghiệm những chuyến đi độc đáo phù hợp với gu của bạn.",
-          },
-          {
-            title: "Lập Kế Hoạch Nhanh & Hiệu Quả",
-            description:
-              "Tạo lịch trình chi tiết trong vài phút, tiết kiệm thời gian và công sức. Đơn giản hóa việc lập kế hoạch du lịch phức tạp.",
-          },
-          {
-            title: "Thông Tin Đáng Tin Cậy",
-            description:
-              "Nhận thông tin mới nhất về điểm đến, điểm tham quan và mẹo du lịch. Đảm bảo chuyến đi an toàn và thú vị với thông tin đã được xác minh.",
-          },
-        ],
-      },
-      popularItineraries: {
-        title: "Lịch Trình Phổ Biến",
-        subtitle: "Khám phá những tuyến đường du lịch tốt nhất được lựa chọn bởi du khách trên toàn thế giới",
-        viewItinerary: "Xem Lịch Trình",
-      },
-      testimonials: {
-        title: "Đánh Giá Người Dùng",
-        subtitle: "Xem đánh giá thực tế từ những du khách đã sử dụng Plan Go",
-      },
-      footer: {
-        description: "Trải nghiệm du lịch hoàn hảo với dịch vụ lập kế hoạch du lịch AI.",
-        services: {
-          title: "Dịch Vụ",
-          items: ["Tạo Lịch Trình", "Đề Xuất Tùy Chỉnh", "Thông Tin Du Lịch"],
-        },
-        support: {
-          title: "Hỗ Trợ",
-          items: ["Câu Hỏi Thường Gặp", "Liên Hệ", "Điều Khoản", "Chính Sách Bảo Mật"],
-        },
-        copyright: "© 2025 Plan Go. Tất cả quyền được bảo lưu.",
       },
     },
     id: {
@@ -502,6 +341,164 @@ export default function HomePage() {
         copyright: "© 2025 Plan Go. Semua hak dilindungi.",
       },
     },
+    zh: {
+      logo: "Plan Go",
+      nav: {
+        createItinerary: "制定旅行计划",
+        destinations: "热门目的地",
+        community: "旅行社区",
+        pricing: "价格方案",
+      },
+      auth: {
+        login: "登录",
+        signup: "注册",
+      },
+      hero: {
+        title: "AI定制专属行程",
+        subtitle: "创造难忘的旅行体验",
+        cta: "立即开始规划旅行",
+      },
+      howItWorks: {
+        title: "Plan Go使用方法",
+        subtitle: "通过几个简单步骤创建完美的旅行计划",
+        steps: [
+          {
+            title: "注册/登录",
+            description: "轻松注册并登录，使用Plan Go的所有功能。",
+          },
+          {
+            title: "输入旅行信息",
+            description: "输入旅行日期、目的地、预算、兴趣等基本信息。",
+          },
+          {
+            title: "AI生成行程",
+            description: "AI根据您的输入信息生成最佳旅行行程。",
+          },
+          {
+            title: "查看和修改",
+            description: "查看生成的行程并根据需要自由修改。",
+          },
+        ],
+      },
+      features: {
+        title: "体验Plan Go的卓越",
+        subtitle: "Plan Go与其他旅行规划服务的差异化优势",
+        items: [
+          {
+            title: "个性化行程",
+            description: "AI根据您的偏好、兴趣和预算制定完美的定制旅行计划。体验符合您品味的独特旅行。",
+          },
+          {
+            title: "快速高效规划",
+            description: "几分钟内创建详细行程，节省时间和精力。简化复杂的旅行规划。",
+          },
+          {
+            title: "可靠信息",
+            description: "获取关于目的地、景点和旅行贴士的最新信息。通过验证信息确保安全愉快的旅行。",
+          },
+        ],
+      },
+      popularItineraries: {
+        title: "热门行程",
+        subtitle: "发现全球旅行者选择的最佳旅行路线",
+        viewItinerary: "查看行程",
+      },
+      testimonials: {
+        title: "用户评价",
+        subtitle: "查看使用Plan Go的旅行者的真实评价",
+      },
+      footer: {
+        description: "通过AI驱动的旅行规划服务体验完美旅行。",
+        services: {
+          title: "服务",
+          items: ["行程生成", "定制推荐", "旅行信息"],
+        },
+        support: {
+          title: "客户支持",
+          items: ["常见问题", "客服中心", "使用条款", "隐私政策"],
+        },
+        copyright: "© 2025 Plan Go. 版权所有。",
+      },
+    },
+    vi: {
+      logo: "Plan Go",
+      nav: {
+        createItinerary: "Tạo Lịch Trình",
+        destinations: "Điểm Đến Phổ Biến",
+        community: "Cộng Đồng Du Lịch",
+        pricing: "Bảng Giá",
+      },
+      auth: {
+        login: "Đăng Nhập",
+        signup: "Đăng Ký",
+      },
+      hero: {
+        title: "Tạo Hành Trình Khó Quên",
+        subtitle: "với Lịch Trình Tùy Chỉnh AI",
+        cta: "Bắt Đầu Lập Kế Hoạch Du Lịch",
+      },
+      howItWorks: {
+        title: "Cách Plan Go Hoạt Động",
+        subtitle: "Tạo kế hoạch du lịch hoàn hảo chỉ với vài bước đơn giản",
+        steps: [
+          {
+            title: "Đăng Ký / Đăng Nhập",
+            description: "Dễ dàng đăng ký và đăng nhập để truy cập tất cả tính năng Plan Go.",
+          },
+          {
+            title: "Nhập Thông Tin Du Lịch",
+            description: "Nhập thông tin cơ bản như ngày du lịch, điểm đến, ngân sách và sở thích.",
+          },
+          {
+            title: "AI Tạo Lịch Trình",
+            description: "AI tạo lịch trình du lịch tối ưu dựa trên thông tin bạn nhập.",
+          },
+          {
+            title: "Xem Và Chỉnh Sửa",
+            description: "Xem lịch trình được tạo và tự do chỉnh sửa theo nhu cầu.",
+          },
+        ],
+      },
+      features: {
+        title: "Trải Nghiệm Sự Xuất Sắc Của Plan Go",
+        subtitle: "Điều làm Plan Go khác biệt với các dịch vụ lập kế hoạch du lịch khác",
+        items: [
+          {
+            title: "Hành Trình Cá Nhân Hóa",
+            description: "AI tạo kế hoạch du lịch tùy chỉnh hoàn hảo dựa trên sở thích, quan tâm và ngân sách của bạn.",
+          },
+          {
+            title: "Lập Kế Hoạch Nhanh & Hiệu Quả",
+            description: "Tạo lịch trình chi tiết trong vài phút, tiết kiệm thời gian và công sức.",
+          },
+          {
+            title: "Thông Tin Đáng Tin Cậy",
+            description: "Nhận thông tin mới nhất về điểm đến, điểm tham quan và mẹo du lịch.",
+          },
+        ],
+      },
+      popularItineraries: {
+        title: "Lịch Trình Phổ Biến",
+        subtitle: "Khám phá những tuyến du lịch tuyệt vời nhất được lựa chọn bởi du khách trên toàn thế giới",
+        viewItinerary: "Xem Lịch Trình",
+      },
+      testimonials: {
+        title: "Đánh Giá Người Dùng",
+        subtitle: "Xem đánh giá thực tế từ những du khách đã sử dụng Plan Go",
+      },
+      footer: {
+        description: "Trải nghiệm du lịch hoàn hảo với dịch vụ lập kế hoạch du lịch được hỗ trợ bởi AI.",
+        services: {
+          title: "Dịch Vụ",
+          items: ["Tạo Lịch Trình", "Gợi Ý Tùy Chỉnh", "Thông Tin Du Lịch"],
+        },
+        support: {
+          title: "Hỗ Trợ",
+          items: ["Câu Hỏi Thường Gặp", "Liên Hệ", "Điều Khoản", "Chính Sách Bảo Mật"],
+        },
+        copyright: "© 2025 Plan Go. Tất cả quyền được bảo lưu.",
+      },
+    },
   }
 
   const t = translations[language as keyof typeof translations]
@@ -549,17 +546,17 @@ export default function HomePage() {
           </div>
 
           <div className="flex items-center space-x-4">
-            <Select value={language} onValueChange={changeLanguage}>
+                            <Select value={language} onValueChange={setLanguage}>
               <SelectTrigger className="w-32 border-border bg-background">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
-                <SelectItem value="ko">한국어</SelectItem>
-                <SelectItem value="en">English</SelectItem>
-                <SelectItem value="zh">中文</SelectItem>
-                <SelectItem value="ja">日本語</SelectItem>
-                <SelectItem value="vi">Tiếng Việt</SelectItem>
-                <SelectItem value="id">Bahasa Indonesia</SelectItem>
+                                  <SelectItem value="ko">한국어</SelectItem>
+                  <SelectItem value="en">English</SelectItem>
+                  <SelectItem value="ja">日本語</SelectItem>
+                  <SelectItem value="zh">中文</SelectItem>
+                  <SelectItem value="vi">Tiếng Việt</SelectItem>
+                  <SelectItem value="id">Bahasa Indonesia</SelectItem>
               </SelectContent>
             </Select>
             <ThemeToggle />

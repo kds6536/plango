@@ -9,8 +9,148 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
 import { Badge } from "@/components/ui/badge"
 import { Heart, MessageCircle, Share2, Search, TrendingUp, Users, Calendar } from "lucide-react"
 import Link from "next/link"
+import { useLanguageStore } from "@/lib/language-store"
+
+// 다국어 번역
+const translations = {
+  ko: {
+    title: "여행 커뮤니티",
+    nav: {
+      home: "홈",
+      destinations: "인기 여행지",
+      community: "커뮤니티",
+      profile: "내 계정"
+    },
+    search: "게시글 검색...",
+    trendingTopics: "인기 토픽",
+    communityStats: "커뮤니티 현황",
+    totalMembers: "총 회원수",
+    todayPosts: "오늘 게시글",
+    activeUsers: "활성 사용자",
+    writePost: "글 작성하기",
+    tabs: {
+      popular: "인기글",
+      recent: "최신글",
+      questions: "질문",
+      reviews: "후기"
+    }
+  },
+  en: {
+    title: "Travel Community",
+    nav: {
+      home: "Home",
+      destinations: "Popular Destinations",
+      community: "Community",
+      profile: "My Account"
+    },
+    search: "Search posts...",
+    trendingTopics: "Trending Topics",
+    communityStats: "Community Stats",
+    totalMembers: "Total Members",
+    todayPosts: "Today's Posts",
+    activeUsers: "Active Users",
+    writePost: "Write Post",
+    tabs: {
+      popular: "Popular",
+      recent: "Recent",
+      questions: "Questions",
+      reviews: "Reviews"
+    }
+  },
+  ja: {
+    title: "旅行コミュニティ",
+    nav: {
+      home: "ホーム",
+      destinations: "人気の目的地",
+      community: "コミュニティ",
+      profile: "マイアカウント"
+    },
+    search: "投稿を検索...",
+    trendingTopics: "トレンディングトピック",
+    communityStats: "コミュニティ統計",
+    totalMembers: "総メンバー数",
+    todayPosts: "今日の投稿",
+    activeUsers: "アクティブユーザー",
+    writePost: "投稿作成",
+    tabs: {
+      popular: "人気",
+      recent: "最新",
+      questions: "質問",
+      reviews: "レビュー"
+    }
+  },
+  zh: {
+    title: "旅行社区",
+    nav: {
+      home: "首页",
+      destinations: "热门目的地",
+      community: "社区",
+      profile: "我的账户"
+    },
+    search: "搜索帖子...",
+    trendingTopics: "热门话题",
+    communityStats: "社区统计",
+    totalMembers: "总会员数",
+    todayPosts: "今日帖子",
+    activeUsers: "活跃用户",
+    writePost: "发布帖子",
+    tabs: {
+      popular: "热门",
+      recent: "最新",
+      questions: "问题",
+      reviews: "评价"
+    }
+  },
+  vi: {
+    title: "Cộng Đồng Du Lịch",
+    nav: {
+      home: "Trang Chủ",
+      destinations: "Điểm Đến Phổ Biến",
+      community: "Cộng Đồng",
+      profile: "Tài Khoản"
+    },
+    search: "Tìm kiếm bài viết...",
+    trendingTopics: "Chủ Đề Thịnh Hành",
+    communityStats: "Thống Kê Cộng Đồng",
+    totalMembers: "Tổng Thành Viên",
+    todayPosts: "Bài Viết Hôm Nay",
+    activeUsers: "Người Dùng Hoạt Động",
+    writePost: "Viết Bài",
+    tabs: {
+      popular: "Phổ Biến",
+      recent: "Mới Nhất",
+      questions: "Câu Hỏi",
+      reviews: "Đánh Giá"
+    }
+  },
+  id: {
+    title: "Komunitas Travel",
+    nav: {
+      home: "Beranda",
+      destinations: "Destinasi Populer",
+      community: "Komunitas",
+      profile: "Akun Saya"
+    },
+    search: "Cari postingan...",
+    trendingTopics: "Topik Trending",
+    communityStats: "Statistik Komunitas",
+    totalMembers: "Total Anggota",
+    todayPosts: "Postingan Hari Ini",
+    activeUsers: "Pengguna Aktif",
+    writePost: "Tulis Postingan",
+    tabs: {
+      popular: "Populer",
+      recent: "Terbaru",
+      questions: "Pertanyaan",
+      reviews: "Ulasan"
+    }
+  }
+}
 
 export default function CommunityPage() {
+  const { language } = useLanguageStore()
+  const t = translations[language as keyof typeof translations]
+  
   const [activeTab, setActiveTab] = useState("popular")
 
   const posts = [
@@ -74,16 +214,16 @@ export default function CommunityPage() {
           </Link>
           <nav className="hidden md:flex space-x-6">
             <Link href="/" className="text-muted-foreground hover:text-foreground">
-              홈
+              {t.nav.home}
             </Link>
             <Link href="/destinations" className="text-muted-foreground hover:text-foreground">
-              인기 여행지
+              {t.nav.destinations}
             </Link>
             <Link href="/community" className="text-green-600 font-medium">
-              커뮤니티
+              {t.nav.community}
             </Link>
             <Link href="/profile" className="text-muted-foreground hover:text-foreground">
-              내 계정
+              {t.nav.profile}
             </Link>
           </nav>
         </div>
@@ -98,7 +238,7 @@ export default function CommunityPage() {
               <CardContent className="p-4">
                 <div className="relative">
                   <Search className="absolute left-3 top-1/2 transform -translate-y-1/2 text-muted-foreground w-4 h-4" />
-                  <Input placeholder="게시글 검색..." className="pl-10" />
+                  <Input placeholder={t.search} className="pl-10" />
                 </div>
               </CardContent>
             </Card>
@@ -108,7 +248,7 @@ export default function CommunityPage() {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <TrendingUp className="w-5 h-5 mr-2" />
-                  인기 토픽
+                  {t.trendingTopics}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
@@ -126,20 +266,20 @@ export default function CommunityPage() {
               <CardHeader>
                 <CardTitle className="flex items-center">
                   <Users className="w-5 h-5 mr-2" />
-                  커뮤니티 현황
+                  {t.communityStats}
                 </CardTitle>
               </CardHeader>
               <CardContent className="space-y-3">
                 <div className="flex justify-between">
-                  <span className="text-sm">총 회원수</span>
+                  <span className="text-sm">{t.totalMembers}</span>
                   <span className="font-semibold">12,345명</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm">오늘 게시글</span>
+                  <span className="text-sm">{t.todayPosts}</span>
                   <span className="font-semibold">89개</span>
                 </div>
                 <div className="flex justify-between">
-                  <span className="text-sm">활성 사용자</span>
+                  <span className="text-sm">{t.activeUsers}</span>
                   <span className="font-semibold">1,234명</span>
                 </div>
               </CardContent>
@@ -149,16 +289,16 @@ export default function CommunityPage() {
           {/* Main Content */}
           <div className="lg:col-span-3">
             <div className="flex justify-between items-center mb-6">
-              <h1 className="text-3xl font-bold">여행 커뮤니티</h1>
-              <Button className="bg-green-600 hover:bg-green-700">글 작성하기</Button>
+              <h1 className="text-3xl font-bold">{t.title}</h1>
+              <Button className="bg-green-600 hover:bg-green-700">{t.writePost}</Button>
             </div>
 
             <Tabs value={activeTab} onValueChange={setActiveTab} className="space-y-6">
               <TabsList className="grid w-full grid-cols-4">
-                <TabsTrigger value="popular">인기글</TabsTrigger>
-                <TabsTrigger value="recent">최신글</TabsTrigger>
-                <TabsTrigger value="questions">질문</TabsTrigger>
-                <TabsTrigger value="reviews">후기</TabsTrigger>
+                <TabsTrigger value="popular">{t.tabs.popular}</TabsTrigger>
+                <TabsTrigger value="recent">{t.tabs.recent}</TabsTrigger>
+                <TabsTrigger value="questions">{t.tabs.questions}</TabsTrigger>
+                <TabsTrigger value="reviews">{t.tabs.reviews}</TabsTrigger>
               </TabsList>
 
               <TabsContent value="popular" className="space-y-6">

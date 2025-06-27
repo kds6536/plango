@@ -4,7 +4,8 @@ import { useState } from "react"
 import Link from "next/link"
 import { Button } from "../../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
-import { Download, Printer, Save, RotateCcw, Plane, X, Eye, Globe } from "lucide-react"
+import { Download, Printer, Save, RotateCcw, Plane, X, Eye } from "lucide-react"
+import { useLanguageStore } from "../../lib/language-store"
 
 // 다국어 지원
 const translations = {
@@ -55,6 +56,54 @@ const translations = {
     save: "プラン保存",
     download: "プランダウンロード",
     print: "直接印刷"
+  },
+  zh: {
+    title: "🎉 推荐旅行行程",
+    subtitle: "查看AI生成的完美定制旅行行程 ✨",
+    customSchedule: "🎯 制定专属行程",
+    customScheduleDesc: "从下方选择您想要的旅游景点和餐厅，AI将生成最优路线的新行程。",
+    selectedItems: "当前选择的项目",
+    regenerateBtn: "✨ 重新生成混合行程",
+    itinerary1: "🌟 推荐行程 1",
+    itinerary2: "🌟 推荐行程 2",
+    detailView: "查看详情",
+    attractions: "景点 (观光地)",
+    restaurants: "美食 (餐厅或料理)",
+    save: "保存行程",
+    download: "下载行程",
+    print: "直接打印"
+  },
+  vi: {
+    title: "🎉 Lịch Trình Du Lịch Đề Xuất",
+    subtitle: "Xem lịch trình du lịch tùy chỉnh hoàn hảo được tạo bởi AI ✨",
+    customSchedule: "🎯 Tạo Lịch Trình Riêng",
+    customScheduleDesc: "Chọn các điểm đến và nhà hàng mong muốn bên dưới, AI sẽ tạo lịch trình mới với tuyến đường tối ưu.",
+    selectedItems: "Các mục hiện được chọn",
+    regenerateBtn: "✨ Tạo Lại Lịch Trình Hỗn Hợp",
+    itinerary1: "🌟 Lịch Trình Đề Xuất 1",
+    itinerary2: "🌟 Lịch Trình Đề Xuất 2",
+    detailView: "Xem Chi Tiết",
+    attractions: "Điểm Tham Quan (Danh Lam)",
+    restaurants: "Ẩm Thực (Nhà Hàng hoặc Món Ăn)",
+    save: "Lưu Lịch Trình",
+    download: "Tải Lịch Trình",
+    print: "In Trực Tiếp"
+  },
+  id: {
+    title: "🎉 Itinerary Perjalanan yang Direkomendasikan",
+    subtitle: "Lihat itinerary perjalanan kustom sempurna yang dibuat oleh AI ✨",
+    customSchedule: "🎯 Buat Itinerary Pribadi",
+    customScheduleDesc: "Pilih destinasi dan restoran yang diinginkan di bawah, AI akan membuat itinerary baru dengan rute optimal.",
+    selectedItems: "Item yang dipilih saat ini",
+    regenerateBtn: "✨ Buat Ulang Itinerary Campuran",
+    itinerary1: "🌟 Itinerary Rekomendasi 1",
+    itinerary2: "🌟 Itinerary Rekomendasi 2",
+    detailView: "Lihat Detail",
+    attractions: "Tempat Wisata (Objek Wisata)",
+    restaurants: "Kuliner (Restoran atau Masakan)",
+    save: "Simpan Itinerary",
+    download: "Unduh Itinerary",
+    print: "Cetak Langsung"
   }
 }
 
@@ -114,7 +163,6 @@ function DetailModal({ isOpen, onClose, title, children }: {
 
 export default function ItineraryResultsPage() {
   const [selectedItems, setSelectedItems] = useState<Set<string>>(new Set())
-  const [language, setLanguage] = useState<'ko' | 'en' | 'ja'>('ko')
   const [modalData, setModalData] = useState<{
     isOpen: boolean;
     title: string;
@@ -125,7 +173,8 @@ export default function ItineraryResultsPage() {
     content: null
   })
 
-  const t = translations[language]
+  const { language } = useLanguageStore()
+  const t = translations[language as keyof typeof translations]
 
   const handleCheckboxChange = (itemId: string) => {
     const newSelected = new Set(selectedItems)
@@ -379,23 +428,9 @@ export default function ItineraryResultsPage() {
               Plan Go
             </span>
           </Link>
-          <div className="flex items-center justify-center space-x-4 mb-6">
-            <h1 className="text-5xl font-bold bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
-              {t.title}
-            </h1>
-            <div className="flex items-center space-x-2">
-              <Globe className="w-6 h-6 text-gray-600" />
-              <select
-                value={language}
-                onChange={(e) => setLanguage(e.target.value as 'ko' | 'en' | 'ja')}
-                className="bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 text-sm"
-              >
-                <option value="ko">한국어</option>
-                <option value="en">English</option>
-                <option value="ja">日本語</option>
-              </select>
-            </div>
-          </div>
+          <h1 className="text-5xl font-bold mb-6 bg-gradient-to-r from-purple-600 to-pink-600 bg-clip-text text-transparent">
+            {t.title}
+          </h1>
           <p className="text-xl text-gray-600 dark:text-gray-300 mb-8">{t.subtitle}</p>
           
           {/* 혼합 일정 생성 섹션을 상단으로 이동 - 항상 표시 */}

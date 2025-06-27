@@ -1,5 +1,27 @@
 "use client"
 
+import { create } from 'zustand'
+import { persist } from 'zustand/middleware'
+
+type Language = 'ko' | 'en' | 'ja'
+
+interface LanguageStore {
+  language: Language
+  setLanguage: (language: Language) => void
+}
+
+export const useLanguageStore = create<LanguageStore>()(
+  persist(
+    (set) => ({
+      language: 'ko',
+      setLanguage: (language) => set({ language }),
+    }),
+    {
+      name: 'plango-language',
+    }
+  )
+)
+
 // 언어 설정을 전역적으로 관리하는 유틸리티
 export const getLanguage = (): string => {
   if (typeof window !== "undefined") {

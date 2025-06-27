@@ -14,8 +14,196 @@ import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import type { DateRange } from "react-day-picker"
 import Link from "next/link"
+import { useLanguageStore } from "@/lib/language-store"
+
+// 다국어 번역
+const translations = {
+  ko: {
+    title: "✈️ 여행 일정 만들기",
+    subtitle: "몇 가지 정보만 입력하시면 AI가 완벽한 맞춤형 여행 일정을 생성해드립니다 🎯",
+    cardTitle: "🌟 여행 정보 입력",
+    destination: "🌍 국가 선택 또는 도시 입력",
+    destinationPlaceholder: "예: 일본, 도쿄, 파리, 뉴욕...",
+    dateSelection: "📅 여행 날짜 선택",
+    dateSelectionPlaceholder: "날짜를 선택하세요",
+    travelers: "👥 인원수",
+    travelerUnit: "명",
+    budget: "💰 가능 예산",
+    budgetPlaceholder: "숙박, 식사, 교통, 관광 등 전체 예산을 입력해주세요",
+    ageRange: "🎂 연령대 (복수 선택 가능)",
+    ageRanges: ["10대이하", "10대", "20대", "30대", "40대", "50대 이상"],
+    gender: "👤 성별",
+    genderPlaceholder: "성별을 선택하세요",
+    genderOptions: { male: "남성", female: "여성", none: "선택 안함" },
+    specialRequests: "✨ 특별 요청사항 (선택)",
+    specialRequestsPlaceholder: "원하시는 여행 스타일, 특별한 요청사항, 관심사, 피하고 싶은 것들을 자유롭게 작성해주세요.\n예: \n- 힐링이 되는 조용한 여행을 원해요\n- 맛집 투어에 관심이 많아요  \n- 역사적인 장소들을 방문하고 싶어요\n- 높은 곳이나 물을 무서워해요\n- 비건 음식만 먹을 수 있어요\n- 사진 찍기 좋은 장소들로 가고 싶어요",
+    specialRequestsDesc: "더 맞춤형 일정을 위해 특별한 요청사항을 알려주세요 (선택사항)",
+    generateButton: "🎯 맞춤 여행 일정 생성하기",
+    currencies: {
+      KRW: "🇰🇷 원",
+      USD: "🇺🇸 달러", 
+      EUR: "🇪🇺 유로",
+      JPY: "🇯🇵 엔",
+      CNY: "🇨🇳 위안",
+      GBP: "🇬🇧 파운드"
+    }
+  },
+  en: {
+    title: "✈️ Create Itinerary",
+    subtitle: "Enter a few details and AI will generate the perfect customized travel itinerary for you 🎯",
+    cardTitle: "🌟 Enter Travel Information",
+    destination: "🌍 Select Country or Enter City",
+    destinationPlaceholder: "e.g. Japan, Tokyo, Paris, New York...",
+    dateSelection: "📅 Select Travel Dates",
+    dateSelectionPlaceholder: "Select dates",
+    travelers: "👥 Number of Travelers",
+    travelerUnit: "people",
+    budget: "💰 Available Budget",
+    budgetPlaceholder: "Enter total budget for accommodation, meals, transportation, sightseeing, etc.",
+    ageRange: "🎂 Age Range (Multiple Selection)",
+    ageRanges: ["Under 10", "Teens", "20s", "30s", "40s", "50s+"],
+    gender: "👤 Gender",
+    genderPlaceholder: "Select gender",
+    genderOptions: { male: "Male", female: "Female", none: "Prefer not to say" },
+    specialRequests: "✨ Special Requests (Optional)",
+    specialRequestsPlaceholder: "Feel free to describe your preferred travel style, special requests, interests, or things to avoid.\nExamples:\n- Looking for a relaxing, quiet trip\n- Interested in food tours\n- Want to visit historical sites\n- Afraid of heights or water\n- Can only eat vegan food\n- Want Instagram-worthy photo spots",
+    specialRequestsDesc: "Let us know any special requests for a more personalized itinerary (optional)",
+    generateButton: "🎯 Generate Custom Travel Itinerary",
+    currencies: {
+      KRW: "🇰🇷 KRW",
+      USD: "🇺🇸 USD", 
+      EUR: "🇪🇺 EUR",
+      JPY: "🇯🇵 JPY",
+      CNY: "🇨🇳 CNY",
+      GBP: "🇬🇧 GBP"
+    }
+  },
+  ja: {
+    title: "✈️ 旅程を作成",
+    subtitle: "いくつかの情報を入力するだけで、AIが完璧なカスタム旅行プランを作成します 🎯",
+    cardTitle: "🌟 旅行情報入力",
+    destination: "🌍 国選択または都市入力",
+    destinationPlaceholder: "例：日本、東京、パリ、ニューヨーク...",
+    dateSelection: "📅 旅行日選択",
+    dateSelectionPlaceholder: "日付を選択してください",
+    travelers: "👥 人数",
+    travelerUnit: "名",
+    budget: "💰 利用可能予算",
+    budgetPlaceholder: "宿泊、食事、交通、観光などの総予算を入力してください",
+    ageRange: "🎂 年齢層（複数選択可）",
+    ageRanges: ["10歳未満", "10代", "20代", "30代", "40代", "50代以上"],
+    gender: "👤 性別",
+    genderPlaceholder: "性別を選択してください",
+    genderOptions: { male: "男性", female: "女性", none: "選択しない" },
+    specialRequests: "✨ 特別なリクエスト（任意）",
+    specialRequestsPlaceholder: "ご希望の旅行スタイル、特別なリクエスト、興味、避けたいことを自由に記述してください。\n例：\n- 癒しの静かな旅行を希望\n- グルメツアーに興味あり\n- 歴史的な場所を訪問したい\n- 高所や水が苦手\n- ビーガン料理のみ\n- インスタ映えスポットに行きたい",
+    specialRequestsDesc: "よりパーソナライズされた行程のための特別なリクエストをお知らせください（任意）",
+    generateButton: "🎯 カスタム旅行行程を生成",
+    currencies: {
+      KRW: "🇰🇷 ウォン",
+      USD: "🇺🇸 ドル", 
+      EUR: "🇪🇺 ユーロ",
+      JPY: "🇯🇵 円",
+      CNY: "🇨🇳 元",
+      GBP: "🇬🇧 ポンド"
+    }
+  },
+  zh: {
+    title: "✈️ 制定旅行计划",
+    subtitle: "只需输入几项信息，AI就会为您生成完美的定制旅行行程 🎯",
+    cardTitle: "🌟 输入旅行信息",
+    destination: "🌍 选择国家或输入城市",
+    destinationPlaceholder: "例如：日本、东京、巴黎、纽约...",
+    dateSelection: "📅 选择旅行日期",
+    dateSelectionPlaceholder: "请选择日期",
+    travelers: "👥 人数",
+    travelerUnit: "人",
+    budget: "💰 可用预算",
+    budgetPlaceholder: "请输入住宿、餐饮、交通、观光等总预算",
+    ageRange: "🎂 年龄段（可多选）",
+    ageRanges: ["10岁以下", "10多岁", "20多岁", "30多岁", "40多岁", "50岁以上"],
+    gender: "👤 性别",
+    genderPlaceholder: "请选择性别",
+    genderOptions: { male: "男性", female: "女性", none: "不选择" },
+    specialRequests: "✨ 特殊要求（可选）",
+    specialRequestsPlaceholder: "请自由描述您希望的旅行风格、特殊要求、兴趣或想避免的事情。\n例如：\n- 希望轻松安静的旅行\n- 对美食之旅感兴趣\n- 想参观历史景点\n- 恐高或怕水\n- 只能吃素食\n- 想去适合拍照的地方",
+    specialRequestsDesc: "告诉我们任何特殊要求，以获得更个性化的行程（可选）",
+    generateButton: "🎯 生成定制旅行行程",
+    currencies: {
+      KRW: "🇰🇷 韩元",
+      USD: "🇺🇸 美元", 
+      EUR: "🇪🇺 欧元",
+      JPY: "🇯🇵 日元",
+      CNY: "🇨🇳 人民币",
+      GBP: "🇬🇧 英镑"
+    }
+  },
+  vi: {
+    title: "✈️ Tạo Lịch Trình",
+    subtitle: "Chỉ cần nhập một vài thông tin và AI sẽ tạo lịch trình du lịch tùy chỉnh hoàn hảo cho bạn 🎯",
+    cardTitle: "🌟 Nhập Thông Tin Du Lịch",
+    destination: "🌍 Chọn Quốc Gia hoặc Nhập Thành Phố",
+    destinationPlaceholder: "VD: Nhật Bản, Tokyo, Paris, New York...",
+    dateSelection: "📅 Chọn Ngày Du Lịch",
+    dateSelectionPlaceholder: "Chọn ngày",
+    travelers: "👥 Số Người",
+    travelerUnit: "người",
+    budget: "💰 Ngân Sách Có Sẵn",
+    budgetPlaceholder: "Nhập tổng ngân sách cho chỗ ở, ăn uống, giao thông, tham quan, v.v.",
+    ageRange: "🎂 Độ Tuổi (Có thể chọn nhiều)",
+    ageRanges: ["Dưới 10 tuổi", "Thiếu niên", "20-29", "30-39", "40-49", "50 tuổi+"],
+    gender: "👤 Giới Tính",
+    genderPlaceholder: "Chọn giới tính",
+    genderOptions: { male: "Nam", female: "Nữ", none: "Không chọn" },
+    specialRequests: "✨ Yêu Cầu Đặc Biệt (Tùy chọn)",
+    specialRequestsPlaceholder: "Hãy mô tả phong cách du lịch mong muốn, yêu cầu đặc biệt, sở thích hoặc điều muốn tránh.\nVí dụ:\n- Muốn chuyến đi thư giãn, yên tĩnh\n- Quan tâm đến tour ẩm thực\n- Muốn thăm các địa điểm lịch sử\n- Sợ độ cao hoặc nước\n- Chỉ ăn được đồ chay\n- Muốn đến những nơi chụp ảnh đẹp",
+    specialRequestsDesc: "Cho chúng tôi biết bất kỳ yêu cầu đặc biệt nào để có lịch trình cá nhân hóa hơn (tùy chọn)",
+    generateButton: "🎯 Tạo Lịch Trình Du Lịch Tùy Chỉnh",
+    currencies: {
+      KRW: "🇰🇷 Won",
+      USD: "🇺🇸 USD", 
+      EUR: "🇪🇺 EUR",
+      JPY: "🇯🇵 Yen",
+      CNY: "🇨🇳 Yuan",
+      GBP: "🇬🇧 Pound"
+    }
+  },
+  id: {
+    title: "✈️ Buat Itinerary",
+    subtitle: "Cukup masukkan beberapa informasi dan AI akan membuat itinerary perjalanan kustom yang sempurna untuk Anda 🎯",
+    cardTitle: "🌟 Masukkan Informasi Perjalanan",
+    destination: "🌍 Pilih Negara atau Masukkan Kota",
+    destinationPlaceholder: "Contoh: Jepang, Tokyo, Paris, New York...",
+    dateSelection: "📅 Pilih Tanggal Perjalanan",
+    dateSelectionPlaceholder: "Pilih tanggal",
+    travelers: "👥 Jumlah Traveler",
+    travelerUnit: "orang",
+    budget: "💰 Budget Tersedia",
+    budgetPlaceholder: "Masukkan total budget untuk akomodasi, makanan, transportasi, wisata, dll.",
+    ageRange: "🎂 Rentang Usia (Pilihan Ganda)",
+    ageRanges: ["Di bawah 10", "Remaja", "20an", "30an", "40an", "50+"],
+    gender: "👤 Jenis Kelamin",
+    genderPlaceholder: "Pilih jenis kelamin",
+    genderOptions: { male: "Laki-laki", female: "Perempuan", none: "Tidak memilih" },
+    specialRequests: "✨ Permintaan Khusus (Opsional)",
+    specialRequestsPlaceholder: "Silakan deskripsikan gaya perjalanan yang diinginkan, permintaan khusus, minat, atau hal yang ingin dihindari.\nContoh:\n- Ingin perjalanan yang santai dan tenang\n- Tertarik dengan tur kuliner\n- Ingin mengunjungi situs bersejarah\n- Takut ketinggian atau air\n- Hanya bisa makan vegan\n- Ingin tempat yang Instagramable",
+    specialRequestsDesc: "Beritahu kami permintaan khusus untuk itinerary yang lebih personal (opsional)",
+    generateButton: "🎯 Buat Itinerary Perjalanan Kustom",
+    currencies: {
+      KRW: "🇰🇷 Won",
+      USD: "🇺🇸 USD", 
+      EUR: "🇪🇺 EUR",
+      JPY: "🇯🇵 Yen",
+      CNY: "🇨🇳 Yuan",
+      GBP: "🇬🇧 Pound"
+    }
+  }
+}
 
 export default function CreateItineraryPage() {
+  const { language } = useLanguageStore()
+  const t = translations[language as keyof typeof translations]
+  
   const [dateRange, setDateRange] = useState<DateRange | undefined>()
   const [travelers, setTravelers] = useState(2)
   const [destinations, setDestinations] = useState<string[]>([])
@@ -84,26 +272,26 @@ export default function CreateItineraryPage() {
             </span>
           </Link>
           <h1 className="text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
-            ✈️ 여행 일정 만들기
+            {t.title}
           </h1>
           <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
-            몇 가지 정보만 입력하시면 AI가 완벽한 맞춤형 여행 일정을 생성해드립니다 🎯
+            {t.subtitle}
           </p>
         </div>
 
         <Card className="shadow-lg border border-border bg-card">
           <CardHeader className="bg-gradient-to-r from-green-500/80 to-blue-500/80 text-white rounded-t-lg">
-            <CardTitle className="text-xl lg:text-2xl text-center font-medium">🌟 여행 정보 입력</CardTitle>
+            <CardTitle className="text-xl lg:text-2xl text-center font-medium">{t.cardTitle}</CardTitle>
           </CardHeader>
           <CardContent className="space-y-8 p-6 lg:p-8">
             <div className="space-y-4">
               <Label htmlFor="destination" className="text-base font-medium text-foreground flex items-center gap-2">
-                🌍 국가 선택 또는 도시 입력
+                {t.destination}
               </Label>
               <div className="flex space-x-3">
                 <Input
                   id="destination"
-                  placeholder="예: 일본, 도쿄, 파리, 뉴욕..."
+                  placeholder={t.destinationPlaceholder}
                   className="flex-1 h-11 bg-background border-input text-foreground placeholder:text-muted-foreground"
                   value={currentDestination}
                   onChange={(e) => setCurrentDestination(e.target.value)}
@@ -139,7 +327,7 @@ export default function CreateItineraryPage() {
 
             <div className="space-y-4">
               <Label className="text-base font-medium text-foreground flex items-center gap-2">
-                📅 여행 날짜 선택
+                {t.dateSelection}
               </Label>
               <Popover>
                 <PopoverTrigger asChild>
@@ -159,7 +347,7 @@ export default function CreateItineraryPage() {
                           format(dateRange.from, "PPP", { locale: ko })
                         )
                       ) : (
-                        "날짜를 선택하세요"
+                        t.dateSelectionPlaceholder
                       )}
                     </span>
                   </Button>
@@ -172,7 +360,7 @@ export default function CreateItineraryPage() {
 
             <div className="space-y-4">
               <Label className="text-base font-medium text-foreground flex items-center gap-2">
-                👥 인원수
+                {t.travelers}
               </Label>
               <div className="flex items-center justify-center space-x-8 bg-muted/30 rounded-xl p-6">
                 <Button
@@ -185,7 +373,7 @@ export default function CreateItineraryPage() {
                 </Button>
                 <div className="text-center">
                   <span className="text-3xl font-bold text-foreground">{travelers}</span>
-                  <p className="text-sm text-muted-foreground mt-1">명</p>
+                  <p className="text-sm text-muted-foreground mt-1">{t.travelerUnit}</p>
                 </div>
                 <Button 
                   variant="outline" 
@@ -200,7 +388,7 @@ export default function CreateItineraryPage() {
 
             <div className="space-y-4">
               <Label className="text-base font-medium text-foreground flex items-center gap-2">
-                💰 가능 예산
+                {t.budget}
               </Label>
               <div className="space-y-3">
                 <div className="flex space-x-3">
@@ -220,27 +408,27 @@ export default function CreateItineraryPage() {
                       <SelectValue />
                     </SelectTrigger>
                     <SelectContent className="bg-card border-border">
-                      <SelectItem value="KRW">🇰🇷 원</SelectItem>
-                      <SelectItem value="USD">🇺🇸 달러</SelectItem>
-                      <SelectItem value="EUR">🇪🇺 유로</SelectItem>
-                      <SelectItem value="JPY">🇯🇵 엔</SelectItem>
-                      <SelectItem value="CNY">🇨🇳 위안</SelectItem>
-                      <SelectItem value="GBP">🇬🇧 파운드</SelectItem>
+                      <SelectItem value="KRW">{t.currencies.KRW}</SelectItem>
+                      <SelectItem value="USD">{t.currencies.USD}</SelectItem>
+                      <SelectItem value="EUR">{t.currencies.EUR}</SelectItem>
+                      <SelectItem value="JPY">{t.currencies.JPY}</SelectItem>
+                      <SelectItem value="CNY">{t.currencies.CNY}</SelectItem>
+                      <SelectItem value="GBP">{t.currencies.GBP}</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
                 <p className="text-sm text-muted-foreground leading-relaxed">
-                  숙박, 식사, 교통, 관광 등 전체 예산을 입력해주세요
+                  {t.budgetPlaceholder}
                 </p>
               </div>
             </div>
 
             <div className="space-y-4">
               <Label className="text-base font-medium text-foreground flex items-center gap-2">
-                🎂 연령대 (복수 선택 가능)
+                {t.ageRange}
               </Label>
               <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
-                {["10대이하", "10대", "20대", "30대", "40대", "50대 이상"].map((age) => (
+                {t.ageRanges.map((age, index) => (
                   <Button
                     key={age}
                     variant={ageRanges.includes(age) ? "default" : "outline"}
@@ -283,47 +471,40 @@ export default function CreateItineraryPage() {
 
             <div className="space-y-4">
               <Label className="text-base font-medium text-foreground flex items-center gap-2">
-                👤 성별
+                {t.gender}
               </Label>
               <Select value={gender} onValueChange={setGender}>
                 <SelectTrigger className="h-12 bg-background border-input">
-                  <SelectValue placeholder="성별을 선택하세요" />
+                  <SelectValue placeholder={t.genderPlaceholder} />
                 </SelectTrigger>
                 <SelectContent className="bg-card border-border">
-                  <SelectItem value="male">남성</SelectItem>
-                  <SelectItem value="female">여성</SelectItem>
-                  <SelectItem value="none">선택 안함</SelectItem>
+                  <SelectItem value="male">{t.genderOptions.male}</SelectItem>
+                  <SelectItem value="female">{t.genderOptions.female}</SelectItem>
+                  <SelectItem value="none">{t.genderOptions.none}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
             <div className="space-y-4">
               <Label htmlFor="specialRequests" className="text-base font-medium text-foreground flex items-center gap-2">
-                ✨ 특별 요청사항 (선택)
+                {t.specialRequests}
               </Label>
               <Textarea
                 id="specialRequests"
-                placeholder="원하시는 여행 스타일, 특별한 요청사항, 관심사, 피하고 싶은 것들을 자유롭게 작성해주세요.
-예: 
-- 힐링이 되는 조용한 여행을 원해요
-- 맛집 투어에 관심이 많아요  
-- 역사적인 장소들을 방문하고 싶어요
-- 높은 곳이나 물을 무서워해요
-- 비건 음식만 먹을 수 있어요
-- 사진 찍기 좋은 장소들로 가고 싶어요"
+                placeholder={t.specialRequestsPlaceholder}
                 className="min-h-[120px] bg-background border-input text-foreground placeholder:text-muted-foreground resize-none"
                 value={specialRequests}
                 onChange={(e) => setSpecialRequests(e.target.value)}
               />
               <p className="text-sm text-muted-foreground leading-relaxed">
-                더 맞춤형 일정을 위해 특별한 요청사항을 알려주세요 (선택사항)
+                {t.specialRequestsDesc}
               </p>
             </div>
 
             <div className="pt-4">
               <Link href="/itinerary-results" className="block">
                 <Button className="w-full bg-gradient-to-r from-green-600/90 to-blue-600/90 hover:from-green-600 hover:to-blue-600 text-white text-lg font-medium py-6 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300">
-                  🎯 맞춤 여행 일정 생성하기
+                  {t.generateButton}
                 </Button>
               </Link>
             </div>
