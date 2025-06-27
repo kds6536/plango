@@ -179,6 +179,41 @@ const translations = {
         rome: "영원한 도시, 역사와 예술의 보고"
       }
     },
+    popularItineraries: {
+      title: "인기 여행 일정",
+      subtitle: "많은 여행자들이 사랑하는 여행 계획을 확인해보세요",
+      itinerary1: {
+        title: "4일간의 도쿄 탐험",
+        description: "전통과 현대가 조화를 이루는 도쿄의 매력을 만끽하세요. 센소지 절부터 시부야까지, 일본의 진정한 아름다움을 경험할 수 있습니다."
+      },
+      itinerary2: {
+        title: "5일간의 파리 발견",
+        description: "에펠탑부터 루브르까지, 파리의 로맨스와 예술을 체험해보세요."
+      },
+      itinerary3: {
+        title: "서울 문화 여행",
+        description: "경복궁부터 홍대까지, 한국 문화를 체험하는 3일간의 서울 여행."
+      }
+    },
+    testimonials: {
+      title: "사용자 후기",
+      subtitle: "Plan Go를 사용한 여행자들의 실제 경험담",
+      user1: {
+        name: "김지연",
+        review: "Plan Go 덕분에 일본 여행을 정말 효율적으로 계획할 수 있었어요. 아이와 함께 여행 계획을 세우는 일이 몇 주가 걸렸는데, Plan Go로는 단 몇 분만에 완벽한 일정을 만들어줬어요. 특히 숨겨진 현지 맛집 추천이 정말 좋았습니다!",
+        date: "2025년 4월 여행"
+      },
+      user2: {
+        name: "박민호",
+        review: "가족 여행을 계획하면서 Plan Go를 사용하는 데 아이들 취향까지 고려한 일정을 추천해줘서 놀랐어요. 특히 기존 가이드북에 없는 특별한 장소들을 발견할 수 있어서 좋았습니다. 덕분에 예산 조절 없이 알찬 여행을 즐길 수 있었습니다.",
+        date: "2025년 3월 여행"
+      },
+      user3: {
+        name: "이수진",
+        review: "혼자 떠나는 유럽 배낭여행을 Plan Go로 계획했어요. 안전한 숙소와 교통편 추천은 물론이고, 실시간으로 일정을 수정할 수 있어서 편했습니다. Plan Go 덕분에 정말 멋진 여행이 되었어요!",
+        date: "2025년 5월 여행"
+      }
+    }
   },
   en: {
     logo: "Plan Go",
@@ -509,6 +544,41 @@ const translations = {
         confirm: "完成支付"
       }
     },
+    popularItineraries: {
+      title: "热门行程",
+      subtitle: "探索世界各地旅行者选择的最佳旅行路线",
+      itinerary1: {
+        title: "4天东京探索",
+        description: "体验传统与现代和谐融合的东京魅力。从浅草寺到东京晴空塔，发现日本的真正美丽。"
+      },
+      itinerary2: {
+        title: "5天巴黎发现",
+        description: "在爱情之都巴黎创造浪漫时刻。在埃菲尔铁塔、卢浮宫和香榭丽舍大街留下特殊回忆。"
+      },
+      itinerary3: {
+        title: "首尔文化之旅",
+        description: "体验韩国传统和现代文化。从景福宫到江南，发现首尔的多样魅力。"
+      }
+    },
+    testimonials: {
+      title: "用户评价",
+      subtitle: "查看使用Plan Go的旅行者的真实评价",
+      user1: {
+        name: "李小雅",
+        review: "Plan Go让我的旅行计划变得如此简单！这个AI帮我发现了我自己永远不会找到的隐藏宝石。Plan Go真的提供了令人惊叹的旅行体验！",
+        date: "2025年4月旅行"
+      },
+      user2: {
+        name: "王明浩",
+        review: "我用Plan Go计划家庭度假，孩子们也很喜欢！从适合儿童的住宿到有趣的活动，这个神奇的旅行规划师考虑到了我们需要的一切。",
+        date: "2025年3月旅行"
+      },
+      user3: {
+        name: "张丽华",
+        review: "我最近用Plan Go计划了一次独自背包旅行！详细的时间表和实惠的推荐都非常完美。感谢Plan Go给了我如此美好的体验！",
+        date: "2025年5月旅行"
+      }
+    }
   },
   ja: {
     logo: "Plan Go",
@@ -626,6 +696,41 @@ const translations = {
         confirm: "支払い完了"
       }
     },
+    popularItineraries: {
+      title: "人気の旅程",
+      subtitle: "世界中の旅行者が選ぶ最高の旅行ルートを発見してください",
+      itinerary1: {
+        title: "4日間の東京探索",
+        description: "伝統とモダンが調和する東京の魅力を体験してください。浅草寺から東京スカイツリーまで、日本の真の美しさを発見できます。"
+      },
+      itinerary2: {
+        title: "5日間のパリ発見",
+        description: "愛の都パリでロマンチックな瞬間を作りましょう。エッフェル塔、ルーブル美術館、シャンゼリゼ通りで特別な思い出を作ってください。"
+      },
+      itinerary3: {
+        title: "ソウル文化の旅",
+        description: "韓国の伝統と現代文化の両方を体験してください。景福宮から江南まで、ソウルの多様な魅力を発見してください。"
+      }
+    },
+    testimonials: {
+      title: "ユーザーレビュー",
+      subtitle: "Plan Goを使用した旅行者の実際のレビューをご覧ください",
+      user1: {
+        name: "田中花子",
+        review: "Plan Goのおかげで旅行計画がとても簡単になりました！このAIは私が一人では見つけられなかった隠れた名所を発見してくれました。Plan Goは本当に素晴らしい旅行体験を提供してくれます！",
+        date: "2025年4月旅行"
+      },
+      user2: {
+        name: "佐藤太郎",
+        review: "Plan Goで家族旅行を計画しましたが、子供たちも大喜びでした！子供向けの宿泊施設から楽しいアクティビティまで、この素晴らしい旅行プランナーは私たちが必要とするすべてを考えてくれました。",
+        date: "2025年3月旅行"
+      },
+      user3: {
+        name: "山田美咲",
+        review: "最近Plan Goで一人バックパッキング旅行を計画しました！詳細なスケジュールと手頃な価格の推奨事項はすべて完璧でした。Plan Goのおかげで素晴らしい体験ができました！",
+        date: "2025年5月旅行"
+      }
+    }
   },
   vi: {
     logo: "Plan Go",
@@ -743,6 +848,41 @@ const translations = {
         confirm: "Hoàn tất thanh toán"
       }
     },
+    popularItineraries: {
+      title: "Lịch Trình Phổ Biến",
+      subtitle: "Khám phá những tuyến du lịch tốt nhất được lựa chọn bởi du khách trên toàn thế giới",
+      itinerary1: {
+        title: "Khám Phá Tokyo 4 Ngày",
+        description: "Trải nghiệm sự quyến rũ của Tokyo nơi truyền thống hòa quyện với hiện đại. Từ Chùa Sensoji đến Tokyo Skytree, khám phá vẻ đẹp thực sự của Nhật Bản."
+      },
+      itinerary2: {
+        title: "Khám Phá Paris 5 Ngày",
+        description: "Tạo những khoảnh khắc lãng mạn ở Paris, thành phố tình yêu. Xây dựng những kỷ niệm đặc biệt tại Tháp Eiffel, Bảo tàng Louvre và Đại lộ Champs-Élysées."
+      },
+      itinerary3: {
+        title: "Hành Trình Văn Hóa Seoul",
+        description: "Trải nghiệm cả văn hóa truyền thống và hiện đại của Hàn Quốc. Từ Cung điện Gyeongbokgung đến Gangnam, khám phá những nét quyến rũ đa dạng của Seoul."
+      }
+    },
+    testimonials: {
+      title: "Đánh Giá Người Dùng",
+      subtitle: "Xem những đánh giá thực tế từ các du khách đã sử dụng Plan Go",
+      user1: {
+        name: "Nguyễn Thị Lan",
+        review: "Plan Go đã làm cho việc lập kế hoạch chuyến đi hoàn hảo của tôi trở nên rất dễ dàng! AI này đã giúp tôi khám phá những viên ngọc ẩn mà tôi không bao giờ có thể tự mình tìm thấy. Plan Go thực sự mang đến trải nghiệm du lịch tuyệt vời!",
+        date: "Chuyến đi tháng 4 năm 2025"
+      },
+      user2: {
+        name: "Trần Văn Minh",
+        review: "Tôi đã sử dụng Plan Go để lập kế hoạch cho kỳ nghỉ gia đình và các con cũng rất thích! Từ chỗ ở thân thiện với trẻ em đến các hoạt động vui nhộn, người lập kế hoạch du lịch tuyệt vời này đã nghĩ đến mọi thứ chúng tôi cần.",
+        date: "Chuyến đi tháng 3 năm 2025"
+      },
+      user3: {
+        name: "Lê Thị Mai",
+        review: "Gần đây tôi đã lập kế hoạch cho một chuyến du lịch ba lô một mình với Plan Go! Các lịch trình chi tiết và những gợi ý giá cả phải chăng đều hoàn hảo. Cảm ơn Plan Go vì đã mang lại cho tôi trải nghiệm tuyệt vời như vậy!",
+        date: "Chuyến đi tháng 5 năm 2025"
+      }
+    }
   },
   id: {
     logo: "Plan Go",
@@ -860,6 +1000,41 @@ const translations = {
         confirm: "Selesaikan pembayaran"
       }
     },
+    popularItineraries: {
+      title: "Itinerary Populer",
+      subtitle: "Temukan rute perjalanan terbaik yang dipilih oleh traveler di seluruh dunia",
+      itinerary1: {
+        title: "Eksplorasi Tokyo 4 Hari",
+        description: "Rasakan pesona Tokyo di mana tradisi bertemu dengan modernitas. Dari Kuil Sensoji hingga Tokyo Skytree, temukan keindahan sejati Jepang."
+      },
+      itinerary2: {
+        title: "Penemuan Paris 5 Hari",
+        description: "Ciptakan momen romantis di Paris, kota cinta. Bangun kenangan spesial di Menara Eiffel, Museum Louvre, dan Champs-Élysées."
+      },
+      itinerary3: {
+        title: "Perjalanan Budaya Seoul",
+        description: "Alami budaya tradisional dan modern Korea. Dari Istana Gyeongbokgung hingga Gangnam, temukan pesona Seoul yang beragam."
+      }
+    },
+    testimonials: {
+      title: "Ulasan Pengguna",
+      subtitle: "Lihat ulasan nyata dari traveler yang telah menggunakan Plan Go",
+      user1: {
+        name: "Sari Dewi",
+        review: "Plan Go membuat perencanaan perjalanan sempurna saya menjadi sangat mudah! AI ini membantu saya menemukan permata tersembunyi yang tidak akan pernah saya temukan sendiri. Plan Go benar-benar menawarkan pengalaman perjalanan yang luar biasa!",
+        date: "Perjalanan April 2025"
+      },
+      user2: {
+        name: "Budi Santoso",
+        review: "Saya menggunakan Plan Go untuk merencanakan liburan keluarga dan anak-anak juga menyukainya! Dari akomodasi ramah anak hingga aktivitas menyenangkan, perencana perjalanan luar biasa ini memikirkan semua yang kami butuhkan.",
+        date: "Perjalanan Maret 2025"
+      },
+      user3: {
+        name: "Maya Putri",
+        review: "Saya baru-baru ini merencanakan perjalanan backpacking solo dengan Plan Go! Jadwal detail dan rekomendasi terjangkau semuanya sempurna. Terima kasih Plan Go atas pengalaman luar biasa seperti itu!",
+        date: "Perjalanan Mei 2025"
+      }
+    }
   },
 }
 
