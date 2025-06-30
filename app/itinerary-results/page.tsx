@@ -75,6 +75,58 @@ const translations = {
       dongdaemunNight: "밤늦게까지 열리는 쇼핑과 야식의 천국입니다.",
       hongdaeFood: "젊음의 거리 홍대에서 다양한 퓨전 요리를 즐겨보세요.",
       itaewonWorld: "세계 각국의 정통 요리를 한 곳에서 맛볼 수 있습니다."
+    },
+    detailDescriptions: {
+      gyeongbokDetail: "조선왕조 제1궁궐로 1395년에 창건된 한국의 대표적인 고궁입니다. 근정전, 경회루, 향원정 등 아름다운 전각들이 조화를 이루며, 특히 가을 단풍과 겨울 설경이 장관을 이룹니다. 수문장 교대의식은 조선시대 궁궐 수비 의식을 재현한 것으로 매일 관람할 수 있습니다.",
+      namsanTowerDetail: "서울의 상징적인 랜드마크로 해발 262m 남산 정상에 위치한 종합전파탑입니다. 서울 전체를 한눈에 내려다볼 수 있는 최고의 전망대이며, 특히 야간에는 서울의 화려한 야경을 감상할 수 있습니다. 연인들의 사랑의 맹세 장소로도 유명하며, 케이블카를 타고 올라가는 재미도 쏠쏠합니다.",
+      insadongTeaDetail: "전통과 현대가 어우러진 서울의 대표적인 문화의 거리, 인사동에 위치한 전통차집입니다. 한국 전통 공예품, 골동품, 서예용품 등을 판매하는 상점들이 즐비하며, 전통차를 마실 수 있는 찻집과 한식당이 많습니다. 주말에는 거리 공연도 볼 수 있어 한국의 전통문화를 체험하기에 최적의 장소입니다.",
+      myeongdongNoodleDetail: "서울 중심부 명동에 위치한 50년 전통의 현지인 맛집입니다. 진한 멸치 육수로 끓인 칼국수와 손으로 빚은 만두가 유명하며, 저렴한 가격에 푸짐한 양으로 많은 현지인들이 찾는 숨은 맛집입니다. 쇼핑 후 간단한 한끼로 안성맞춤인 곳입니다.",
+      hangangDetail: "서울을 관통하는 한강변에 조성된 대규모 시민 휴식공간입니다. 자전거 라이딩, 피크닉, 치킨과 맥주를 즐기는 치맥 문화의 성지로 유명하며, 특히 야경이 아름다워 연인들의 데이트 코스로도 인기가 높습니다. 한강 유람선을 타고 서울의 스카이라인을 감상하는 것도 특별한 경험입니다."
+    },
+    detailInfo: {
+      gyeongbok: {
+        hours: "09:00 - 18:00",
+        fee: "성인 3,000원",
+        time: "2시간",
+        program: "수문장 교대식 (매시 정각)"
+      },
+      namsanTower: {
+        hours: "10:00 - 23:00",
+        fee: "성인 12,000원",
+        time: "1.5시간",
+        experience: "사랑의 자물쇠, 케이블카"
+      },
+      insadongTea: {
+        menu: "대추차, 전통한과세트",
+        price: "15,000원 - 25,000원",
+        atmosphere: "전통 한옥, 조용한 분위기"
+      },
+      myeongdongNoodle: {
+        menu: "멸치칼국수, 만두",
+        price: "8,000원 - 12,000원",
+        feature: "50년 전통, 현지인 맛집"
+      },
+      hangang: {
+        activity: "자전거, 피크닉, 치킨&맥주",
+        bike: "시간당 3,000원",
+        experience: "한강 유람선, 수상스키"
+      },
+      dongdaemun: {
+        hours: "19:00 - 05:00",
+        shopping: "의류, 액세서리, 신발",
+        food: "떡볶이, 순대, 호떡",
+        feature: "24시간 쇼핑몰, 도매가격"
+      },
+      hongdaeFood: {
+        menu: "파스타, 피자, 수제버거",
+        price: "15,000원 - 30,000원",
+        atmosphere: "젊고 활기찬, 인스타 핫플"
+      },
+      itaewonWorld: {
+        menu: "인도카레, 터키케밥, 태국음식",
+        price: "12,000원 - 25,000원",
+        feature: "다국적 문화, 할랄음식 가능"
+      }
     }
   },
   en: {
@@ -143,6 +195,58 @@ const translations = {
       dongdaemunNight: "A paradise of shopping and late-night snacks open until late at night.",
       hongdaeFood: "Enjoy various fusion cuisines in Hongdae, the street of youth.",
       itaewonWorld: "You can taste authentic cuisine from around the world in one place."
+    },
+    detailDescriptions: {
+      gyeongbokDetail: "The first palace of the Joseon Dynasty, built in 1395, it is Korea's representative ancient palace. Beautiful pavilions such as Geunjeongjeon, Gyeonghoeru, and Hyangwonjeong are in harmony, and the autumn foliage and winter snow scenes are spectacular. The changing of the guard ceremony reproduces the palace defense ceremony of the Joseon Dynasty and can be watched daily.",
+      namsanTowerDetail: "An iconic landmark of Seoul, it is a comprehensive broadcasting tower located at the top of Namsan Mountain at 262m above sea level. It is the best observatory where you can look down at the entire Seoul at a glance, and you can especially enjoy Seoul's colorful night view at night. It is also famous as a place for lovers to pledge their love, and it is also fun to go up by cable car.",
+      insadongTeaDetail: "A traditional tea house located in Insadong, Seoul's representative cultural street where tradition and modernity harmonize. There are many shops selling Korean traditional crafts, antiques, and calligraphy supplies, as well as tea houses and Korean restaurants where you can drink traditional tea. You can also see street performances on weekends, making it the best place to experience Korean traditional culture.",
+      myeongdongNoodleDetail: "A 50-year-old local restaurant located in Myeongdong, central Seoul. It is famous for its kalguksu (knife-cut noodles) boiled in rich anchovy broth and hand-made dumplings, and is a hidden gem visited by many locals with generous portions at affordable prices. It is perfect for a simple meal after shopping.",
+      hangangDetail: "A large-scale citizen rest area created along the Han River that runs through Seoul. It is famous as a sacred place for chicken and beer culture where you can enjoy bicycle riding, picnics, and chicken and beer, and the night view is beautiful, making it popular as a dating course for couples. Taking a Han River cruise and enjoying Seoul's skyline is also a special experience."
+    },
+    detailInfo: {
+      gyeongbok: {
+        hours: "09:00 - 18:00",
+        fee: "Adults 3,000 KRW",
+        time: "2 hours",
+        program: "Changing of the Guard Ceremony (every hour on the hour)"
+      },
+      namsanTower: {
+        hours: "10:00 - 23:00",
+        fee: "Adults 12,000 KRW",
+        time: "1.5 hours",
+        experience: "Love locks, Cable car"
+      },
+      insadongTea: {
+        menu: "Jujube tea, Traditional Korean sweets set",
+        price: "15,000 - 25,000 KRW",
+        atmosphere: "Traditional hanok, Quiet atmosphere"
+      },
+      myeongdongNoodle: {
+        menu: "Anchovy noodle soup, Dumplings",
+        price: "8,000 - 12,000 KRW",
+        feature: "50-year tradition, Local restaurant"
+      },
+      hangang: {
+        activity: "Bicycle, Picnic, Chicken & Beer",
+        bike: "3,000 KRW per hour",
+        experience: "Han River cruise, Water skiing"
+      },
+      dongdaemun: {
+        hours: "19:00 - 05:00",
+        shopping: "Clothing, Accessories, Shoes",
+        food: "Tteokbokki, Sundae, Hotteok",
+        feature: "24-hour shopping mall, Wholesale prices"
+      },
+      hongdaeFood: {
+        menu: "Pasta, Pizza, Handmade burgers",
+        price: "15,000 - 30,000 KRW",
+        atmosphere: "Young and vibrant, Instagram hotspot"
+      },
+      itaewonWorld: {
+        menu: "Indian curry, Turkish kebab, Thai food",
+        price: "12,000 - 25,000 KRW",
+        feature: "Multicultural, Halal food available"
+      }
     }
   },
   ja: {
@@ -211,6 +315,58 @@ const translations = {
       dongdaemunNight: "夜遅くまで開いているショッピングと夜食の天国です。",
       hongdaeFood: "若者の街弘大で様々なフュージョン料理をお楽しみください。",
       itaewonWorld: "世界各国の本格料理を一ヶ所で味わうことができます。"
+    },
+    detailDescriptions: {
+      gyeongbokDetail: "朝鮮王朝の第1宮殿として1395年に建てられた韓国の代表的な古宮です。勤政殿、慶会楼、香遠亭など美しい殿閣が調和を成し、特に秋の紅葉と冬の雪景色が壮観です。守門将交代儀式は朝鮮時代の宮殿守備儀式を再現したもので毎日観覧できます。",
+      namsanTowerDetail: "ソウルの象徴的なランドマークで、海抜262mの南山頂上にある総合電波塔です。ソウル全体を一目で見下ろすことができる最高の展望台で、特に夜間にはソウルの華やかな夜景を鑑賞できます。恋人たちの愛の誓いの場としても有名で、ケーブルカーで上がる楽しみもあります。",
+      insadongTeaDetail: "伝統と現代が調和したソウルの代表的な文化の街、仁寺洞にある伝統茶房です。韓国伝統工芸品、骨董品、書道用品などを販売する店舗が立ち並び、伝統茶を飲める茶房と韓国料理店が多くあります。週末には街頭公演も見ることができ、韓国の伝統文化を体験するのに最適な場所です。",
+      myeongdongNoodleDetail: "ソウル中心部の明洞にある50年の伝統を持つ地元の名店です。濃いアンチョビスープで煮たカルグクスと手作り餃子が有名で、手頃な価格でボリューム満点の隠れた名店として多くの地元の人々が訪れます。ショッピング後の簡単な食事にぴったりの場所です。",
+      hangangDetail: "ソウルを貫く漢江沿いに造成された大規模な市民憩いの空間です。自転車ライディング、ピクニック、チキンとビールを楽しむチメク文化の聖地として有名で、特に夜景が美しくカップルのデートコースとしても人気が高いです。漢江遊覧船に乗ってソウルのスカイラインを鑑賞するのも特別な体験です。"
+    },
+    detailInfo: {
+      gyeongbok: {
+        hours: "09:00 - 18:00",
+        fee: "大人 3,000ウォン",
+        time: "2時間",
+        program: "守門将交代式 (毎時正時)"
+      },
+      namsanTower: {
+        hours: "10:00 - 23:00",
+        fee: "大人 12,000ウォン",
+        time: "1.5時間",
+        experience: "愛の南京錠、ケーブルカー"
+      },
+      insadongTea: {
+        menu: "なつめ茶、伝統韓菓セット",
+        price: "15,000 - 25,000ウォン",
+        atmosphere: "伝統韓屋、静かな雰囲気"
+      },
+      myeongdongNoodle: {
+        menu: "アンチョビカルグクス、餃子",
+        price: "8,000 - 12,000ウォン",
+        feature: "50年の伝統、地元の名店"
+      },
+      hangang: {
+        activity: "自転車、ピクニック、チキン&ビール",
+        bike: "時間あたり3,000ウォン",
+        experience: "漢江遊覧船、水上スキー"
+      },
+      dongdaemun: {
+        hours: "19:00 - 05:00",
+        shopping: "衣類、アクセサリー、靴",
+        food: "トッポッキ、スンデ、ホットク",
+        feature: "24時間ショッピングモール、卸売価格"
+      },
+      hongdaeFood: {
+        menu: "パスタ、ピザ、手作りバーガー",
+        price: "15,000 - 30,000ウォン",
+        atmosphere: "若々しく活気に満ちた、インスタスポット"
+      },
+      itaewonWorld: {
+        menu: "インドカレー、トルコケバブ、タイ料理",
+        price: "12,000 - 25,000ウォン",
+        feature: "多文化、ハラル料理可能"
+      }
     }
   },
   zh: {
@@ -279,6 +435,58 @@ const translations = {
       dongdaemunNight: "营业到深夜的购物和夜宵天堂。",
       hongdaeFood: "在年轻人的街道弘大享受各种融合料理。",
       itaewonWorld: "可以在一个地方品尝世界各国正宗料理。"
+    },
+    detailDescriptions: {
+      gyeongbokDetail: "朝鲜王朝第一宫殿，建于1395年，是韩国代表性的古宫。勤政殿、庆会楼、香远亭等美丽的殿阁和谐统一，特别是秋季红叶和冬季雪景壮观。守门将换岗仪式再现了朝鲜时代宫殿守卫仪式，每天都可观看。",
+      namsanTowerDetail: "首尔的标志性地标，位于海拔262米南山山顶的综合电波塔。是可以俯瞰整个首尔的最佳观景台，特别是夜间可以欣赏首尔绚丽的夜景。作为恋人们爱的誓言之地也很有名，乘坐缆车上去的乐趣也很大。",
+      insadongTeaDetail: "位于传统与现代和谐统一的首尔代表性文化街仁寺洞的传统茶屋。有许多销售韩国传统工艺品、古董、书法用品等的商店，还有可以喝传统茶的茶屋和韩餐厅。周末还可以看到街头表演，是体验韩国传统文化的最佳场所。",
+      myeongdongNoodleDetail: "位于首尔中心区明洞的50年传统本地名店。以浓郁鳀鱼汤煮的刀切面和手工饺子闻名，以实惠的价格提供丰富的份量，是许多当地人寻找的隐藏名店。购物后简单用餐的绝佳场所。",
+      hangangDetail: "沿着贯穿首尔的汉江建造的大规模市民休息空间。作为可以享受自行车骑行、野餐、炸鸡和啤酒的炸啤文化圣地而闻名，特别是夜景美丽，作为情侣约会路线也很受欢迎。乘坐汉江游览船欣赏首尔天际线也是特别的体验。"
+    },
+    detailInfo: {
+      gyeongbok: {
+        hours: "09:00 - 18:00",
+        fee: "成人 3,000韩元",
+        time: "2小时",
+        program: "守门将换岗仪式 (每小时整点)"
+      },
+      namsanTower: {
+        hours: "10:00 - 23:00",
+        fee: "成人 12,000韩元",
+        time: "1.5小时",
+        experience: "爱情锁、缆车"
+      },
+      insadongTea: {
+        menu: "大枣茶、传统韩果套餐",
+        price: "15,000 - 25,000韩元",
+        atmosphere: "传统韩屋、安静氛围"
+      },
+      myeongdongNoodle: {
+        menu: "鳀鱼刀切面、饺子",
+        price: "8,000 - 12,000韩元",
+        feature: "50年传统、本地名店"
+      },
+      hangang: {
+        activity: "自行车、野餐、炸鸡&啤酒",
+        bike: "每小时3,000韩元",
+        experience: "汉江游览船、水上滑雪"
+      },
+      dongdaemun: {
+        hours: "19:00 - 05:00",
+        shopping: "服装、配饰、鞋子",
+        food: "年糕、血肠、煎饼",
+        feature: "24小时购物中心、批发价格"
+      },
+      hongdaeFood: {
+        menu: "意大利面、披萨、手工汉堡",
+        price: "15,000 - 30,000韩元",
+        atmosphere: "年轻活力、Instagram热点"
+      },
+      itaewonWorld: {
+        menu: "印度咖喱、土耳其烤肉、泰国菜",
+        price: "12,000 - 25,000韩元",
+        feature: "多元文化、提供清真食品"
+      }
     }
   },
   vi: {
@@ -347,6 +555,58 @@ const translations = {
       dongdaemunNight: "Thiên đường mua sắm và đồ ăn đêm mở cửa đến tận khuya.",
       hongdaeFood: "Thưởng thức các món ăn fusion đa dạng ở Hongdae, khu phố của giới trẻ.",
       itaewonWorld: "Bạn có thể thưởng thức ẩm thực chính gốc từ khắp nơi trên thế giới tại một nơi."
+    },
+    detailDescriptions: {
+      gyeongbokDetail: "Cung điện đầu tiên của triều đại Joseon được xây dựng vào năm 1395, là cung điện cổ đại tiêu biểu của Hàn Quốc. Các điện đẹp như Geunjeongjeon, Gyeonghoeru, và Hyangwonjeong hòa hợp với nhau, đặc biệt là lá vàng mùa thu và cảnh tuyết mùa đông thật nspectacular. Lễ thay ca lính gác tái hiện nghi lễ bảo vệ cung điện thời Joseon và có thể xem hàng ngày.",
+      namsanTowerDetail: "Biểu tượng của Seoul, là tháp phát sóng tổng hợp nằm trên đỉnh núi Namsan cao 262m so với mực nước biển. Là đài quan sát tốt nhất có thể nhìn toàn cảnh Seoul chỉ trong một cái nhìn, đặc biệt vào ban đêm có thể thưởng thức cảnh đêm rực rỡ của Seoul. Cũng nổi tiếng là nơi các cặp đôi thề nguyền tình yêu, và việc đi lên bằng cáp treo cũng rất thú vị.",
+      insadongTeaDetail: "Nhà trà truyền thống nằm ở Insadong, con phố văn hóa tiêu biểu của Seoul nơi truyền thống và hiện đại hòa quyện. Có nhiều cửa hàng bán đồ thủ công truyền thống Hàn Quốc, đồ cổ, và dụng cụ thư pháp, cũng như nhà trà và nhà hàng Hàn Quốc nơi bạn có thể uống trà truyền thống. Cuối tuần cũng có thể xem biểu diễn đường phố, làm cho nó trở thành nơi tốt nhất để trải nghiệm văn hóa truyền thống Hàn Quốc.",
+      myeongdongNoodleDetail: "Nhà hàng địa phương 50 năm tuổi nằm ở Myeongdong, trung tâm Seoul. Nổi tiếng với kalguksu (mì cắt bằng dao) nấu trong nước dùng cá cơm đậm đà và bánh bao làm bằng tay, và là một viên ngọc ẩn được nhiều người dân địa phương ghé thăm với khẩu phần lớn với giá cả phải chăng. Hoàn hảo cho một bữa ăn đơn giản sau khi mua sắm.",
+      hangangDetail: "Khu vực nghỉ ngơi của công dân quy mô lớn được tạo ra dọc sông Hàn chảy qua Seoul. Nổi tiếng là nơi thiêng liêng của văn hóa gà và bia nơi bạn có thể thưởng thức đạp xe, dã ngoại, và gà và bia, và cảnh đêm đẹp, làm cho nó phổ biến như một khóa học hẹn hò cho các cặp đôi. Đi du thuyền sông Hàn và thưởng thức đường chân trời Seoul cũng là một trải nghiệm đặc biệt."
+    },
+    detailInfo: {
+      gyeongbok: {
+        hours: "09:00 - 18:00",
+        fee: "Người lớn 3.000 KRW",
+        time: "2 giờ",
+        program: "Lễ thay ca lính gác (mỗi giờ đúng giờ)"
+      },
+      namsanTower: {
+        hours: "10:00 - 23:00",
+        fee: "Người lớn 12.000 KRW",
+        time: "1,5 giờ",
+        experience: "Ổ khóa tình yêu, Cáp treo"
+      },
+      insadongTea: {
+        menu: "Trà táo tàu, Set bánh truyền thống Hàn Quốc",
+        price: "15.000 - 25.000 KRW",
+        atmosphere: "Hanok truyền thống, Không khí yên tĩnh"
+      },
+      myeongdongNoodle: {
+        menu: "Súp mì cá cơm, Bánh bao",
+        price: "8.000 - 12.000 KRW",
+        feature: "Truyền thống 50 năm, Nhà hàng địa phương"
+      },
+      hangang: {
+        activity: "Xe đạp, Dã ngoại, Gà & Bia",
+        bike: "3.000 KRW mỗi giờ",
+        experience: "Du thuyền sông Hàn, Trượt nước"
+      },
+      dongdaemun: {
+        hours: "19:00 - 05:00",
+        shopping: "Quần áo, Phụ kiện, Giày dép",
+        food: "Tteokbokki, Sundae, Hotteok",
+        feature: "Trung tâm mua sắm 24 giờ, Giá bán sỉ"
+      },
+      hongdaeFood: {
+        menu: "Pasta, Pizza, Hamburger thủ công",
+        price: "15.000 - 30.000 KRW",
+        atmosphere: "Trẻ trung và sôi động, Điểm nóng Instagram"
+      },
+      itaewonWorld: {
+        menu: "Cà ri Ấn Độ, Kebab Thổ Nhĩ Kỳ, Món Thái",
+        price: "12.000 - 25.000 KRW",
+        feature: "Đa văn hóa, Có thực phẩm Halal"
+      }
     }
   },
   id: {
@@ -415,6 +675,58 @@ const translations = {
       dongdaemunNight: "Surga belanja dan makanan malam yang buka hingga larut malam.",
       hongdaeFood: "Nikmati berbagai masakan fusion di Hongdae, jalan anak muda.",
       itaewonWorld: "Anda dapat mencicipi masakan autentik dari seluruh dunia di satu tempat."
+    },
+    detailDescriptions: {
+      gyeongbokDetail: "Istana pertama Dinasti Joseon yang dibangun pada tahun 1395, merupakan istana kuno perwakilan Korea. Paviliun indah seperti Geunjeongjeon, Gyeonghoeru, dan Hyangwonjeong berada dalam harmoni, dan dedaunan musim gugur serta pemandangan salju musim dingin sangat spektakuler. Upacara pergantian penjaga mereproduksi upacara pertahanan istana Dinasti Joseon dan dapat disaksikan setiap hari.",
+      namsanTowerDetail: "Landmark ikonik Seoul, ini adalah menara penyiaran komprehensif yang terletak di puncak Gunung Namsan pada ketinggian 262m di atas permukaan laut. Ini adalah observatorium terbaik di mana Anda dapat melihat seluruh Seoul sekilas, dan Anda terutama dapat menikmati pemandangan malam Seoul yang berwarna-warni di malam hari. Ini juga terkenal sebagai tempat bagi para kekasih untuk berjanji cinta mereka, dan juga menyenangkan untuk naik dengan kereta gantung.",
+      insadongTeaDetail: "Rumah teh tradisional yang terletak di Insadong, jalan budaya perwakilan Seoul di mana tradisi dan modernitas berpadu. Ada banyak toko yang menjual kerajinan tradisional Korea, barang antik, dan perlengkapan kaligrafi, serta rumah teh dan restoran Korea di mana Anda dapat minum teh tradisional. Anda juga dapat melihat pertunjukan jalanan di akhir pekan, membuatnya menjadi tempat terbaik untuk mengalami budaya tradisional Korea.",
+      myeongdongNoodleDetail: "Restoran lokal berusia 50 tahun yang terletak di Myeongdong, Seoul pusat. Terkenal dengan kalguksu (mie potong pisau) yang direbus dalam kaldu ikan teri yang kaya dan pangsit buatan tangan, dan merupakan permata tersembunyi yang dikunjungi banyak penduduk lokal dengan porsi besar dengan harga terjangkau. Sempurna untuk makan sederhana setelah berbelanja.",
+      hangangDetail: "Area istirahat warga skala besar yang dibuat di sepanjang Sungai Han yang mengalir melalui Seoul. Terkenal sebagai tempat suci budaya ayam dan bir di mana Anda dapat menikmati bersepeda, piknik, dan ayam dan bir, dan pemandangan malam indah, membuatnya populer sebagai kursus kencan untuk pasangan. Naik kapal pesiar Sungai Han dan menikmati cakrawala Seoul juga merupakan pengalaman yang istimewa."
+    },
+    detailInfo: {
+      gyeongbok: {
+        hours: "09:00 - 18:00",
+        fee: "Dewasa 3.000 KRW",
+        time: "2 jam",
+        program: "Upacara Pergantian Penjaga (setiap jam pada jam penuh)"
+      },
+      namsanTower: {
+        hours: "10:00 - 23:00",
+        fee: "Dewasa 12.000 KRW",
+        time: "1,5 jam",
+        experience: "Gembok cinta, Kereta gantung"
+      },
+      insadongTea: {
+        menu: "Teh jujube, Set kue tradisional Korea",
+        price: "15.000 - 25.000 KRW",
+        atmosphere: "Hanok tradisional, Suasana tenang"
+      },
+      myeongdongNoodle: {
+        menu: "Sup mie ikan teri, Pangsit",
+        price: "8.000 - 12.000 KRW",
+        feature: "Tradisi 50 tahun, Restoran lokal"
+      },
+      hangang: {
+        activity: "Sepeda, Piknik, Ayam & Bir",
+        bike: "3.000 KRW per jam",
+        experience: "Kapal pesiar Sungai Han, Ski air"
+      },
+      dongdaemun: {
+        hours: "19:00 - 05:00",
+        shopping: "Pakaian, Aksesoris, Sepatu",
+        food: "Tteokbokki, Sundae, Hotteok",
+        feature: "Mall 24 jam, Harga grosir"
+      },
+      hongdaeFood: {
+        menu: "Pasta, Pizza, Burger buatan tangan",
+        price: "15.000 - 30.000 KRW",
+        atmosphere: "Muda dan bersemangat, Hotspot Instagram"
+      },
+      itaewonWorld: {
+        menu: "Kari India, Kebab Turki, Makanan Thailand",
+        price: "12.000 - 25.000 KRW",
+        feature: "Multikultural, Makanan halal tersedia"
+      }
     }
   }
 }
@@ -427,7 +739,7 @@ function DetailModal({ isOpen, onClose, title, children }: {
   children: React.ReactNode;
 }) {
   const { language } = useLanguageStore()
-  const t = translations[language as keyof typeof translations]
+  const t = translations[language as keyof typeof translations] as any
   
   if (!isOpen) return null;
 
@@ -489,7 +801,7 @@ export default function ItineraryResultsPage() {
   })
 
   const { language } = useLanguageStore()
-  const t = translations[language as keyof typeof translations]
+  const t = translations[language as keyof typeof translations] as any
 
   const handleCheckboxChange = (itemId: string) => {
     const newSelected = new Set(selectedItems)
@@ -529,24 +841,21 @@ export default function ItineraryResultsPage() {
     <div className="space-y-6">
       {/* 경복궁 상세 정보 */}
       <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">경복궁</h3>
+        <h3 className="text-xl font-bold mb-3">{t.places.gyeongbok}</h3>
         <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            조선왕조 제1궁궐로 1395년에 창건된 한국의 대표적인 고궁입니다. 
-            근정전, 경회루, 향원정 등 아름다운 전각들이 조화를 이루며, 
-            특히 가을 단풍과 겨울 설경이 장관을 이룹니다. 
-            수문장 교대의식은 조선시대 궁궐 수비 의식을 재현한 것으로 매일 관람할 수 있습니다.
+            {t.detailDescriptions?.gyeongbokDetail || '조선왕조 제1궁궐로 1395년에 창건된 한국의 대표적인 고궁입니다.'}
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="mb-2"><strong>운영시간:</strong> 09:00 - 18:00</p>
-            <p className="mb-2"><strong>입장료:</strong> 성인 3,000원</p>
-            <p className="mb-2"><strong>추천시간:</strong> 2시간</p>
-            <p className="mb-2"><strong>특별프로그램:</strong> 수문장 교대식 (매시 정각)</p>
+            <p className="mb-2"><strong>{t.common.operatingHours}</strong> {t.detailInfo?.gyeongbok?.hours || '09:00 - 18:00'}</p>
+            <p className="mb-2"><strong>{t.common.admissionFee}</strong> {t.detailInfo?.gyeongbok?.fee || '성인 3,000원'}</p>
+            <p className="mb-2"><strong>{t.common.recommendedTime}</strong> {t.detailInfo?.gyeongbok?.time || '2시간'}</p>
+            <p className="mb-2"><strong>{t.common.specialProgram}</strong> {t.detailInfo?.gyeongbok?.program || '수문장 교대식 (매시 정각)'}</p>
           </div>
           <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
+            <p className="mb-2"><strong>{t.common.photoUrl}</strong></p>
             <div className="text-sm text-blue-600 space-y-1">
               <p>• https://example.com/photos/gyeongbok-1.jpg</p>
               <p>• https://example.com/photos/gyeongbok-2.jpg</p>
@@ -558,24 +867,21 @@ export default function ItineraryResultsPage() {
 
       {/* 남산타워 상세 정보 */}
       <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">남산타워</h3>
+        <h3 className="text-xl font-bold mb-3">{t.places.namsanTower}</h3>
         <div className="mb-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            서울의 상징적인 랜드마크로 해발 262m 남산 정상에 위치한 종합전파탑입니다. 
-            서울 전체를 한눈에 내려다볼 수 있는 최고의 전망대이며, 
-            특히 야간에는 서울의 화려한 야경을 감상할 수 있습니다. 
-            연인들의 사랑의 맹세 장소로도 유명하며, 케이블카를 타고 올라가는 재미도 쏠쏠합니다.
+            {t.detailDescriptions?.namsanTowerDetail || '서울의 상징적인 랜드마크로 해발 262m 남산 정상에 위치한 종합전파탑입니다.'}
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="mb-2"><strong>운영시간:</strong> 10:00 - 23:00</p>
-            <p className="mb-2"><strong>입장료:</strong> 성인 12,000원</p>
-            <p className="mb-2"><strong>추천시간:</strong> 1.5시간</p>
-            <p className="mb-2"><strong>특별체험:</strong> 사랑의 자물쇠, 케이블카</p>
+            <p className="mb-2"><strong>{t.common.operatingHours}</strong> {t.detailInfo?.namsanTower?.hours || '10:00 - 23:00'}</p>
+            <p className="mb-2"><strong>{t.common.admissionFee}</strong> {t.detailInfo?.namsanTower?.fee || '성인 12,000원'}</p>
+            <p className="mb-2"><strong>{t.common.recommendedTime}</strong> {t.detailInfo?.namsanTower?.time || '1.5시간'}</p>
+            <p className="mb-2"><strong>{t.common.specialExperience}</strong> {language === 'ja' ? '愛の南京錠、ケーブルカー' : t.detailInfo?.namsanTower?.experience || '사랑의 자물쇠, 케이블카'}</p>
           </div>
           <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
+            <p className="mb-2"><strong>{t.common.photoUrl}</strong></p>
             <div className="text-sm text-blue-600 space-y-1">
               <p>• https://example.com/photos/namsan-tower-1.jpg</p>
               <p>• https://example.com/photos/namsan-night.jpg</p>
@@ -587,23 +893,20 @@ export default function ItineraryResultsPage() {
 
       {/* 음식점 상세 정보 */}
       <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">인사동 전통차집</h3>
+        <h3 className="text-xl font-bold mb-3">{t.places.insadongTea}</h3>
         <div className="mb-4 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            전통과 현대가 어우러진 서울의 대표적인 문화의 거리, 인사동에 위치한 전통차집입니다. 
-            한국 전통 공예품, 골동품, 서예용품 등을 판매하는 상점들이 즐비하며, 
-            전통차를 마실 수 있는 찻집과 한식당이 많습니다. 
-            주말에는 거리 공연도 볼 수 있어 한국의 전통문화를 체험하기에 최적의 장소입니다.
+            {t.detailDescriptions.insadongTeaDetail}
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="mb-2"><strong>추천메뉴:</strong> 대추차, 전통한과세트</p>
-            <p className="mb-2"><strong>가격대:</strong> 15,000원 - 25,000원</p>
-            <p className="mb-2"><strong>분위기:</strong> 전통 한옥, 조용한 분위기</p>
+            <p className="mb-2"><strong>{t.common.recommendedMenu}</strong> {t.detailInfo.insadongTea.menu}</p>
+            <p className="mb-2"><strong>{t.common.priceRange}</strong> {t.detailInfo.insadongTea.price}</p>
+            <p className="mb-2"><strong>{t.common.atmosphere}</strong> {t.detailInfo.insadongTea.atmosphere}</p>
           </div>
           <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
+            <p className="mb-2"><strong>{t.common.photoUrl}</strong></p>
             <div className="text-sm text-blue-600 space-y-1">
               <p>• https://example.com/photos/insadong-tea-1.jpg</p>
               <p>• https://example.com/photos/insadong-tea-2.jpg</p>
@@ -613,23 +916,20 @@ export default function ItineraryResultsPage() {
       </div>
 
       <div>
-        <h3 className="text-xl font-bold mb-3">명동 칼국수</h3>
+        <h3 className="text-xl font-bold mb-3">{t.places.myeongdongNoodle}</h3>
         <div className="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            서울 중심부 명동에 위치한 50년 전통의 현지인 맛집입니다. 
-            진한 멸치 육수로 끓인 칼국수와 손으로 빚은 만두가 유명하며, 
-            저렴한 가격에 푸짐한 양으로 많은 현지인들이 찾는 숨은 맛집입니다. 
-            쇼핑 후 간단한 한끼로 안성맞춤인 곳입니다.
+            {t.detailDescriptions.myeongdongNoodleDetail}
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="mb-2"><strong>추천메뉴:</strong> 멸치칼국수, 만두</p>
-            <p className="mb-2"><strong>가격대:</strong> 8,000원 - 12,000원</p>
-            <p className="mb-2"><strong>특징:</strong> 50년 전통, 현지인 맛집</p>
+            <p className="mb-2"><strong>{t.common.recommendedMenu}</strong> {t.detailInfo.myeongdongNoodle.menu}</p>
+            <p className="mb-2"><strong>{t.common.priceRange}</strong> {t.detailInfo.myeongdongNoodle.price}</p>
+            <p className="mb-2"><strong>{t.common.features}</strong> {t.detailInfo.myeongdongNoodle.feature}</p>
           </div>
           <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
+            <p className="mb-2"><strong>{t.common.photoUrl}</strong></p>
             <div className="text-sm text-blue-600 space-y-1">
               <p>• https://example.com/photos/myeongdong-noodle-1.jpg</p>
               <p>• https://example.com/photos/myeongdong-noodle-2.jpg</p>
@@ -644,24 +944,21 @@ export default function ItineraryResultsPage() {
     <div className="space-y-6">
       {/* 한강공원 상세 정보 */}
       <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">한강공원</h3>
+        <h3 className="text-xl font-bold mb-3">{t.places.hangang}</h3>
         <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
           <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            서울을 관통하는 한강변에 조성된 대규모 시민 휴식공간입니다. 
-            자전거 라이딩, 피크닉, 치킨과 맥주를 즐기는 치맥 문화의 성지로 유명하며, 
-            특히 야경이 아름다워 연인들의 데이트 코스로도 인기가 높습니다. 
-            한강 유람선을 타고 서울의 스카이라인을 감상하는 것도 특별한 경험입니다.
+            {t.detailDescriptions.hangangDetail}
           </p>
         </div>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="mb-2"><strong>운영시간:</strong> 24시간</p>
-            <p className="mb-2"><strong>추천활동:</strong> 자전거, 피크닉, 치킨&맥주</p>
-            <p className="mb-2"><strong>자전거대여:</strong> 시간당 3,000원</p>
-            <p className="mb-2"><strong>특별체험:</strong> 한강 유람선, 수상스키</p>
+            <p className="mb-2"><strong>{t.common.operatingHours}</strong> 24시간</p>
+            <p className="mb-2"><strong>{t.common.recommendedActivity}</strong> {t.detailInfo.hangang.activity}</p>
+            <p className="mb-2"><strong>{t.common.bikeRental}</strong> {t.detailInfo.hangang.bike}</p>
+            <p className="mb-2"><strong>{t.common.specialExperience}</strong> {t.detailInfo.hangang.experience}</p>
           </div>
           <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
+            <p className="mb-2"><strong>{t.common.photoUrl}</strong></p>
             <div className="text-sm text-blue-600 space-y-1">
               <p>• https://example.com/photos/hangang-park-1.jpg</p>
               <p>• https://example.com/photos/hangang-bike.jpg</p>
@@ -673,16 +970,16 @@ export default function ItineraryResultsPage() {
 
       {/* 동대문 상세 정보 */}
       <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">동대문 야시장</h3>
+        <h3 className="text-xl font-bold mb-3">{t.places.dongdaemunNight}</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="mb-2"><strong>운영시간:</strong> 19:00 - 05:00</p>
-            <p className="mb-2"><strong>추천쇼핑:</strong> 의류, 액세서리, 신발</p>
-            <p className="mb-2"><strong>야식:</strong> 떡볶이, 순대, 호떡</p>
-            <p className="mb-2"><strong>특징:</strong> 24시간 쇼핑몰, 도매가격</p>
+            <p className="mb-2"><strong>{t.common.operatingHours}</strong> {t.detailInfo.dongdaemun.hours}</p>
+            <p className="mb-2"><strong>{t.common.recommendedShopping}</strong> {t.detailInfo.dongdaemun.shopping}</p>
+            <p className="mb-2"><strong>{t.common.nightFood}</strong> {t.detailInfo.dongdaemun.food}</p>
+            <p className="mb-2"><strong>{t.common.features}</strong> {t.detailInfo.dongdaemun.feature}</p>
           </div>
           <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
+            <p className="mb-2"><strong>{t.common.photoUrl}</strong></p>
             <div className="text-sm text-blue-600 space-y-1">
               <p>• https://example.com/photos/dongdaemun-night-1.jpg</p>
               <p>• https://example.com/photos/dongdaemun-shopping.jpg</p>
@@ -694,15 +991,15 @@ export default function ItineraryResultsPage() {
 
       {/* 음식점 상세 정보 */}
       <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">홍대 맛집 투어</h3>
+        <h3 className="text-xl font-bold mb-3">{t.places.hongdaeFood}</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="mb-2"><strong>추천메뉴:</strong> 파스타, 피자, 수제버거</p>
-            <p className="mb-2"><strong>가격대:</strong> 15,000원 - 30,000원</p>
-            <p className="mb-2"><strong>분위기:</strong> 젊고 활기찬, 인스타 핫플</p>
+            <p className="mb-2"><strong>{t.common.recommendedMenu}</strong> {t.detailInfo.hongdaeFood.menu}</p>
+            <p className="mb-2"><strong>{t.common.priceRange}</strong> {t.detailInfo.hongdaeFood.price}</p>
+            <p className="mb-2"><strong>{t.common.atmosphere}</strong> {t.detailInfo.hongdaeFood.atmosphere}</p>
           </div>
           <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
+            <p className="mb-2"><strong>{t.common.photoUrl}</strong></p>
             <div className="text-sm text-blue-600 space-y-1">
               <p>• https://example.com/photos/hongdae-food-1.jpg</p>
               <p>• https://example.com/photos/hongdae-food-2.jpg</p>
@@ -712,15 +1009,15 @@ export default function ItineraryResultsPage() {
       </div>
 
       <div>
-        <h3 className="text-xl font-bold mb-3">이태원 세계음식</h3>
+        <h3 className="text-xl font-bold mb-3">{t.places.itaewonWorld}</h3>
         <div className="grid md:grid-cols-2 gap-4">
           <div>
-            <p className="mb-2"><strong>추천메뉴:</strong> 인도카레, 터키케밥, 태국음식</p>
-            <p className="mb-2"><strong>가격대:</strong> 12,000원 - 25,000원</p>
-            <p className="mb-2"><strong>특징:</strong> 다국적 문화, 할랄음식 가능</p>
+            <p className="mb-2"><strong>{t.common.recommendedMenu}</strong> {t.detailInfo.itaewonWorld.menu}</p>
+            <p className="mb-2"><strong>{t.common.priceRange}</strong> {t.detailInfo.itaewonWorld.price}</p>
+            <p className="mb-2"><strong>{t.common.features}</strong> {t.detailInfo.itaewonWorld.feature}</p>
           </div>
           <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
+            <p className="mb-2"><strong>{t.common.photoUrl}</strong></p>
             <div className="text-sm text-blue-600 space-y-1">
               <p>• https://example.com/photos/itaewon-world-food-1.jpg</p>
               <p>• https://example.com/photos/itaewon-world-food-2.jpg</p>
