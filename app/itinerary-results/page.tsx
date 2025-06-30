@@ -23,7 +23,59 @@ const translations = {
     restaurants: "먹거리 (음식점 또는 음식)",
     save: "일정 저장",
     download: "일정 다운로드",
-    print: "바로 프린터"
+    print: "바로 프린터",
+    modal: {
+      detailInfo: "상세 정보",
+      saveAlert: "일정이 저장되었습니다! 💾",
+      downloadAlert: "일정이 다운로드됩니다! 📱",
+      selectAlert: "최소 1개 이상의 항목을 선택해주세요!",
+      customAlert: "개 항목으로 커스텀 일정이 생성됩니다! ✨"
+    },
+    common: {
+      totalRoute: "📍 전체 여행 경로",
+      totalDistance1: "총 거리: 약 15km | 예상 소요시간: 1일",
+      totalDistance2: "총 거리: 약 20km | 예상 소요시간: 1일",
+      scheduleSelection: "여행 일정 선택",
+      operatingHours: "운영시간:",
+      admissionFee: "입장료:",
+      recommendedTime: "추천시간:",
+      specialProgram: "특별프로그램:",
+      specialExperience: "특별체험:",
+      recommendedMenu: "추천메뉴:",
+      priceRange: "가격대:",
+      atmosphere: "분위기:",
+      features: "특징:",
+      recommendedActivity: "추천활동:",
+      bikeRental: "자전거대여:",
+      recommendedShopping: "추천쇼핑:",
+      nightFood: "야식:",
+      photoUrl: "사진 URL:"
+    },
+    places: {
+      gyeongbok: "경복궁",
+      insadong: "인사동",
+      myeongdong: "명동",
+      namsanTower: "남산타워",
+      hangang: "한강공원",
+      hongdae: "홍대",
+      itaewon: "이태원",
+      dongdaemun: "동대문",
+      dongdaemunNight: "동대문 야시장",
+      insadongTea: "인사동 전통차집",
+      myeongdongNoodle: "명동 칼국수",
+      hongdaeFood: "홍대 맛집 투어",
+      itaewonWorld: "이태원 세계음식"
+    },
+    descriptions: {
+      gyeongbok: "조선왕조의 정궁으로 한국의 전통 건축미를 감상할 수 있습니다.",
+      namsanTower: "서울의 야경을 한눈에 볼 수 있는 최고의 전망대입니다.",
+      insadongTea: "전통 한과와 차를 즐길 수 있는 고즈넉한 찻집입니다.",
+      myeongdongNoodle: "50년 전통의 손칼국수를 맛볼 수 있는 명동 맛집입니다.",
+      hangang: "한강에서 자전거를 타며 여유로운 시간을 보낼 수 있습니다.",
+      dongdaemunNight: "밤늦게까지 열리는 쇼핑과 야식의 천국입니다.",
+      hongdaeFood: "젊음의 거리 홍대에서 다양한 퓨전 요리를 즐겨보세요.",
+      itaewonWorld: "세계 각국의 정통 요리를 한 곳에서 맛볼 수 있습니다."
+    }
   },
   en: {
     title: "🎉 Recommended Travel Itinerary",
@@ -39,7 +91,59 @@ const translations = {
     restaurants: "Food (Restaurants or Cuisine)",
     save: "Save Itinerary",
     download: "Download Itinerary",
-    print: "Print Directly"
+    print: "Print Directly",
+    modal: {
+      detailInfo: "Detailed Information",
+      saveAlert: "Itinerary saved successfully! 💾",
+      downloadAlert: "Itinerary is being downloaded! 📱",
+      selectAlert: "Please select at least 1 item!",
+      customAlert: " items will create a custom itinerary! ✨"
+    },
+    common: {
+      totalRoute: "📍 Total Travel Route",
+      totalDistance1: "Total Distance: ~15km | Estimated Duration: 1 day",
+      totalDistance2: "Total Distance: ~20km | Estimated Duration: 1 day",
+      scheduleSelection: "Travel Schedule Selection",
+      operatingHours: "Operating Hours:",
+      admissionFee: "Admission Fee:",
+      recommendedTime: "Recommended Time:",
+      specialProgram: "Special Program:",
+      specialExperience: "Special Experience:",
+      recommendedMenu: "Recommended Menu:",
+      priceRange: "Price Range:",
+      atmosphere: "Atmosphere:",
+      features: "Features:",
+      recommendedActivity: "Recommended Activity:",
+      bikeRental: "Bike Rental:",
+      recommendedShopping: "Recommended Shopping:",
+      nightFood: "Night Food:",
+      photoUrl: "Photo URL:"
+    },
+    places: {
+      gyeongbok: "Gyeongbokgung Palace",
+      insadong: "Insadong",
+      myeongdong: "Myeongdong",
+      namsanTower: "Namsan Tower",
+      hangang: "Hangang Park",
+      hongdae: "Hongdae",
+      itaewon: "Itaewon",
+      dongdaemun: "Dongdaemun",
+      dongdaemunNight: "Dongdaemun Night Market",
+      insadongTea: "Insadong Traditional Tea House",
+      myeongdongNoodle: "Myeongdong Noodle House",
+      hongdaeFood: "Hongdae Food Tour",
+      itaewonWorld: "Itaewon International Cuisine"
+    },
+    descriptions: {
+      gyeongbok: "Royal palace of the Joseon Dynasty where you can admire traditional Korean architecture.",
+      namsanTower: "The best observatory to see Seoul's night view at a glance.",
+      insadongTea: "A quiet traditional tea house where you can enjoy traditional Korean sweets and tea.",
+      myeongdongNoodle: "A 50-year-old traditional Myeongdong restaurant where you can taste handmade noodles.",
+      hangang: "You can spend leisurely time riding bikes along the Han River.",
+      dongdaemunNight: "A paradise of shopping and late-night snacks open until late at night.",
+      hongdaeFood: "Enjoy various fusion cuisines in Hongdae, the street of youth.",
+      itaewonWorld: "You can taste authentic cuisine from around the world in one place."
+    }
   },
   ja: {
     title: "🎉 おすすめ旅行プラン",
@@ -55,7 +159,59 @@ const translations = {
     restaurants: "グルメ (レストランまたは料理)",
     save: "プラン保存",
     download: "プランダウンロード",
-    print: "直接印刷"
+    print: "直接印刷",
+    modal: {
+      detailInfo: "詳細情報",
+      saveAlert: "プランが保存されました！ 💾",
+      downloadAlert: "プランをダウンロードします！ 📱",
+      selectAlert: "最低1つ以上のアイテムを選択してください！",
+      customAlert: "個のアイテムでカスタムプランが生成されます！ ✨"
+    },
+    common: {
+      totalRoute: "📍 全体旅行ルート",
+      totalDistance1: "総距離：約15km｜予想所要時間：1日",
+      totalDistance2: "総距離：約20km｜予想所要時間：1日",
+      scheduleSelection: "旅行プラン選択",
+      operatingHours: "営業時間：",
+      admissionFee: "入場料：",
+      recommendedTime: "推奨時間：",
+      specialProgram: "特別プログラム：",
+      specialExperience: "特別体験：",
+      recommendedMenu: "おすすめメニュー：",
+      priceRange: "価格帯：",
+      atmosphere: "雰囲気：",
+      features: "特徴：",
+      recommendedActivity: "おすすめアクティビティ：",
+      bikeRental: "自転車レンタル：",
+      recommendedShopping: "おすすめショッピング：",
+      nightFood: "夜食：",
+      photoUrl: "写真URL："
+    },
+    places: {
+      gyeongbok: "景福宮",
+      insadong: "仁寺洞",
+      myeongdong: "明洞",
+      namsanTower: "南山タワー",
+      hangang: "漢江公園",
+      hongdae: "弘大",
+      itaewon: "梨泰院",
+      dongdaemun: "東大門",
+      dongdaemunNight: "東大門夜市",
+      insadongTea: "仁寺洞伝統茶屋",
+      myeongdongNoodle: "明洞カルグクス",
+      hongdaeFood: "弘大グルメツアー",
+      itaewonWorld: "梨泰院世界料理"
+    },
+    descriptions: {
+      gyeongbok: "朝鮮王朝の正宮で韓国の伝統建築美を鑑賞できます。",
+      namsanTower: "ソウルの夜景を一望できる最高の展望台です。",
+      insadongTea: "伝統韓菓と茶を楽しめる静かな茶屋です。",
+      myeongdongNoodle: "50年伝統の手作り麺を味わえる明洞の名店です。",
+      hangang: "漢江で自転車に乗りながらゆったりとした時間を過ごせます。",
+      dongdaemunNight: "夜遅くまで開いているショッピングと夜食の天国です。",
+      hongdaeFood: "若者の街弘大で様々なフュージョン料理をお楽しみください。",
+      itaewonWorld: "世界各国の本格料理を一ヶ所で味わうことができます。"
+    }
   },
   zh: {
     title: "🎉 推荐旅行行程",
@@ -71,7 +227,59 @@ const translations = {
     restaurants: "美食 (餐厅或料理)",
     save: "保存行程",
     download: "下载行程",
-    print: "直接打印"
+    print: "直接打印",
+    modal: {
+      detailInfo: "详细信息",
+      saveAlert: "行程已保存！ 💾",
+      downloadAlert: "正在下载行程！ 📱",
+      selectAlert: "请至少选择1个项目！",
+      customAlert: "个项目将创建定制行程！ ✨"
+    },
+    common: {
+      totalRoute: "📍 整体旅行路线",
+      totalDistance1: "总距离：约15公里 | 预计耗时：1天",
+      totalDistance2: "总距离：约20公里 | 预计耗时：1天",
+      scheduleSelection: "旅行行程选择",
+      operatingHours: "营业时间：",
+      admissionFee: "门票：",
+      recommendedTime: "推荐时间：",
+      specialProgram: "特别节目：",
+      specialExperience: "特别体验：",
+      recommendedMenu: "推荐菜单：",
+      priceRange: "价格范围：",
+      atmosphere: "氛围：",
+      features: "特色：",
+      recommendedActivity: "推荐活动：",
+      bikeRental: "自行车租赁：",
+      recommendedShopping: "推荐购物：",
+      nightFood: "夜宵：",
+      photoUrl: "照片网址："
+    },
+    places: {
+      gyeongbok: "景福宫",
+      insadong: "仁寺洞",
+      myeongdong: "明洞",
+      namsanTower: "南山塔",
+      hangang: "汉江公园",
+      hongdae: "弘大",
+      itaewon: "梨泰院",
+      dongdaemun: "东大门",
+      dongdaemunNight: "东大门夜市",
+      insadongTea: "仁寺洞传统茶屋",
+      myeongdongNoodle: "明洞刀切面",
+      hongdaeFood: "弘大美食之旅",
+      itaewonWorld: "梨泰院国际美食"
+    },
+    descriptions: {
+      gyeongbok: "朝鲜王朝正宫，可以欣赏韩国传统建筑美。",
+      namsanTower: "可以一览首尔夜景的最佳观景台。",
+      insadongTea: "可以享受传统韩式点心和茶的静谧茶屋。",
+      myeongdongNoodle: "可以品尝50年传统手工面条的明洞名店。",
+      hangang: "可以在汉江骑自行车度过悠闲时光。",
+      dongdaemunNight: "营业到深夜的购物和夜宵天堂。",
+      hongdaeFood: "在年轻人的街道弘大享受各种融合料理。",
+      itaewonWorld: "可以在一个地方品尝世界各国正宗料理。"
+    }
   },
   vi: {
     title: "🎉 Lịch Trình Du Lịch Đề Xuất",
@@ -87,7 +295,59 @@ const translations = {
     restaurants: "Ẩm Thực (Nhà Hàng hoặc Món Ăn)",
     save: "Lưu Lịch Trình",
     download: "Tải Lịch Trình",
-    print: "In Trực Tiếp"
+    print: "In Trực Tiếp",
+    modal: {
+      detailInfo: "Thông Tin Chi Tiết",
+      saveAlert: "Lịch trình đã được lưu! 💾",
+      downloadAlert: "Đang tải lịch trình! 📱",
+      selectAlert: "Vui lòng chọn ít nhất 1 mục!",
+      customAlert: " mục sẽ tạo lịch trình tùy chỉnh! ✨"
+    },
+    common: {
+      totalRoute: "📍 Tổng Tuyến Đường Du Lịch",
+      totalDistance1: "Tổng quãng đường: ~15km | Thời gian dự kiến: 1 ngày",
+      totalDistance2: "Tổng quãng đường: ~20km | Thời gian dự kiến: 1 ngày",
+      scheduleSelection: "Lựa Chọn Lịch Trình Du Lịch",
+      operatingHours: "Giờ hoạt động:",
+      admissionFee: "Phí vào cửa:",
+      recommendedTime: "Thời gian đề xuất:",
+      specialProgram: "Chương trình đặc biệt:",
+      specialExperience: "Trải nghiệm đặc biệt:",
+      recommendedMenu: "Menu đề xuất:",
+      priceRange: "Mức giá:",
+      atmosphere: "Không khí:",
+      features: "Đặc điểm:",
+      recommendedActivity: "Hoạt động đề xuất:",
+      bikeRental: "Thuê xe đạp:",
+      recommendedShopping: "Mua sắm đề xuất:",
+      nightFood: "Đồ ăn đêm:",
+      photoUrl: "URL ảnh:"
+    },
+    places: {
+      gyeongbok: "Cung Gyeongbok",
+      insadong: "Insadong",
+      myeongdong: "Myeongdong",
+      namsanTower: "Tháp Namsan",
+      hangang: "Công viên Hangang",
+      hongdae: "Hongdae",
+      itaewon: "Itaewon",
+      dongdaemun: "Dongdaemun",
+      dongdaemunNight: "Chợ đêm Dongdaemun",
+      insadongTea: "Nhà trà truyền thống Insadong",
+      myeongdongNoodle: "Quán mì Myeongdong",
+      hongdaeFood: "Tour ẩm thực Hongdae",
+      itaewonWorld: "Ẩm thực quốc tế Itaewon"
+    },
+    descriptions: {
+      gyeongbok: "Cung điện chính của triều đại Joseon nơi bạn có thể thưởng thức kiến trúc truyền thống Hàn Quốc.",
+      namsanTower: "Đài quan sát tốt nhất để nhìn toàn cảnh Seoul về đêm.",
+      insadongTea: "Nhà trà truyền thống yên tĩnh nơi bạn có thể thưởng thức bánh kẹo và trà truyền thống.",
+      myeongdongNoodle: "Nhà hàng truyền thống 50 năm tuổi ở Myeongdong nơi bạn có thể thưởng thức mì làm tay.",
+      hangang: "Bạn có thể dành thời gian thư giãn đạp xe dọc sông Hàn.",
+      dongdaemunNight: "Thiên đường mua sắm và đồ ăn đêm mở cửa đến tận khuya.",
+      hongdaeFood: "Thưởng thức các món ăn fusion đa dạng ở Hongdae, khu phố của giới trẻ.",
+      itaewonWorld: "Bạn có thể thưởng thức ẩm thực chính gốc từ khắp nơi trên thế giới tại một nơi."
+    }
   },
   id: {
     title: "🎉 Itinerary Perjalanan yang Direkomendasikan",
@@ -103,7 +363,59 @@ const translations = {
     restaurants: "Kuliner (Restoran atau Masakan)",
     save: "Simpan Itinerary",
     download: "Unduh Itinerary",
-    print: "Cetak Langsung"
+    print: "Cetak Langsung",
+    modal: {
+      detailInfo: "Informasi Detail",
+      saveAlert: "Itinerary telah disimpan! 💾",
+      downloadAlert: "Sedang mengunduh itinerary! 📱",
+      selectAlert: "Pilih minimal 1 item!",
+      customAlert: " item akan membuat itinerary kustom! ✨"
+    },
+    common: {
+      totalRoute: "📍 Total Rute Perjalanan",
+      totalDistance1: "Total jarak: ~15km | Perkiraan waktu: 1 hari",
+      totalDistance2: "Total jarak: ~20km | Perkiraan waktu: 1 hari",
+      scheduleSelection: "Pemilihan Jadwal Perjalanan",
+      operatingHours: "Jam operasional:",
+      admissionFee: "Biaya masuk:",
+      recommendedTime: "Waktu yang disarankan:",
+      specialProgram: "Program khusus:",
+      specialExperience: "Pengalaman khusus:",
+      recommendedMenu: "Menu yang disarankan:",
+      priceRange: "Kisaran harga:",
+      atmosphere: "Suasana:",
+      features: "Fitur:",
+      recommendedActivity: "Aktivitas yang disarankan:",
+      bikeRental: "Sewa sepeda:",
+      recommendedShopping: "Belanja yang disarankan:",
+      nightFood: "Makanan malam:",
+      photoUrl: "URL foto:"
+    },
+    places: {
+      gyeongbok: "Istana Gyeongbok",
+      insadong: "Insadong",
+      myeongdong: "Myeongdong",
+      namsanTower: "Menara Namsan",
+      hangang: "Taman Hangang",
+      hongdae: "Hongdae",
+      itaewon: "Itaewon",
+      dongdaemun: "Dongdaemun",
+      dongdaemunNight: "Pasar Malam Dongdaemun",
+      insadongTea: "Rumah Teh Tradisional Insadong",
+      myeongdongNoodle: "Kedai Mie Myeongdong",
+      hongdaeFood: "Tur Kuliner Hongdae",
+      itaewonWorld: "Masakan Internasional Itaewon"
+    },
+    descriptions: {
+      gyeongbok: "Istana utama Dinasti Joseon tempat Anda dapat mengagumi arsitektur tradisional Korea.",
+      namsanTower: "Observatorium terbaik untuk melihat pemandangan malam Seoul secara keseluruhan.",
+      insadongTea: "Rumah teh tradisional yang tenang tempat Anda dapat menikmati kue tradisional dan teh.",
+      myeongdongNoodle: "Restoran tradisional berusia 50 tahun di Myeongdong tempat Anda dapat mencicipi mie buatan tangan.",
+      hangang: "Anda dapat menghabiskan waktu santai bersepeda di sepanjang Sungai Han.",
+      dongdaemunNight: "Surga belanja dan makanan malam yang buka hingga larut malam.",
+      hongdaeFood: "Nikmati berbagai masakan fusion di Hongdae, jalan anak muda.",
+      itaewonWorld: "Anda dapat mencicipi masakan autentik dari seluruh dunia di satu tempat."
+    }
   }
 }
 
@@ -114,14 +426,17 @@ function DetailModal({ isOpen, onClose, title, children }: {
   title: string; 
   children: React.ReactNode;
 }) {
+  const { language } = useLanguageStore()
+  const t = translations[language as keyof typeof translations]
+  
   if (!isOpen) return null;
 
   const handleSaveSchedule = () => {
-    alert("일정이 저장되었습니다! 💾")
+    alert(t.modal.saveAlert)
   }
 
   const handleDownload = () => {
-    alert("일정이 다운로드됩니다! 📱")
+    alert(t.modal.downloadAlert)
   }
 
   const handlePrint = () => {
@@ -132,7 +447,7 @@ function DetailModal({ isOpen, onClose, title, children }: {
     <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
       <div className="bg-white dark:bg-gray-800 rounded-lg max-w-2xl w-full max-h-[90vh] overflow-y-auto">
         <div className="flex justify-between items-center p-6 border-b">
-          <h2 className="text-2xl font-bold">{title} - 상세 정보</h2>
+          <h2 className="text-2xl font-bold">{title} - {t.modal.detailInfo}</h2>
           <Button variant="ghost" size="sm" onClick={onClose}>
             <X className="w-4 h-4" />
           </Button>
@@ -144,15 +459,15 @@ function DetailModal({ isOpen, onClose, title, children }: {
           <div className="flex flex-wrap gap-4 mt-6 pt-6 border-t">
             <Button onClick={handleSaveSchedule} className="flex items-center space-x-2 bg-blue-600 hover:bg-blue-700">
               <Save className="w-4 h-4" />
-              <span>일정 저장</span>
+              <span>{t.save}</span>
             </Button>
             <Button onClick={handleDownload} className="flex items-center space-x-2 bg-green-600 hover:bg-green-700">
               <Download className="w-4 h-4" />
-              <span>일정 다운로드</span>
+              <span>{t.download}</span>
             </Button>
             <Button onClick={handlePrint} variant="outline" className="flex items-center space-x-2">
               <Printer className="w-4 h-4" />
-              <span>바로 프린터</span>
+              <span>{t.print}</span>
             </Button>
           </div>
         </div>
@@ -188,10 +503,10 @@ export default function ItineraryResultsPage() {
 
   const handleCreateCustomSchedule = () => {
     if (selectedItems.size === 0) {
-      alert("최소 1개 이상의 항목을 선택해주세요!")
+      alert(t.modal.selectAlert)
       return
     }
-    alert(`선택된 ${selectedItems.size}개 항목으로 커스텀 일정이 생성됩니다! ✨`)
+    alert(`${selectedItems.size}${t.modal.customAlert}`)
   }
 
   const openModal = (title: string, content: React.ReactNode) => {
@@ -443,7 +758,7 @@ export default function ItineraryResultsPage() {
                   {t.customScheduleDesc}
                 </p>
                 <span className="inline-block mt-3 text-lg font-semibold text-purple-600 dark:text-purple-400">
-                  {t.selectedItems}: {selectedItems.size}개
+                  {t.selectedItems}: {selectedItems.size}
                 </span>
               </div>
               <Button 
@@ -463,42 +778,42 @@ export default function ItineraryResultsPage() {
               
               {/* 전체 여행 경로 */}
               <div className="mt-4 p-4 bg-white/20 rounded-lg">
-                <h4 className="font-bold text-lg mb-3">📍 전체 여행 경로</h4>
+                <h4 className="font-bold text-lg mb-3">{t.common.totalRoute}</h4>
                 <div className="flex items-center justify-between text-sm">
                   <div className="text-center">
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold mb-1">
                       1
                     </div>
-                    <span>경복궁</span>
+                    <span>{t.places.gyeongbok}</span>
                   </div>
                   <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
                   <div className="text-center">
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold mb-1">
                       2
                     </div>
-                    <span>인사동</span>
+                    <span>{t.places.insadong}</span>
                   </div>
                   <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
                   <div className="text-center">
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold mb-1">
                       3
                     </div>
-                    <span>명동</span>
+                    <span>{t.places.myeongdong}</span>
                   </div>
                   <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
                   <div className="text-center">
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold mb-1">
                       4
                     </div>
-                    <span>남산타워</span>
+                    <span>{t.places.namsanTower}</span>
                   </div>
                 </div>
-                <p className="text-center mt-3 text-sm">총 거리: 약 15km | 예상 소요시간: 1일</p>
+                <p className="text-center mt-3 text-sm">{t.common.totalDistance1}</p>
               </div>
             </CardHeader>
             <CardContent className="space-y-8 p-6">
               <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-green-600 dark:text-green-400">여행 일정 선택</h3>
+                <h3 className="text-xl font-bold text-green-600 dark:text-green-400">{t.common.scheduleSelection}</h3>
                 <Button 
                   onClick={() => openModal(t.itinerary1, getDetailContent1())} 
                   variant="outline" 
@@ -523,9 +838,9 @@ export default function ItineraryResultsPage() {
                     />
                     <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
                     <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">경복궁</h4>
+                      <h4 className="font-bold text-gray-900 dark:text-gray-100">{t.places.gyeongbok}</h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        조선왕조의 정궁으로 한국의 전통 건축미를 감상할 수 있습니다.
+                        {t.descriptions.gyeongbok}
                       </p>
                     </div>
                   </div>
@@ -538,9 +853,9 @@ export default function ItineraryResultsPage() {
                     />
                     <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
                     <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">남산타워</h4>
+                      <h4 className="font-bold text-gray-900 dark:text-gray-100">{t.places.namsanTower}</h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        서울의 야경을 한눈에 볼 수 있는 최고의 전망대입니다.
+                        {t.descriptions.namsanTower}
                       </p>
                     </div>
                   </div>
@@ -560,9 +875,9 @@ export default function ItineraryResultsPage() {
                     />
                     <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
                     <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">인사동 전통차집</h4>
+                      <h4 className="font-bold text-gray-900 dark:text-gray-100">{t.places.insadongTea}</h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        전통 한과와 차를 즐길 수 있는 고즈넉한 찻집입니다.
+                        {t.descriptions.insadongTea}
                       </p>
                     </div>
                   </div>
@@ -575,9 +890,9 @@ export default function ItineraryResultsPage() {
                     />
                     <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
                     <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">명동 칼국수</h4>
+                      <h4 className="font-bold text-gray-900 dark:text-gray-100">{t.places.myeongdongNoodle}</h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        50년 전통의 손칼국수를 맛볼 수 있는 명동 맛집입니다.
+                        {t.descriptions.myeongdongNoodle}
                       </p>
                     </div>
                   </div>
@@ -593,42 +908,42 @@ export default function ItineraryResultsPage() {
 
               {/* 전체 여행 경로 */}
               <div className="mt-4 p-4 bg-white/20 rounded-lg">
-                <h4 className="font-bold text-lg mb-3">📍 전체 여행 경로</h4>
+                <h4 className="font-bold text-lg mb-3">{t.common.totalRoute}</h4>
                 <div className="flex items-center justify-between text-sm">
                   <div className="text-center">
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold mb-1">
                       1
                     </div>
-                    <span>한강공원</span>
+                    <span>{t.places.hangang}</span>
                   </div>
                   <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
                   <div className="text-center">
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold mb-1">
                       2
                     </div>
-                    <span>홍대</span>
+                    <span>{t.places.hongdae}</span>
                   </div>
                   <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
                   <div className="text-center">
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold mb-1">
                       3
                     </div>
-                    <span>이태원</span>
+                    <span>{t.places.itaewon}</span>
                   </div>
                   <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
                   <div className="text-center">
                     <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold mb-1">
                       4
                     </div>
-                    <span>동대문</span>
+                    <span>{t.places.dongdaemun}</span>
                   </div>
                 </div>
-                <p className="text-center mt-3 text-sm">총 거리: 약 20km | 예상 소요시간: 1일</p>
+                <p className="text-center mt-3 text-sm">{t.common.totalDistance2}</p>
               </div>
             </CardHeader>
             <CardContent className="space-y-8 p-6">
               <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-green-600 dark:text-green-400">여행 일정 선택</h3>
+                <h3 className="text-xl font-bold text-green-600 dark:text-green-400">{t.common.scheduleSelection}</h3>
                 <Button 
                   onClick={() => openModal(t.itinerary2, getDetailContent2())} 
                   variant="outline" 
@@ -653,9 +968,9 @@ export default function ItineraryResultsPage() {
                     />
                     <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
                     <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">한강공원</h4>
+                      <h4 className="font-bold text-gray-900 dark:text-gray-100">{t.places.hangang}</h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        한강에서 자전거를 타며 여유로운 시간을 보낼 수 있습니다.
+                        {t.descriptions.hangang}
                       </p>
                     </div>
                   </div>
@@ -668,9 +983,9 @@ export default function ItineraryResultsPage() {
                     />
                     <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
                     <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">동대문 야시장</h4>
+                      <h4 className="font-bold text-gray-900 dark:text-gray-100">{t.places.dongdaemunNight}</h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        밤늦게까지 열리는 쇼핑과 야식의 천국입니다.
+                        {t.descriptions.dongdaemunNight}
                       </p>
                     </div>
                   </div>
@@ -690,9 +1005,9 @@ export default function ItineraryResultsPage() {
                     />
                     <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
                     <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">홍대 맛집 투어</h4>
+                      <h4 className="font-bold text-gray-900 dark:text-gray-100">{t.places.hongdaeFood}</h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        젊음의 거리 홍대에서 다양한 퓨전 요리를 즐겨보세요.
+                        {t.descriptions.hongdaeFood}
                       </p>
                     </div>
                   </div>
@@ -705,9 +1020,9 @@ export default function ItineraryResultsPage() {
                     />
                     <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
                     <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">이태원 세계음식</h4>
+                      <h4 className="font-bold text-gray-900 dark:text-gray-100">{t.places.itaewonWorld}</h4>
                       <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        세계 각국의 정통 요리를 한 곳에서 맛볼 수 있습니다.
+                        {t.descriptions.itaewonWorld}
                       </p>
                     </div>
                   </div>
