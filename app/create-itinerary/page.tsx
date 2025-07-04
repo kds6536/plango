@@ -269,16 +269,28 @@ export default function CreateItineraryPage() {
   const handleGenerateItinerary = async () => {
     setIsLoading(true);
     setError(null);
+
+    // 입력창에 값이 남아있으면 자동 추가
+    let finalDestinations = destinations;
+    if (currentDestination.trim() && !destinations.includes(currentDestination.trim())) {
+      finalDestinations = [...destinations, currentDestination.trim()];
+      setDestinations(finalDestinations);
+      setCurrentDestination("");
+    }
+
+    // 방어 코드: 여행지 배열이 비어있으면 중단
+    if (!finalDestinations.length) {
+      setError("여행지를 1개 이상 입력하세요.");
+      setIsLoading(false);
+      return;
+    }
+
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://plango-api-production.up.railway.app/api/v1';
-      // 필수값 체크(예시)
-      if (!destinations.length) throw new Error('여행지를 1개 이상 입력하세요.');
-      if (!dateRange?.from || !dateRange?.to) throw new Error('여행 날짜를 선택하세요.');
-      // 요청 데이터 구성
       const requestData = {
-        destinations,
-        date_from: dateRange.from,
-        date_to: dateRange.to,
+        cities: finalDestinations, // 반드시 cities로 보냄
+        date_from: dateRange?.from,
+        date_to: dateRange?.to,
         travelers,
         budget,
         currency,
