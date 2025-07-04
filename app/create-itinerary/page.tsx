@@ -285,19 +285,39 @@ export default function CreateItineraryPage() {
       return;
     }
 
+    // 도시명: 여러 개 입력받더라도 첫 번째만 사용 (백엔드 스펙 기준)
+    const city = finalDestinations[0];
+
+    // 날짜 차이 계산 (YYYY-MM-DD)
+    let duration = 1;
+    if (dateRange?.from && dateRange?.to) {
+      const from = new Date(dateRange.from);
+      const to = new Date(dateRange.to);
+      duration = Math.ceil((to.getTime() - from.getTime()) / (1000 * 60 * 60 * 24)) + 1;
+    }
+
+    // 예산 숫자 → budget_range 변환 (임시 예시, 실제 기준은 백엔드와 협의)
+    let budget_range = "medium";
+    const budgetNum = Number(budget);
+    if (budgetNum < 100000) budget_range = "low";
+    else if (budgetNum < 300000) budget_range = "medium";
+    else if (budgetNum < 1000000) budget_range = "high";
+    else budget_range = "luxury";
+
+    // 여행 스타일(추가 구현 필요시)
+    const travel_style: string[] = [];
+
+    const requestData = {
+      city,
+      duration,
+      special_requests: specialRequests,
+      travel_style,
+      budget_range,
+      travelers_count: travelers,
+    };
+
     try {
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://plango-api-production.up.railway.app/api/v1';
-      const requestData = {
-        cities: finalDestinations, // 반드시 cities로 보냄
-        date_from: dateRange?.from,
-        date_to: dateRange?.to,
-        travelers,
-        budget,
-        currency,
-        age_ranges: ageRanges,
-        gender,
-        special_requests: specialRequests,
-      };
       const response = await axios.post(`${apiUrl}/itinerary/generate`, requestData);
       localStorage.setItem('itineraryResults', JSON.stringify(response.data));
       router.push('/itinerary-results');
