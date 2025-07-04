@@ -15,6 +15,8 @@ import { ko } from "date-fns/locale"
 import type { DateRange } from "react-day-picker"
 import Link from "next/link"
 import { useLanguageStore } from "@/lib/language-store"
+import { useRouter } from 'next/navigation';
+import axios from 'axios';
 
 // 다국어 번역
 const translations = {
@@ -203,6 +205,7 @@ const translations = {
 export default function CreateItineraryPage() {
   const { language } = useLanguageStore()
   const t = translations[language as keyof typeof translations]
+  const router = useRouter();
   
   const [dateRange, setDateRange] = useState<DateRange | undefined>()
   const [travelers, setTravelers] = useState(2)
@@ -213,6 +216,9 @@ export default function CreateItineraryPage() {
   const [currency, setCurrency] = useState("KRW")
   const [gender, setGender] = useState("")
   const [specialRequests, setSpecialRequests] = useState("")
+  // 추가: 로딩/에러 상태
+  const [isLoading, setIsLoading] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const addDestination = () => {
     if (currentDestination.trim() && !destinations.includes(currentDestination.trim())) {
@@ -258,6 +264,38 @@ export default function CreateItineraryPage() {
     }
     return placeholders[currency] || '예: 1000'
   }
+
+  // 여행일정 생성 API 호출 함수
+  const handleGenerateItinerary = async () => {
+    setIsLoading(true);
+    setError(null);
+    try {
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'https://plango-api-production.up.railway.app/api/v1';
+      // 필수값 체크(예시)
+      if (!destinations.length) throw new Error('여행지를 1개 이상 입력하세요.');
+      if (!dateRange?.from || !dateRange?.to) throw new Error('여행 날짜를 선택하세요.');
+      // 요청 데이터 구성
+      const requestData = {
+        destinations,
+        date_from: dateRange.from,
+        date_to: dateRange.to,
+        travelers,
+        budget,
+        currency,
+        age_ranges: ageRanges,
+        gender,
+        special_requests: specialRequests,
+      };
+      const response = await axios.post(`${apiUrl}/itinerary/generate`, requestData);
+      localStorage.setItem('itineraryResults', JSON.stringify(response.data));
+      router.push('/itinerary-results');
+    } catch (err: any) {
+      setError(err?.message || '일정 생성에 실패했습니다.');
+      console.error(err);
+    } finally {
+      setIsLoading(false);
+    }
+  };
 
   return (
     <div className="min-h-screen bg-background text-foreground py-8 lg:py-12">
@@ -502,11 +540,14 @@ export default function CreateItineraryPage() {
             </div>
 
             <div className="pt-4">
-              <Link href="/itinerary-results" className="block">
-                <Button className="w-full bg-gradient-to-r from-green-600/90 to-blue-600/90 hover:from-green-600 hover:to-blue-600 text-white text-lg font-medium py-6 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300">
-                  {t.generateButton}
-                </Button>
-              </Link>
+              <Button
+                className="w-full bg-gradient-to-r from-green-600/90 to-blue-600/90 hover:from-green-600 hover:to-blue-600 text-white text-lg font-medium py-6 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300"
+                onClick={handleGenerateItinerary}
+                disabled={isLoading}
+              >
+                {isLoading ? '생성 중...' : t.generateButton}
+              </Button>
+              {error && <div className="text-red-500 text-center mt-2">{error}</div>}
             </div>
           </CardContent>
         </Card>
