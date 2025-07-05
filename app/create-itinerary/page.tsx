@@ -9,7 +9,7 @@ import { Textarea } from "@/components/ui/textarea"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Calendar } from "@/components/ui/calendar"
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover"
-import { CalendarIcon, Minus, Plus, X, Plane, DollarSign } from "lucide-react"
+import { CalendarIcon, Minus, Plus, X, Plane, DollarSign, Loader2 } from "lucide-react"
 import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import type { DateRange } from "react-day-picker"
@@ -305,15 +305,20 @@ export default function CreateItineraryPage() {
     else budget_range = "luxury";
 
     // 여행 스타일(추가 구현 필요시)
-    const travel_style: string[] = [];
+    let travel_style: string[] = [];
+    // 특별 요청사항, 연령대 등에서 travel_style 추출 로직이 있다면 반영, 없으면 기본값
+    if (!travel_style || travel_style.length === 0) {
+      travel_style = ["cultural"];
+    }
 
     const requestData = {
-      city,
+      destination: city,
       duration,
-      special_requests: specialRequests,
       travel_style,
       budget_range,
       travelers_count: travelers,
+      special_interests: specialRequests ? [specialRequests] : [],
+      // accommodation_preference, dietary_restrictions, mobility_considerations 등은 아예 누락
     };
 
     try {
@@ -573,11 +578,18 @@ export default function CreateItineraryPage() {
 
             <div className="pt-4">
               <Button
-                className="w-full bg-gradient-to-r from-green-600/90 to-blue-600/90 hover:from-green-600 hover:to-blue-600 text-white text-lg font-medium py-6 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300"
+                className="w-full bg-gradient-to-r from-green-600/90 to-blue-600/90 hover:from-green-600 hover:to-blue-600 text-white text-lg font-medium py-6 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300 disabled:opacity-75 disabled:cursor-not-allowed disabled:transform-none"
                 onClick={handleGenerateItinerary}
                 disabled={isLoading}
               >
-                {isLoading ? '생성 중...' : t.generateButton}
+                {isLoading ? (
+                  <div className="flex items-center justify-center gap-3">
+                    <Loader2 className="w-6 h-6 animate-spin" />
+                    <span className="animate-pulse">AI가 여행 일정을 생성하고 있습니다...</span>
+                  </div>
+                ) : (
+                  t.generateButton
+                )}
               </Button>
               {error && <div className="text-red-500 text-center mt-2">{error}</div>}
             </div>
