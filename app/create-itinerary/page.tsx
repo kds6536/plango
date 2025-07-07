@@ -124,21 +124,46 @@ export default function CreateItineraryPage() {
 
     setIsLoading(true)
 
+    // --- 백엔드 스키마에 맞게 요청 데이터 가공 ---
+    const calculateDuration = (from: Date, to: Date | undefined) => {
+      if (!to) return 1;
+      const diffInMs = to.getTime() - from.getTime();
+      const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+      return diffInDays + 1;
+    };
+
+    const getBudgetRange = (budget: string, currency: string) => {
+      const budgetNum = parseInt(budget, 10);
+      if (isNaN(budgetNum)) return "medium";
+
+      // KRW 기준으로 일일 예산 계산 (대략적인 값)
+      const dailyBudgetKRW = currency !== 'KRW' 
+        ? budgetNum * 1300 // 달러 등 외화로 가정
+        : budgetNum / (calculateDuration(dateRange.from!, dateRange.to) || 1);
+      
+      if (dailyBudgetKRW <= 50000) return "low";
+      if (dailyBudgetKRW <= 150000) return "medium";
+      return "high";
+    }
+
+    // 여행 스타일 키워드 (Enum과 유사하게)
+    const travelStyles = ["adventure", "relaxation", "cultural", "gourmet", "shopping", "nature"];
+    const foundStyles = travelStyles.filter(style => specialRequests.toLowerCase().includes(style));
+
+
     const requestBody = {
-      destinations: updatedDestinations, // 수정된 목록으로 요청
-      start_date: format(dateRange.from, "yyyy-MM-dd"),
-      end_date: dateRange.to ? format(dateRange.to, "yyyy-MM-dd") : format(dateRange.from, "yyyy-MM-dd"),
-      participants: travelers,
-      budget: `${budget} ${currency}`,
-      user_preferences: [
-        ...ageRanges,
-        ...(gender && gender !== 'none' ? [t.genderOptions[gender as keyof typeof t.genderOptions]] : []),
-        specialRequests
-      ].filter(Boolean).join(', ')
+      destination: updatedDestinations[0], // 첫 번째 목적지를 대표로 설정
+      city: updatedDestinations[0],
+      duration: calculateDuration(dateRange.from, dateRange.to),
+      travelers_count: travelers,
+      budget_range: getBudgetRange(budget, currency),
+      accommodation_preference: "호텔", // 임시 기본값
+      travel_style: foundStyles,
+      special_interests: ageRanges,
+      special_requests: specialRequests,
     };
 
     try {
-      // --- 올바른 API 주소로 수정 ---
       const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/itinerary/generate`, requestBody);
       
       localStorage.setItem('itineraryResult', JSON.stringify(response.data))
