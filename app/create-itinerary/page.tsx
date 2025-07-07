@@ -102,7 +102,18 @@ export default function CreateItineraryPage() {
   const [specialRequests, setSpecialRequests] = useState("")
 
   const handleGenerateItinerary = async () => {
-    if (destinations.length === 0) {
+    // ---- 개선된 로직 시작 ----
+    let updatedDestinations = [...destinations];
+    // 현재 입력 필드에 텍스트가 있고, 목록에 중복되지 않은 경우
+    if (currentDestination.trim() && !updatedDestinations.includes(currentDestination.trim())) {
+      updatedDestinations = [...updatedDestinations, currentDestination.trim()];
+      // 상태를 업데이트하여 UI에도 반영하고, 입력 필드를 비웁니다.
+      setDestinations(updatedDestinations);
+      setCurrentDestination("");
+    }
+    // ---- 개선된 로직 끝 ----
+
+    if (updatedDestinations.length === 0) { // 수정된 목록으로 유효성 검사
       alert(t.destinationPlaceholder)
       return
     }
@@ -114,7 +125,7 @@ export default function CreateItineraryPage() {
     setIsLoading(true)
 
     const requestBody = {
-      destinations: destinations,
+      destinations: updatedDestinations, // 수정된 목록으로 요청
       start_date: format(dateRange.from, "yyyy-MM-dd"),
       end_date: dateRange.to ? format(dateRange.to, "yyyy-MM-dd") : format(dateRange.from, "yyyy-MM-dd"),
       participants: travelers,
@@ -127,7 +138,8 @@ export default function CreateItineraryPage() {
     };
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/itineraries/generate-advanced`, requestBody)
+      // --- 올바른 API 주소로 수정 ---
+      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/itinerary/generate`, requestBody);
       
       localStorage.setItem('itineraryResult', JSON.stringify(response.data))
       
