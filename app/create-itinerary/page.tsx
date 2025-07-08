@@ -16,6 +16,7 @@ import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import type { DateRange } from "react-day-picker"
 import { useLanguageStore } from "@/lib/language-store"
+import Link from "next/link"
 
 const translations = {
   ko: {
@@ -100,87 +101,7 @@ export default function CreateItineraryPage() {
   const [currency, setCurrency] = useState("KRW")
   const [gender, setGender] = useState("")
   const [specialRequests, setSpecialRequests] = useState("")
-
-  const handleGenerateItinerary = async () => {
-    // ---- 개선된 로직 시작 ----
-    let updatedDestinations = [...destinations];
-    // 현재 입력 필드에 텍스트가 있고, 목록에 중복되지 않은 경우
-    if (currentDestination.trim() && !updatedDestinations.includes(currentDestination.trim())) {
-      updatedDestinations = [...updatedDestinations, currentDestination.trim()];
-      // 상태를 업데이트하여 UI에도 반영하고, 입력 필드를 비웁니다.
-      setDestinations(updatedDestinations);
-      setCurrentDestination("");
-    }
-    // ---- 개선된 로직 끝 ----
-
-    if (updatedDestinations.length === 0) { // 수정된 목록으로 유효성 검사
-      alert(t.destinationPlaceholder)
-      return
-    }
-    if (!dateRange || !dateRange.from) {
-      alert(t.dateSelectionPlaceholder)
-      return
-    }
-
-    setIsLoading(true)
-
-    // --- 백엔드 스키마에 맞게 요청 데이터 가공 ---
-    const calculateDuration = (from: Date, to: Date | undefined) => {
-      if (!to) return 1;
-      const diffInMs = to.getTime() - from.getTime();
-      const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-      return diffInDays + 1;
-    };
-
-    const getBudgetRange = (budget: string, currency: string) => {
-      const budgetNum = parseInt(budget, 10);
-      if (isNaN(budgetNum)) return "medium";
-
-      // KRW 기준으로 일일 예산 계산 (대략적인 값)
-      const dailyBudgetKRW = currency !== 'KRW' 
-        ? budgetNum * 1300 // 달러 등 외화로 가정
-        : budgetNum / (calculateDuration(dateRange.from!, dateRange.to) || 1);
-      
-      if (dailyBudgetKRW <= 50000) return "low";
-      if (dailyBudgetKRW <= 150000) return "medium";
-      return "high";
-    }
-
-    // 여행 스타일 키워드 (Enum과 유사하게)
-    const travelStyles = ["adventure", "relaxation", "cultural", "gourmet", "shopping", "nature"];
-    const foundStyles = travelStyles.filter(style => specialRequests.toLowerCase().includes(style));
-
-
-    const requestBody = {
-      destination: updatedDestinations[0], // 첫 번째 목적지를 대표로 설정
-      city: updatedDestinations[0],
-      duration: calculateDuration(dateRange.from, dateRange.to),
-      travelers_count: travelers,
-      budget_range: getBudgetRange(budget, currency),
-      accommodation_preference: "호텔", // 임시 기본값
-      travel_style: foundStyles,
-      special_interests: ageRanges,
-      special_requests: specialRequests,
-    };
-
-    try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/itinerary/generate`, requestBody);
-      
-      localStorage.setItem('itineraryResult', JSON.stringify(response.data))
-      
-      router.push('/itinerary-results')
-
-    } catch (error) {
-      console.error("Error generating itinerary:", error)
-      if (axios.isAxiosError(error) && error.response) {
-        alert(`여행 생성 실패: ${error.response.data.detail || "알 수 없는 오류가 발생했습니다."}`)
-      } else {
-        alert("여행 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.")
-      }
-    } finally {
-      setIsLoading(false)
-    }
-  }
+  const [error, setError] = useState<string | null>(null)
 
   const addDestination = () => {
     if (currentDestination.trim() && !destinations.includes(currentDestination.trim())) {
@@ -191,6 +112,26 @@ export default function CreateItineraryPage() {
 
   const removeDestination = (index: number) => {
     setDestinations(destinations.filter((_, i) => i !== index))
+  }
+
+  const addAgeRange = (age: string) => {
+    setAgeRanges([...ageRanges, age])
+  }
+
+  const removeAgeRange = (index: number) => {
+    setAgeRanges(ageRanges.filter((_, i) => i !== index))
+  }
+
+  const getCurrencySymbol = (currency: string) => {
+    const symbols: { [key: string]: string } = {
+      'KRW': '₩',
+      'USD': '$',
+      'EUR': '€',
+      'JPY': '¥',
+      'CNY': '¥',
+      'GBP': '£'
+    }
+    return symbols[currency] || currency
   }
 
   const getCurrencyPlaceholder = (currency: string) => {
@@ -205,14 +146,84 @@ export default function CreateItineraryPage() {
     return placeholders[currency] || '예: 1000'
   }
 
-  if (isLoading) {
-    return (
-      <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col items-center justify-center z-50">
-        <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-blue-500"></div>
-        <h2 className="text-white text-2xl font-bold mt-8">{t.generating}</h2>
-        <p className="text-white text-lg mt-2">{t.generatingSubtitle}</p>
-      </div>
-    )
+  // --- API 호출 및 생성 핸들러 ---
+  const handleGenerateItinerary = async () => {
+    setIsLoading(true)
+    setError && setError(null)
+
+    // 1. 입력 데이터 검증
+    if (!destinations.length || !dateRange) {
+      setError && setError(language === 'ko' ? "여행지와 날짜는 필수 입력 항목입니다." : "Destination and dates are required.");
+      setIsLoading(false);
+      return;
+    }
+
+    // 2. 요청 데이터 구성
+    const calculateDuration = (from: Date, to: Date | undefined) => {
+      if (!to) return 1;
+      const diffInMs = to.getTime() - from.getTime();
+      const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
+      return diffInDays + 1;
+    };
+    const getBudgetRange = (budget: string, currency: string) => {
+      const budgetNum = parseInt(budget, 10);
+      if (isNaN(budgetNum)) return "medium";
+      let dailyBudgetKRW = budgetNum;
+      if (currency !== 'KRW') {
+        const exchangeRates: { [key: string]: number } = {
+          'USD': 1300, 'EUR': 1400, 'JPY': 9, 'CNY': 180, 'GBP': 1600
+        };
+        dailyBudgetKRW = budgetNum * (exchangeRates[currency] || 1300);
+      }
+      dailyBudgetKRW = dailyBudgetKRW / (calculateDuration(dateRange.from!, dateRange.to) || 1);
+      if (dailyBudgetKRW <= 50000) return "low";
+      if (dailyBudgetKRW <= 150000) return "medium";
+      return "high";
+    };
+    const extractTravelStyles = (requests: string, ages: string[]) => {
+      const styles = [];
+      const requestLower = requests.toLowerCase();
+      if (requestLower.includes('맛집') || requestLower.includes('음식') || requestLower.includes('미식')) styles.push('gourmet');
+      if (requestLower.includes('문화') || requestLower.includes('역사') || requestLower.includes('박물관')) styles.push('cultural');
+      if (requestLower.includes('모험') || requestLower.includes('액티비티') || requestLower.includes('체험')) styles.push('adventure');
+      if (requestLower.includes('휴양') || requestLower.includes('힐링') || requestLower.includes('조용')) styles.push('relaxation');
+      if (requestLower.includes('쇼핑') || requestLower.includes('구매')) styles.push('shopping');
+      if (requestLower.includes('자연') || requestLower.includes('산') || requestLower.includes('바다')) styles.push('nature');
+      if (ages.includes('20대') || ages.includes('30대')) {
+        if (styles.length === 0) styles.push('cultural', 'gourmet');
+      }
+      return styles.length > 0 ? styles : ['cultural'];
+    };
+    const requestData = {
+      city: destinations[0] || "서울",
+      duration: calculateDuration(dateRange.from!, dateRange.to),
+      special_requests: [
+        specialRequests || "특별한 요청 없음",
+        `연령대: ${ageRanges.join(', ')}`,
+        `성별: ${gender || '선택 안함'}`,
+        `예산: ${getCurrencySymbol ? getCurrencySymbol(currency) : currency}${budget}`
+      ].join(', '),
+      travel_style: extractTravelStyles(specialRequests || "", ageRanges),
+      budget_range: getBudgetRange(budget, currency),
+      travelers_count: travelers
+    }
+    try {
+      const response = await axios.post(
+        `${process.env.NEXT_PUBLIC_API_URL ? process.env.NEXT_PUBLIC_API_URL + '/itinerary/generate' : 'https://plango-api-production.up.railway.app/api/v1/itinerary/generate'}`,
+        requestData
+      );
+      if (response.data) {
+        localStorage.setItem('itineraryResult', JSON.stringify(response.data));
+        router.push('/itinerary-results');
+      } else {
+        throw new Error(language === 'ko' ? "API로부터 유효한 응답을 받지 못했습니다." : "Did not receive a valid response from the API.");
+      }
+    } catch (err: any) {
+      console.error("여행 생성 실패:", err);
+      setError && setError(err.response?.data?.detail || err.message || (language === 'ko' ? "알 수 없는 오류가 발생했습니다." : "An unknown error occurred."));
+    } finally {
+      setIsLoading(false);
+    }
   }
 
   return (
@@ -226,175 +237,260 @@ export default function CreateItineraryPage() {
         </p>
       </div>
 
-      <Card className="w-full max-w-4xl mx-auto shadow-2xl rounded-2xl border-none bg-white dark:bg-gray-800/50 backdrop-blur-sm">
-        <CardHeader>
-          <CardTitle className="text-2xl font-bold text-center text-gray-800 dark:text-white">{t.cardTitle}</CardTitle>
-        </CardHeader>
-        <CardContent className="p-8">
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
-            <div className="space-y-2">
-              <Label htmlFor="destination" className="text-lg font-semibold">{t.destination}</Label>
-              <div className="flex items-center gap-2">
+    <div className="min-h-screen bg-background text-foreground py-8 lg:py-12">
+      <div className="container mx-auto px-4 max-w-3xl">
+        <div className="text-center mb-10">
+          <Link href="/" className="flex items-center justify-center space-x-3 mb-8">
+            <div className="w-10 h-10 bg-gradient-to-br from-blue-600 to-purple-600 rounded-xl flex items-center justify-center">
+              <Plane className="w-6 h-6 text-white transform rotate-45" />
+            </div>
+            <span className="text-2xl font-bold bg-gradient-to-r from-blue-600 to-purple-600 bg-clip-text text-transparent">
+              Plan Go
+            </span>
+          </Link>
+          <h1 className="text-3xl lg:text-4xl font-bold mb-4 bg-gradient-to-r from-green-600 to-blue-600 bg-clip-text text-transparent">
+              {t.title}
+          </h1>
+          <p className="text-lg text-muted-foreground leading-relaxed max-w-2xl mx-auto">
+              {t.subtitle}
+          </p>
+        </div>
+
+        <Card className="shadow-lg border border-border bg-card">
+          <CardHeader className="bg-gradient-to-r from-green-500/80 to-blue-500/80 text-white rounded-t-lg">
+              <CardTitle className="text-xl lg:text-2xl text-center font-medium">{t.cardTitle}</CardTitle>
+          </CardHeader>
+          <CardContent className="space-y-8 p-6 lg:p-8">
+            <div className="space-y-4">
+              <Label htmlFor="destination" className="text-base font-medium text-foreground flex items-center gap-2">
+                  {t.destination}
+              </Label>
+              <div className="flex space-x-3">
                 <Input
                   id="destination"
-                  placeholder={t.destinationPlaceholder}
+                    placeholder={t.destinationPlaceholder}
+                  className="flex-1 h-11 bg-background border-input text-foreground placeholder:text-muted-foreground"
                   value={currentDestination}
                   onChange={(e) => setCurrentDestination(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && addDestination()}
-                  className="flex-grow"
+                  onKeyPress={(e) => e.key === "Enter" && addDestination()}
                 />
-                <Button onClick={addDestination} size="icon" variant="outline">
-                  <Plus className="h-4 w-4" />
+                <Button 
+                  onClick={addDestination} 
+                  className="bg-green-600/90 hover:bg-green-600 text-white px-4 h-11"
+                >
+                  <Plus className="w-4 h-4" />
                 </Button>
               </div>
-              <div className="flex flex-wrap gap-2 pt-2">
-                {destinations.map((dest, index) => (
-                  <div key={index} className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm">
-                    <span>{dest}</span>
-                    <button onClick={() => removeDestination(index)} className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">
-                      <X className="h-3 w-3" />
-                    </button>
-                  </div>
-                ))}
-              </div>
+
+              {destinations.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {destinations.map((dest, index) => (
+                    <div
+                      key={index}
+                      className="bg-green-100/80 dark:bg-green-900/50 text-green-700 dark:text-green-300 px-3 py-2 rounded-lg flex items-center space-x-2 border border-green-200 dark:border-green-800"
+                    >
+                      <span className="text-sm font-medium">{dest}</span>
+                      <button 
+                        onClick={() => removeDestination(index)} 
+                        className="hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="date" className="text-lg font-semibold">{t.dateSelection}</Label>
+            <div className="space-y-4">
+              <Label className="text-base font-medium text-foreground flex items-center gap-2">
+                  {t.dateSelection}
+              </Label>
               <Popover>
                 <PopoverTrigger asChild>
-                  <Button
-                    id="date"
-                    variant="outline"
-                    className="w-full justify-start text-left font-normal"
+                  <Button 
+                    variant="outline" 
+                    className="w-full justify-start text-left font-normal h-12 bg-background border-input hover:bg-muted/50"
                   >
-                    <CalendarIcon className="mr-2 h-4 w-4" />
-                    {dateRange?.from ? (
-                      dateRange.to ? (
-                        `${format(dateRange.from, "PPP", { locale: ko })} - ${format(dateRange.to, "PPP", { locale: ko })}`
+                    <CalendarIcon className="mr-3 h-5 w-5 text-muted-foreground" />
+                    <span className="text-foreground">
+                      {dateRange?.from ? (
+                        dateRange?.to ? (
+                          <>
+                            {format(dateRange.from, "PPP", { locale: ko })} -{" "}
+                            {format(dateRange.to, "PPP", { locale: ko })}
+                          </>
+                        ) : (
+                          format(dateRange.from, "PPP", { locale: ko })
+                        )
                       ) : (
-                        format(dateRange.from, "PPP", { locale: ko })
-                      )
-                    ) : (
-                      <span>{t.dateSelectionPlaceholder}</span>
-                    )}
+                          t.dateSelectionPlaceholder
+                      )}
+                    </span>
                   </Button>
                 </PopoverTrigger>
-                <PopoverContent className="w-auto p-0" align="start">
-                  <Calendar
-                    initialFocus
-                    mode="range"
-                    defaultMonth={dateRange?.from}
-                    selected={dateRange}
-                    onSelect={setDateRange}
-                    numberOfMonths={2}
-                    locale={ko}
-                  />
+                <PopoverContent className="w-auto p-0 bg-card border-border" align="start">
+                  <Calendar mode="range" selected={dateRange} onSelect={setDateRange} numberOfMonths={2} />
                 </PopoverContent>
               </Popover>
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="travelers" className="text-lg font-semibold">{t.travelers}</Label>
-              <div className="flex items-center gap-4">
-                <Button variant="outline" size="icon" onClick={() => setTravelers(Math.max(1, travelers - 1))}>
-                  <Minus className="h-4 w-4" />
+            <div className="space-y-4">
+              <Label className="text-base font-medium text-foreground flex items-center gap-2">
+                  {t.travelers}
+              </Label>
+              <div className="flex items-center justify-center space-x-8 bg-muted/30 rounded-xl p-6">
+                <Button
+                  variant="outline"
+                  size="icon"
+                  onClick={() => setTravelers(Math.max(1, travelers - 1))}
+                  className="h-12 w-12 border-input hover:bg-muted/50"
+                >
+                  <Minus className="h-5 w-5" />
                 </Button>
-                <span className="text-lg font-bold w-12 text-center">{travelers} {t.travelerUnit}</span>
-                <Button variant="outline" size="icon" onClick={() => setTravelers(travelers + 1)}>
-                  <Plus className="h-4 w-4" />
+                <div className="text-center">
+                  <span className="text-3xl font-bold text-foreground">{travelers}</span>
+                    <p className="text-sm text-muted-foreground mt-1">{t.travelerUnit}</p>
+                </div>
+                <Button 
+                  variant="outline" 
+                  size="icon" 
+                  onClick={() => setTravelers(travelers + 1)} 
+                  className="h-12 w-12 border-input hover:bg-muted/50"
+                >
+                  <Plus className="h-5 w-5" />
                 </Button>
               </div>
             </div>
-            
-            <div className="space-y-2">
-              <Label htmlFor="budget" className="text-lg font-semibold">{t.budget}</Label>
-              <div className="relative">
-                <DollarSign className="absolute left-3 top-1/2 -translate-y-1/2 h-5 w-5 text-gray-400" />
-                <Input
-                  id="budget"
-                  type="text"
-                  placeholder={getCurrencyPlaceholder(currency)}
-                  value={budget}
-                  onChange={(e) => setBudget(e.target.value.replace(/[^0-9]/g, ''))}
-                  className="pl-10"
-                />
-                 <div className="absolute right-1 top-1/2 -translate-y-1/2">
+
+            <div className="space-y-4">
+              <Label className="text-base font-medium text-foreground flex items-center gap-2">
+                  {t.budget}
+              </Label>
+              <div className="space-y-3">
+                <div className="flex space-x-3">
+                  <div className="relative flex-1">
+                    <div className="absolute left-4 top-1/2 transform -translate-y-1/2 text-muted-foreground font-medium">
+                      {getCurrencySymbol(currency)}
+                    </div>
+                    <Input
+                      placeholder={getCurrencyPlaceholder(currency)}
+                      className="pl-12 h-12 bg-background border-input text-foreground placeholder:text-muted-foreground"
+                      value={budget}
+                      onChange={(e) => setBudget(e.target.value)}
+                    />
+                  </div>
                   <Select value={currency} onValueChange={setCurrency}>
-                    <SelectTrigger className="w-[120px] bg-transparent border-0 shadow-none focus:ring-0">
+                    <SelectTrigger className="w-32 h-12 bg-background border-input">
                       <SelectValue />
                     </SelectTrigger>
-                    <SelectContent>
-                      {Object.entries(t.currencies).map(([code, name]) => (
-                         <SelectItem key={code} value={code}>{name}</SelectItem>
-                      ))}
+                    <SelectContent className="bg-card border-border">
+                        <SelectItem value="KRW">{t.currencies.KRW}</SelectItem>
+                        <SelectItem value="USD">{t.currencies.USD}</SelectItem>
+                        <SelectItem value="EUR">{t.currencies.EUR}</SelectItem>
+                        <SelectItem value="JPY">{t.currencies.JPY}</SelectItem>
+                        <SelectItem value="CNY">{t.currencies.CNY}</SelectItem>
+                        <SelectItem value="GBP">{t.currencies.GBP}</SelectItem>
                     </SelectContent>
                   </Select>
-                 </div>
+                </div>
+                <p className="text-sm text-muted-foreground leading-relaxed">
+                    {t.budgetPlaceholder}
+                </p>
               </div>
             </div>
-            
-            <div className="space-y-2 md:col-span-2">
-              <Label className="text-lg font-semibold">{t.ageRange}</Label>
-              <div className="flex flex-wrap gap-2">
-                {t.ageRanges.map((age, index) => (
+
+            <div className="space-y-4">
+              <Label className="text-base font-medium text-foreground flex items-center gap-2">
+                  {t.ageRange}
+              </Label>
+              <div className="grid grid-cols-2 lg:grid-cols-3 gap-3">
+                  {t.ageRanges.map((age, index) => (
                   <Button
-                    key={index}
+                    key={age}
                     variant={ageRanges.includes(age) ? "default" : "outline"}
                     onClick={() => {
                       if (ageRanges.includes(age)) {
-                        setAgeRanges(ageRanges.filter((r) => r !== age));
+                        removeAgeRange(ageRanges.indexOf(age))
                       } else {
-                        setAgeRanges([...ageRanges, age]);
+                        addAgeRange(age)
                       }
                     }}
+                    className={`h-11 transition-all ${
+                      ageRanges.includes(age) 
+                        ? "bg-blue-600/90 hover:bg-blue-600 text-white" 
+                        : "border-input hover:bg-muted/50"
+                    }`}
                   >
                     {age}
                   </Button>
                 ))}
               </div>
+              {ageRanges.length > 0 && (
+                <div className="flex flex-wrap gap-2 mt-4">
+                  {ageRanges.map((age, index) => (
+                    <div
+                      key={index}
+                      className="bg-blue-100/80 dark:bg-blue-900/50 text-blue-700 dark:text-blue-300 px-3 py-2 rounded-lg flex items-center space-x-2 border border-blue-200 dark:border-blue-800"
+                    >
+                      <span className="text-sm font-medium">{age}</span>
+                      <button 
+                        onClick={() => removeAgeRange(index)} 
+                        className="hover:text-red-600 dark:hover:text-red-400 transition-colors"
+                      >
+                        <X className="w-4 h-4" />
+                      </button>
+                    </div>
+                  ))}
+                </div>
+              )}
             </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="gender" className="text-lg font-semibold">{t.gender}</Label>
-              <Select onValueChange={setGender}>
-                <SelectTrigger id="gender">
-                  <SelectValue placeholder={t.genderPlaceholder} />
+            <div className="space-y-4">
+              <Label className="text-base font-medium text-foreground flex items-center gap-2">
+                  {t.gender}
+              </Label>
+              <Select value={gender} onValueChange={setGender}>
+                <SelectTrigger className="h-12 bg-background border-input">
+                    <SelectValue placeholder={t.genderPlaceholder} />
                 </SelectTrigger>
-                <SelectContent>
-                  <SelectItem value="male">{t.genderOptions.male}</SelectItem>
-                  <SelectItem value="female">{t.genderOptions.female}</SelectItem>
-                  <SelectItem value="none">{t.genderOptions.none}</SelectItem>
+                <SelectContent className="bg-card border-border">
+                    <SelectItem value="male">{t.genderOptions.male}</SelectItem>
+                    <SelectItem value="female">{t.genderOptions.female}</SelectItem>
+                    <SelectItem value="none">{t.genderOptions.none}</SelectItem>
                 </SelectContent>
               </Select>
             </div>
 
-            <div className="space-y-2 md:col-span-2">
-              <Label htmlFor="special-requests" className="text-lg font-semibold">{t.specialRequests}</Label>
+            <div className="space-y-4">
+              <Label htmlFor="specialRequests" className="text-base font-medium text-foreground flex items-center gap-2">
+                  {t.specialRequests}
+              </Label>
               <Textarea
-                id="special-requests"
-                placeholder={t.specialRequestsPlaceholder}
+                id="specialRequests"
+                  placeholder={t.specialRequestsPlaceholder}
+                className="min-h-[120px] bg-background border-input text-foreground placeholder:text-muted-foreground resize-none"
                 value={specialRequests}
                 onChange={(e) => setSpecialRequests(e.target.value)}
-                rows={5}
               />
+              <p className="text-sm text-muted-foreground leading-relaxed">
+                  {t.specialRequestsDesc}
+              </p>
             </div>
-          </div>
-          
-          <div className="pt-8 text-center">
-            <Button 
-              size="lg" 
-              className="w-full max-w-md bg-blue-600 hover:bg-blue-700 text-lg font-bold"
-              onClick={handleGenerateItinerary}
-              disabled={isLoading}
-            >
-              <Plane className="mr-2 h-5 w-5" />
-              {t.generateButton}
-            </Button>
-          </div>
-        </CardContent>
-      </Card>
+
+            <div className="pt-4">
+              <Button 
+                  className="w-full bg-gradient-to-r from-green-600/90 to-blue-600/90 hover:from-green-600 hover:to-blue-600 text-white text-lg font-medium py-6 rounded-xl shadow-md hover:shadow-lg transform hover:scale-[1.02] transition-all duration-300"
+                  onClick={handleGenerateItinerary}
+                disabled={isLoading}
+                >
+                  {t.generateButton}
+              </Button>
+            </div>
+          </CardContent>
+        </Card>
+      </div>
     </div>
+    </>
   )
 }
