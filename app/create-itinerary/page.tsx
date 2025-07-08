@@ -227,16 +227,6 @@ export default function CreateItineraryPage() {
   }
 
   return (
-    <div className="container mx-auto px-4 py-12 md:px-6 lg:py-16">
-      <div className="text-center mb-12">
-        <h1 className="text-4xl md:text-5xl font-extrabold tracking-tight bg-clip-text text-transparent bg-gradient-to-r from-blue-500 to-teal-400">
-          {t.title}
-        </h1>
-        <p className="mt-4 text-lg md:text-xl text-gray-600 dark:text-gray-300 max-w-3xl mx-auto">
-          {t.subtitle}
-        </p>
-      </div>
-
     <div className="min-h-screen bg-background text-foreground py-8 lg:py-12">
       <div className="container mx-auto px-4 max-w-3xl">
         <div className="text-center mb-10">
@@ -255,7 +245,6 @@ export default function CreateItineraryPage() {
               {t.subtitle}
           </p>
         </div>
-
         <Card className="shadow-lg border border-border bg-card">
           <CardHeader className="bg-gradient-to-r from-green-500/80 to-blue-500/80 text-white rounded-t-lg">
               <CardTitle className="text-xl lg:text-2xl text-center font-medium">{t.cardTitle}</CardTitle>
@@ -491,6 +480,5 @@ export default function CreateItineraryPage() {
         </Card>
       </div>
     </div>
-    </>
   )
 }
