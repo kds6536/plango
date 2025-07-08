@@ -164,7 +164,11 @@ export default function CreateItineraryPage() {
     };
 
     try {
-      const response = await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/api/v1/itinerary/generate`, requestBody);
+      // 환경변수에 /api/v1가 포함되어 있을 수도 있으므로, 중복되지 않게 안전하게 조합
+      const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
+      const endpoint = '/api/v1/itinerary/generate';
+      const url = apiBase.endsWith('/api/v1') ? `${apiBase}/itinerary/generate` : `${apiBase}${endpoint}`;
+      const response = await axios.post(url, requestBody);
       
       localStorage.setItem('itineraryResult', JSON.stringify(response.data))
       
