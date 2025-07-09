@@ -1,6 +1,7 @@
 "use client"
 
-import { useState } from "react"
+import { useState, useEffect } from "react"
+import { useRouter } from "next/navigation"
 import Link from "next/link"
 import { Button } from "../../components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "../../components/ui/card"
@@ -175,6 +176,22 @@ export default function ItineraryResultsPage() {
 
   const { language } = useLanguageStore()
   const t = translations[language as keyof typeof translations]
+
+  const router = useRouter();
+  useEffect(() => {
+    const result = localStorage.getItem("itineraryResult");
+    if (result) {
+      try {
+        const data = JSON.parse(result);
+        if (data.status === "fallback" || data.error_message) {
+          alert("죄송합니다. 일시적인 오류로 인해 여행 일정을 생성하지 못했습니다.");
+          router.replace("/create-itinerary");
+        }
+      } catch (e) {
+        // 파싱 에러 등 예외 무시
+      }
+    }
+  }, []);
 
   const handleCheckboxChange = (itemId: string) => {
     const newSelected = new Set(selectedItems)
