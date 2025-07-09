@@ -209,6 +209,14 @@ export default function CreateItineraryPage() {
     return placeholders[currency] || '예: 1000'
   }
 
+  // 버튼 활성화 조건: 필수값만 검사, 특별 요청사항은 무관
+  const isDisabled =
+    isLoading ||
+    destinations.length === 0 ||
+    !dateRange || !dateRange.from ||
+    !budget ||
+    !gender;
+
   if (isLoading) {
     return (
       <div className="fixed inset-0 bg-black bg-opacity-70 flex flex-col items-center justify-center z-50">
@@ -391,7 +399,7 @@ export default function CreateItineraryPage() {
               size="lg" 
               className="w-full max-w-md bg-blue-600 hover:bg-blue-700 text-lg font-bold"
               onClick={handleGenerateItinerary}
-              disabled={isLoading}
+              disabled={isDisabled}
             >
               <Plane className="mr-2 h-5 w-5" />
               {t.generateButton}

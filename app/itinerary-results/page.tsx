@@ -174,6 +174,9 @@ export default function ItineraryResultsPage() {
     content: null
   })
 
+  // 여행 일정 데이터 상태 추가
+  const [plans, setPlans] = useState<{ plan_a: any; plan_b: any } | null>(null)
+
   const { language } = useLanguageStore()
   const t = translations[language as keyof typeof translations]
 
@@ -186,12 +189,14 @@ export default function ItineraryResultsPage() {
         if (data.status === "fallback" || data.error_message) {
           alert("죄송합니다. 일시적인 오류로 인해 여행 일정을 생성하지 못했습니다.");
           router.replace("/create-itinerary");
+        } else {
+          setPlans({ plan_a: data.plan_a, plan_b: data.plan_b })
         }
       } catch (e) {
         // 파싱 에러 등 예외 무시
       }
     }
-  }, []);
+  }, [router]);
 
   const handleCheckboxChange = (itemId: string) => {
     const newSelected = new Set(selectedItems)
@@ -211,6 +216,7 @@ export default function ItineraryResultsPage() {
     alert(`선택된 ${selectedItems.size}개 항목으로 커스텀 일정이 생성됩니다! ✨`)
   }
 
+  // 일정 상세 모달 동적 생성
   const openModal = (title: string, content: React.ReactNode) => {
     setModalData({
       isOpen: true,
@@ -218,7 +224,6 @@ export default function ItineraryResultsPage() {
       content
     })
   }
-
   const closeModal = () => {
     setModalData({
       isOpen: false,
@@ -227,209 +232,33 @@ export default function ItineraryResultsPage() {
     })
   }
 
-  const getDetailContent1 = () => (
+  // 일정 상세 정보 동적 생성 함수
+  const getDetailContent = (plan: any) => (
     <div className="space-y-6">
-      {/* 경복궁 상세 정보 */}
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">경복궁</h3>
-        <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            조선왕조 제1궁궐로 1395년에 창건된 한국의 대표적인 고궁입니다. 
-            근정전, 경회루, 향원정 등 아름다운 전각들이 조화를 이루며, 
-            특히 가을 단풍과 겨울 설경이 장관을 이룹니다. 
-            수문장 교대의식은 조선시대 궁궐 수비 의식을 재현한 것으로 매일 관람할 수 있습니다.
-          </p>
+      {plan.daily_plans.map((day: any, idx: number) => (
+        <div key={idx} className="border-b pb-4">
+          <h3 className="text-xl font-bold mb-3">Day {day.day}: {day.theme}</h3>
+          <div className="mb-4">
+            {day.activities.map((act: any, i: number) => (
+              <div key={i} className="mb-2 p-2 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <div className="font-semibold">{act.time} - {act.activity}</div>
+                <div className="text-sm text-gray-600 dark:text-gray-300">{act.location} | {act.description}</div>
+                <div className="text-xs text-gray-400">{act.duration} {act.cost && `| 비용: ${act.cost}`}</div>
+                {act.tips && <div className="text-xs text-green-600">Tip: {act.tips}</div>}
+              </div>
+            ))}
+          </div>
+          {day.meals && (
+            <div className="text-xs text-gray-500 mb-2">🍽️ 식사: {Object.entries(day.meals).map(([k, v]) => `${k}: ${v}`).join(", ")}</div>
+          )}
+          {day.transportation && (
+            <div className="text-xs text-gray-500 mb-2">🚗 이동: {day.transportation.join(", ")}</div>
+          )}
+          {day.estimated_cost && (
+            <div className="text-xs text-gray-500 mb-2">💸 예상비용: {day.estimated_cost}</div>
+          )}
         </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <p className="mb-2"><strong>운영시간:</strong> 09:00 - 18:00</p>
-            <p className="mb-2"><strong>입장료:</strong> 성인 3,000원</p>
-            <p className="mb-2"><strong>추천시간:</strong> 2시간</p>
-            <p className="mb-2"><strong>특별프로그램:</strong> 수문장 교대식 (매시 정각)</p>
-          </div>
-          <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
-            <div className="text-sm text-blue-600 space-y-1">
-              <p>• https://example.com/photos/gyeongbok-1.jpg</p>
-              <p>• https://example.com/photos/gyeongbok-2.jpg</p>
-              <p>• https://example.com/photos/gyeongbok-ceremony.jpg</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 남산타워 상세 정보 */}
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">남산타워</h3>
-        <div className="mb-4 p-4 bg-green-50 dark:bg-green-900/20 rounded-lg">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            서울의 상징적인 랜드마크로 해발 262m 남산 정상에 위치한 종합전파탑입니다. 
-            서울 전체를 한눈에 내려다볼 수 있는 최고의 전망대이며, 
-            특히 야간에는 서울의 화려한 야경을 감상할 수 있습니다. 
-            연인들의 사랑의 맹세 장소로도 유명하며, 케이블카를 타고 올라가는 재미도 쏠쏠합니다.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <p className="mb-2"><strong>운영시간:</strong> 10:00 - 23:00</p>
-            <p className="mb-2"><strong>입장료:</strong> 성인 12,000원</p>
-            <p className="mb-2"><strong>추천시간:</strong> 1.5시간</p>
-            <p className="mb-2"><strong>특별체험:</strong> 사랑의 자물쇠, 케이블카</p>
-          </div>
-          <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
-            <div className="text-sm text-blue-600 space-y-1">
-              <p>• https://example.com/photos/namsan-tower-1.jpg</p>
-              <p>• https://example.com/photos/namsan-night.jpg</p>
-              <p>• https://example.com/photos/namsan-cable.jpg</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 음식점 상세 정보 */}
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">인사동 전통차집</h3>
-        <div className="mb-4 p-4 bg-orange-50 dark:bg-orange-900/20 rounded-lg">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            전통과 현대가 어우러진 서울의 대표적인 문화의 거리, 인사동에 위치한 전통차집입니다. 
-            한국 전통 공예품, 골동품, 서예용품 등을 판매하는 상점들이 즐비하며, 
-            전통차를 마실 수 있는 찻집과 한식당이 많습니다. 
-            주말에는 거리 공연도 볼 수 있어 한국의 전통문화를 체험하기에 최적의 장소입니다.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <p className="mb-2"><strong>추천메뉴:</strong> 대추차, 전통한과세트</p>
-            <p className="mb-2"><strong>가격대:</strong> 15,000원 - 25,000원</p>
-            <p className="mb-2"><strong>분위기:</strong> 전통 한옥, 조용한 분위기</p>
-          </div>
-          <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
-            <div className="text-sm text-blue-600 space-y-1">
-              <p>• https://example.com/photos/insadong-tea-1.jpg</p>
-              <p>• https://example.com/photos/insadong-tea-2.jpg</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-xl font-bold mb-3">명동 칼국수</h3>
-        <div className="mb-4 p-4 bg-yellow-50 dark:bg-yellow-900/20 rounded-lg">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            서울 중심부 명동에 위치한 50년 전통의 현지인 맛집입니다. 
-            진한 멸치 육수로 끓인 칼국수와 손으로 빚은 만두가 유명하며, 
-            저렴한 가격에 푸짐한 양으로 많은 현지인들이 찾는 숨은 맛집입니다. 
-            쇼핑 후 간단한 한끼로 안성맞춤인 곳입니다.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <p className="mb-2"><strong>추천메뉴:</strong> 멸치칼국수, 만두</p>
-            <p className="mb-2"><strong>가격대:</strong> 8,000원 - 12,000원</p>
-            <p className="mb-2"><strong>특징:</strong> 50년 전통, 현지인 맛집</p>
-          </div>
-          <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
-            <div className="text-sm text-blue-600 space-y-1">
-              <p>• https://example.com/photos/myeongdong-noodle-1.jpg</p>
-              <p>• https://example.com/photos/myeongdong-noodle-2.jpg</p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-
-  const getDetailContent2 = () => (
-    <div className="space-y-6">
-      {/* 한강공원 상세 정보 */}
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">한강공원</h3>
-        <div className="mb-4 p-4 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-          <p className="text-gray-700 dark:text-gray-300 leading-relaxed">
-            서울을 관통하는 한강변에 조성된 대규모 시민 휴식공간입니다. 
-            자전거 라이딩, 피크닉, 치킨과 맥주를 즐기는 치맥 문화의 성지로 유명하며, 
-            특히 야경이 아름다워 연인들의 데이트 코스로도 인기가 높습니다. 
-            한강 유람선을 타고 서울의 스카이라인을 감상하는 것도 특별한 경험입니다.
-          </p>
-        </div>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <p className="mb-2"><strong>운영시간:</strong> 24시간</p>
-            <p className="mb-2"><strong>추천활동:</strong> 자전거, 피크닉, 치킨&맥주</p>
-            <p className="mb-2"><strong>자전거대여:</strong> 시간당 3,000원</p>
-            <p className="mb-2"><strong>특별체험:</strong> 한강 유람선, 수상스키</p>
-          </div>
-          <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
-            <div className="text-sm text-blue-600 space-y-1">
-              <p>• https://example.com/photos/hangang-park-1.jpg</p>
-              <p>• https://example.com/photos/hangang-bike.jpg</p>
-              <p>• https://example.com/photos/hangang-sunset.jpg</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 동대문 상세 정보 */}
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">동대문 야시장</h3>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <p className="mb-2"><strong>운영시간:</strong> 19:00 - 05:00</p>
-            <p className="mb-2"><strong>추천쇼핑:</strong> 의류, 액세서리, 신발</p>
-            <p className="mb-2"><strong>야식:</strong> 떡볶이, 순대, 호떡</p>
-            <p className="mb-2"><strong>특징:</strong> 24시간 쇼핑몰, 도매가격</p>
-          </div>
-          <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
-            <div className="text-sm text-blue-600 space-y-1">
-              <p>• https://example.com/photos/dongdaemun-night-1.jpg</p>
-              <p>• https://example.com/photos/dongdaemun-shopping.jpg</p>
-              <p>• https://example.com/photos/dongdaemun-food.jpg</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      {/* 음식점 상세 정보 */}
-      <div className="border-b pb-4">
-        <h3 className="text-xl font-bold mb-3">홍대 맛집 투어</h3>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <p className="mb-2"><strong>추천메뉴:</strong> 파스타, 피자, 수제버거</p>
-            <p className="mb-2"><strong>가격대:</strong> 15,000원 - 30,000원</p>
-            <p className="mb-2"><strong>분위기:</strong> 젊고 활기찬, 인스타 핫플</p>
-          </div>
-          <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
-            <div className="text-sm text-blue-600 space-y-1">
-              <p>• https://example.com/photos/hongdae-food-1.jpg</p>
-              <p>• https://example.com/photos/hongdae-food-2.jpg</p>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <div>
-        <h3 className="text-xl font-bold mb-3">이태원 세계음식</h3>
-        <div className="grid md:grid-cols-2 gap-4">
-          <div>
-            <p className="mb-2"><strong>추천메뉴:</strong> 인도카레, 터키케밥, 태국음식</p>
-            <p className="mb-2"><strong>가격대:</strong> 12,000원 - 25,000원</p>
-            <p className="mb-2"><strong>특징:</strong> 다국적 문화, 할랄음식 가능</p>
-          </div>
-          <div>
-            <p className="mb-2"><strong>사진 URL:</strong></p>
-            <div className="text-sm text-blue-600 space-y-1">
-              <p>• https://example.com/photos/itaewon-world-food-1.jpg</p>
-              <p>• https://example.com/photos/itaewon-world-food-2.jpg</p>
-            </div>
-          </div>
-        </div>
-      </div>
+      ))}
     </div>
   )
 
@@ -474,266 +303,64 @@ export default function ItineraryResultsPage() {
 
         <div className="grid lg:grid-cols-2 gap-8">
           {/* Itinerary 1 */}
-          <Card className="shadow-2xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
-            <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
-              <CardTitle className="text-3xl text-center">{t.itinerary1}</CardTitle>
-              
-              {/* 전체 여행 경로 */}
-              <div className="mt-4 p-4 bg-white/20 rounded-lg">
-                <h4 className="font-bold text-lg mb-3">📍 전체 여행 경로</h4>
-                <div className="flex items-center justify-between text-sm">
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold mb-1">
-                      1
-                    </div>
-                    <span>경복궁</span>
-                  </div>
-                  <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold mb-1">
-                      2
-                    </div>
-                    <span>인사동</span>
-                  </div>
-                  <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold mb-1">
-                      3
-                    </div>
-                    <span>명동</span>
-                  </div>
-                  <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-blue-600 font-bold mb-1">
-                      4
-                    </div>
-                    <span>남산타워</span>
-                  </div>
+          {plans && plans.plan_a && (
+            <Card className="shadow-2xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
+              <CardHeader className="bg-gradient-to-r from-blue-500 to-purple-500 text-white">
+                <CardTitle className="text-3xl text-center">{t.itinerary1}</CardTitle>
+                <div className="mt-4 p-4 bg-white/20 rounded-lg">
+                  <h4 className="font-bold text-lg mb-3">{plans.plan_a.title}</h4>
+                  <div className="mb-2 text-base">{plans.plan_a.concept}</div>
                 </div>
-                <p className="text-center mt-3 text-sm">총 거리: 약 15km | 예상 소요시간: 1일</p>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-8 p-6">
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-green-600 dark:text-green-400">여행 일정 선택</h3>
-                <Button 
-                  onClick={() => openModal(t.itinerary1, getDetailContent1())} 
-                  variant="outline" 
-                  size="sm"
-                  className="flex items-center space-x-2"
-                >
+              </CardHeader>
+              <CardContent className="space-y-8 p-6">
+                <Button onClick={() => openModal(t.itinerary1, getDetailContent(plans.plan_a))} variant="outline" size="sm" className="flex items-center space-x-2">
                   <Eye className="w-4 h-4" />
                   <span>{t.detailView}</span>
                 </Button>
-              </div>
-
-              {/* 볼거리 */}
-              <div>
-                <h3 className="text-xl font-bold mb-4 text-green-600 dark:text-green-400">{t.attractions}</h3>
-                <div className="space-y-4">
-                  <div className="flex space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.has("1-palace")}
-                      onChange={() => handleCheckboxChange("1-palace")}
-                      className="mt-1 h-4 w-4"
-                    />
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">경복궁</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        조선왕조의 정궁으로 한국의 전통 건축미를 감상할 수 있습니다.
-                      </p>
-                    </div>
+                {/* 일정 요약 리스트 */}
+                {plans.plan_a.daily_plans.map((day: any, idx: number) => (
+                  <div key={idx} className="mb-6">
+                    <div className="font-bold text-lg mb-2">Day {day.day}: {day.theme}</div>
+                    <ul className="list-disc ml-6">
+                      {day.activities.map((act: any, i: number) => (
+                        <li key={i}>{act.time} - {act.activity} ({act.location})</li>
+                      ))}
+                    </ul>
                   </div>
-                  <div className="flex space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.has("1-tower")}
-                      onChange={() => handleCheckboxChange("1-tower")}
-                      className="mt-1 h-4 w-4"
-                    />
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">남산타워</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        서울의 야경을 한눈에 볼 수 있는 최고의 전망대입니다.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 먹거리 */}
-              <div>
-                <h3 className="text-xl font-bold mb-4 text-green-600 dark:text-green-400">{t.restaurants}</h3>
-                <div className="space-y-4">
-                  <div className="flex space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.has("1-food1")}
-                      onChange={() => handleCheckboxChange("1-food1")}
-                      className="mt-1 h-4 w-4"
-                    />
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">인사동 전통차집</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        전통 한과와 차를 즐길 수 있는 고즈넉한 찻집입니다.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.has("1-food2")}
-                      onChange={() => handleCheckboxChange("1-food2")}
-                      className="mt-1 h-4 w-4"
-                    />
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">명동 칼국수</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        50년 전통의 손칼국수를 맛볼 수 있는 명동 맛집입니다.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
-
+                ))}
+              </CardContent>
+            </Card>
+          )}
           {/* Itinerary 2 */}
-          <Card className="shadow-2xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
-            <CardHeader className="bg-gradient-to-r from-green-500 to-teal-500 text-white">
-              <CardTitle className="text-3xl text-center">{t.itinerary2}</CardTitle>
-
-              {/* 전체 여행 경로 */}
-              <div className="mt-4 p-4 bg-white/20 rounded-lg">
-                <h4 className="font-bold text-lg mb-3">📍 전체 여행 경로</h4>
-                <div className="flex items-center justify-between text-sm">
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold mb-1">
-                      1
-                    </div>
-                    <span>한강공원</span>
-                  </div>
-                  <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold mb-1">
-                      2
-                    </div>
-                    <span>홍대</span>
-                  </div>
-                  <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold mb-1">
-                      3
-                    </div>
-                    <span>이태원</span>
-                  </div>
-                  <div className="flex-1 h-0.5 bg-white/50 mx-2"></div>
-                  <div className="text-center">
-                    <div className="w-8 h-8 bg-white rounded-full flex items-center justify-center text-green-600 font-bold mb-1">
-                      4
-                    </div>
-                    <span>동대문</span>
-                  </div>
+          {plans && plans.plan_b && (
+            <Card className="shadow-2xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
+              <CardHeader className="bg-gradient-to-r from-green-500 to-teal-500 text-white">
+                <CardTitle className="text-3xl text-center">{t.itinerary2}</CardTitle>
+                <div className="mt-4 p-4 bg-white/20 rounded-lg">
+                  <h4 className="font-bold text-lg mb-3">{plans.plan_b.title}</h4>
+                  <div className="mb-2 text-base">{plans.plan_b.concept}</div>
                 </div>
-                <p className="text-center mt-3 text-sm">총 거리: 약 20km | 예상 소요시간: 1일</p>
-              </div>
-            </CardHeader>
-            <CardContent className="space-y-8 p-6">
-              <div className="flex justify-between items-center">
-                <h3 className="text-xl font-bold text-green-600 dark:text-green-400">여행 일정 선택</h3>
-                <Button 
-                  onClick={() => openModal(t.itinerary2, getDetailContent2())} 
-                  variant="outline" 
-                  size="sm"
-                  className="flex items-center space-x-2"
-                >
+              </CardHeader>
+              <CardContent className="space-y-8 p-6">
+                <Button onClick={() => openModal(t.itinerary2, getDetailContent(plans.plan_b))} variant="outline" size="sm" className="flex items-center space-x-2">
                   <Eye className="w-4 h-4" />
                   <span>{t.detailView}</span>
                 </Button>
-              </div>
-
-              {/* 볼거리 */}
-              <div>
-                <h3 className="text-xl font-bold mb-4 text-green-600 dark:text-green-400">{t.attractions}</h3>
-                <div className="space-y-4">
-                  <div className="flex space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.has("2-park")}
-                      onChange={() => handleCheckboxChange("2-park")}
-                      className="mt-1 h-4 w-4"
-                    />
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">한강공원</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        한강에서 자전거를 타며 여유로운 시간을 보낼 수 있습니다.
-                      </p>
-                    </div>
+                {/* 일정 요약 리스트 */}
+                {plans.plan_b.daily_plans.map((day: any, idx: number) => (
+                  <div key={idx} className="mb-6">
+                    <div className="font-bold text-lg mb-2">Day {day.day}: {day.theme}</div>
+                    <ul className="list-disc ml-6">
+                      {day.activities.map((act: any, i: number) => (
+                        <li key={i}>{act.time} - {act.activity} ({act.location})</li>
+                      ))}
+                    </ul>
                   </div>
-                  <div className="flex space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.has("2-dongdaemun")}
-                      onChange={() => handleCheckboxChange("2-dongdaemun")}
-                      className="mt-1 h-4 w-4"
-                    />
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">동대문 야시장</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        밤늦게까지 열리는 쇼핑과 야식의 천국입니다.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-
-              {/* 먹거리 */}
-              <div>
-                <h3 className="text-xl font-bold mb-4 text-green-600 dark:text-green-400">{t.restaurants}</h3>
-                <div className="space-y-4">
-                  <div className="flex space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.has("2-food1")}
-                      onChange={() => handleCheckboxChange("2-food1")}
-                      className="mt-1 h-4 w-4"
-                    />
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">홍대 맛집 투어</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        젊음의 거리 홍대에서 다양한 퓨전 요리를 즐겨보세요.
-                      </p>
-                    </div>
-                  </div>
-                  <div className="flex space-x-4">
-                    <input
-                      type="checkbox"
-                      checked={selectedItems.has("2-food2")}
-                      onChange={() => handleCheckboxChange("2-food2")}
-                      className="mt-1 h-4 w-4"
-                    />
-                    <div className="w-16 h-16 bg-gray-200 dark:bg-gray-600 rounded flex-shrink-0"></div>
-                    <div>
-                      <h4 className="font-bold text-gray-900 dark:text-gray-100">이태원 세계음식</h4>
-                      <p className="text-sm text-gray-600 dark:text-gray-300 mb-2">
-                        세계 각국의 정통 요리를 한 곳에서 맛볼 수 있습니다.
-                      </p>
-                    </div>
-                  </div>
-                </div>
-              </div>
-            </CardContent>
-          </Card>
+                ))}
+              </CardContent>
+            </Card>
+          )}
         </div>
-
         {/* 모달 */}
         <DetailModal 
           isOpen={modalData.isOpen}
