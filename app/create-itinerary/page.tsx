@@ -148,7 +148,7 @@ export default function CreateItineraryPage() {
         const endpoint = '/api/v1/itinerary/generate';
         const url = apiBase.endsWith('/api/v1') ? `${apiBase}/itinerary/generate` : `${apiBase}${endpoint}`;
         const aiRes = await axios.post(url, {
-          destination: cities[0] || countries[0],
+          city: cities[0] || countries[0],
           duration: dateRange?.to && dateRange.from ? (dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 3600 * 24) + 1 : 1,
           travelers_count: travelers,
           budget_range: budget,
