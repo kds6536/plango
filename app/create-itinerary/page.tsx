@@ -39,7 +39,6 @@ const translations = {
     genderOptions: { male: "남성", female: "여성", none: "선택 안함" },
     specialRequests: "✨ 특별 요청사항",
     specialRequestsPlaceholder: "원하시는 여행 스타일, 특별한 요청사항, 관심사, 피하고 싶은 것들을 자유롭게 작성해주세요.\n예: \n- 힐링이 되는 조용한 여행을 원해요\n- 맛집 투어에 관심이 많아요  \n- 역사적인 장소들을 방문하고 싶어요\n- 높은 곳이나 물을 무서워해요\n- 비건 음식만 먹을 수 있어요\n- 사진 찍기 좋은 장소들로 가고 싶어요",
-    specialRequestsDesc: "더 맞춤형 일정을 위해 특별한 요청사항을 알려주세요 (선택사항)",
     generateButton: "🎯 맞춤 여행 일정 생성하기",
     generating: "AI가 최적의 여행 코스를 짜고 있습니다...",
     generatingSubtitle: "잠시만 기다려주세요! 평균적으로 1~2분 정도 소요될 수 있습니다.",
@@ -71,7 +70,6 @@ const translations = {
     genderOptions: { male: "Male", female: "Female", none: "Prefer not to say" },
     specialRequests: "✨ Special Requests",
     specialRequestsPlaceholder: "Feel free to describe your preferred travel style, special requests, interests, or things to avoid.\nExamples:\n- Looking for a relaxing, quiet trip\n- Interested in food tours\n- Want to visit historical sites\n- Afraid of heights or water\n- Can only eat vegan food\n- Want Instagram-worthy photo spots",
-    specialRequestsDesc: "Let us know any special requests for a more personalized itinerary (optional)",
     generateButton: "🎯 Generate Custom Travel Itinerary",
     generating: "AI is creating the optimal travel route...",
     generatingSubtitle: "Please wait a moment! This usually takes about 1-2 minutes.",
@@ -147,12 +145,19 @@ export default function CreateItineraryPage() {
         const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
         const endpoint = '/api/v1/itinerary/generate';
         const url = apiBase.endsWith('/api/v1') ? `${apiBase}/itinerary/generate` : `${apiBase}${endpoint}`;
+
+        const combinedSpecialRequests = [
+          `- 여행자 연령대: ${ageRanges.join(', ')}`,
+          `- 여행자 성별: ${gender}`,
+          `- 특별 요청: ${specialRequests}`
+        ].join('\n');
+
         const aiRes = await axios.post(url, {
           city: cities[0] || countries[0],
           duration: dateRange?.to && dateRange.from ? (dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 3600 * 24) + 1 : 1,
           travelers_count: travelers,
           budget_range: budget,
-          special_requests: specialRequests,
+          special_requests: combinedSpecialRequests,
         });
         brainstormResult = aiRes.data;
       } catch (e) {
