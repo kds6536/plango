@@ -16,6 +16,7 @@ import { format } from "date-fns"
 import { ko } from "date-fns/locale"
 import type { DateRange } from "react-day-picker"
 import { useLanguageStore } from "@/lib/language-store"
+import { useEffect } from "react"
 
 const translations = {
   ko: {
@@ -101,19 +102,38 @@ export default function CreateItineraryPage() {
   const [gender, setGender] = useState("")
   const [specialRequests, setSpecialRequests] = useState("")
 
+  // v3.0: 카테고리별 장소 추천 결과 및 선택 상태 관리
+  const [placesByCategory, setPlacesByCategory] = useState<{
+    숙소?: any[];
+    볼거리?: any[];
+    먹거리?: any[];
+    즐길거리?: any[];
+  }>({});
+  const [selectedPlaces, setSelectedPlaces] = useState<{ [category: string]: Set<string> }>({});
+
+  // 카테고리별 장소 선택 토글 함수
+  const handlePlaceSelect = (category: string, placeId: string) => {
+    setSelectedPlaces((prev) => {
+      const prevSet = prev[category] || new Set();
+      const newSet = new Set(prevSet);
+      if (newSet.has(placeId)) {
+        newSet.delete(placeId);
+      } else {
+        newSet.add(placeId);
+      }
+      return { ...prev, [category]: newSet };
+    });
+  };
+
   const handleGenerateItinerary = async () => {
-    // ---- 개선된 로직 시작 ----
+    // ---- v3.0: AI 브레인스토밍 + Google Places API 연동 구조 ----
     let updatedDestinations = [...destinations];
-    // 현재 입력 필드에 텍스트가 있고, 목록에 중복되지 않은 경우
     if (currentDestination.trim() && !updatedDestinations.includes(currentDestination.trim())) {
       updatedDestinations = [...updatedDestinations, currentDestination.trim()];
-      // 상태를 업데이트하여 UI에도 반영하고, 입력 필드를 비웁니다.
       setDestinations(updatedDestinations);
       setCurrentDestination("");
     }
-    // ---- 개선된 로직 끝 ----
-
-    if (updatedDestinations.length === 0) { // 수정된 목록으로 유효성 검사
+    if (updatedDestinations.length === 0) {
       alert(t.destinationPlaceholder)
       return
     }
@@ -121,68 +141,66 @@ export default function CreateItineraryPage() {
       alert(t.dateSelectionPlaceholder)
       return
     }
-
     setIsLoading(true)
-
-    // --- 백엔드 스키마에 맞게 요청 데이터 가공 ---
-    const calculateDuration = (from: Date, to: Date | undefined) => {
-      if (!to) return 1;
-      const diffInMs = to.getTime() - from.getTime();
-      const diffInDays = Math.ceil(diffInMs / (1000 * 60 * 60 * 24));
-      return diffInDays + 1;
-    };
-
-    const getBudgetRange = (budget: string, currency: string) => {
-      const budgetNum = parseInt(budget, 10);
-      if (isNaN(budgetNum)) return "medium";
-
-      // KRW 기준으로 일일 예산 계산 (대략적인 값)
-      const dailyBudgetKRW = currency !== 'KRW' 
-        ? budgetNum * 1300 // 달러 등 외화로 가정
-        : budgetNum / (calculateDuration(dateRange.from!, dateRange.to) || 1);
-      
-      if (dailyBudgetKRW <= 50000) return "low";
-      if (dailyBudgetKRW <= 150000) return "medium";
-      return "high";
-    }
-
-    // 여행 스타일 키워드 (Enum과 유사하게)
-    const travelStyles = ["adventure", "relaxation", "cultural", "gourmet", "shopping", "nature"];
-    const foundStyles = travelStyles.filter(style => specialRequests.toLowerCase().includes(style));
-
-
-    const requestBody = {
-      destination: updatedDestinations[0], // 첫 번째 목적지를 대표로 설정
-      city: updatedDestinations[0],
-      duration: calculateDuration(dateRange.from, dateRange.to),
-      travelers_count: travelers,
-      budget_range: getBudgetRange(budget, currency),
-      accommodation_preference: "호텔", // 임시 기본값
-      travel_style: foundStyles,
-      special_interests: ageRanges,
-      special_requests: specialRequests,
-    };
-
     try {
-      // 환경변수에 /api/v1가 포함되어 있을 수도 있으므로, 중복되지 않게 안전하게 조합
-      const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
-      const endpoint = '/api/v1/itinerary/generate';
-      const url = apiBase.endsWith('/api/v1') ? `${apiBase}/itinerary/generate` : `${apiBase}${endpoint}`;
-      const response = await axios.post(url, requestBody);
-      
-      localStorage.setItem('itineraryResult', JSON.stringify(response.data))
-      
-      router.push('/itinerary-results')
-
-    } catch (error) {
-      console.error("Error generating itinerary:", error)
-      if (axios.isAxiosError(error) && error.response) {
-        alert(`여행 생성 실패: ${error.response.data.detail || "알 수 없는 오류가 발생했습니다."}`)
-      } else {
-        alert("여행 생성 중 오류가 발생했습니다. 잠시 후 다시 시도해주세요.")
+      // 1. AI 브레인스토밍: 4개 카테고리별 5개 키워드 요청
+      // 실제 API가 준비되지 않았다면 더미 데이터로 대체
+      let brainstormResult;
+      try {
+        const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
+        const endpoint = '/api/v1/itinerary/generate-recommendations';
+        const url = apiBase.endsWith('/api/v1') ? `${apiBase}/itinerary/generate-recommendations` : `${apiBase}${endpoint}`;
+        const aiRes = await axios.post(url, {
+          destination: updatedDestinations[0],
+          duration: 1, // 예시
+          travelers_count: travelers,
+          budget_range: 'medium',
+          special_requests: specialRequests,
+        });
+        brainstormResult = aiRes.data; // { 숙소: [키워드], 볼거리: [키워드], ... }
+      } catch (e) {
+        // 더미 데이터 (테스트용)
+        brainstormResult = {
+          숙소: ["호텔A", "호텔B", "호텔C", "호텔D", "호텔E"],
+          볼거리: ["관광지A", "관광지B", "관광지C", "관광지D", "관광지E"],
+          먹거리: ["맛집A", "맛집B", "맛집C", "맛집D", "맛집E"],
+          즐길거리: ["체험A", "체험B", "체험C", "체험D", "체험E"]
+        };
       }
+      // 2. Google Places API: 각 카테고리별 키워드로 실제 장소 정보 확보
+      let placesResult;
+      try {
+        const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
+        const endpoint = '/api/v1/places/batch-search';
+        const url = apiBase.endsWith('/api/v1') ? `${apiBase}/places/batch-search` : `${apiBase}${endpoint}`;
+        const placesRes = await axios.post(url, { brainstormResult });
+        placesResult = placesRes.data; // { 숙소: [장소], 볼거리: [장소], ... }
+      } catch (e) {
+        // 더미 데이터 (테스트용)
+        placesResult = {
+          숙소: [
+            { place_id: "1", displayName: "호텔A", editorialSummary: "럭셔리 호텔", photoUrl: "/placeholder.jpg", address: "제주도" },
+            { place_id: "2", displayName: "호텔B", editorialSummary: "가성비 호텔", photoUrl: "/placeholder.jpg", address: "제주도" },
+            { place_id: "3", displayName: "호텔C", editorialSummary: "바다 전망", photoUrl: "/placeholder.jpg", address: "제주도" }
+          ],
+          볼거리: [
+            { place_id: "4", displayName: "관광지A", editorialSummary: "유명 관광지", photoUrl: "/placeholder.jpg", address: "제주도" },
+            { place_id: "5", displayName: "관광지B", editorialSummary: "자연 경관", photoUrl: "/placeholder.jpg", address: "제주도" }
+          ],
+          먹거리: [
+            { place_id: "6", displayName: "맛집A", editorialSummary: "현지 맛집", photoUrl: "/placeholder.jpg", address: "제주도" },
+            { place_id: "7", displayName: "맛집B", editorialSummary: "해산물 전문", photoUrl: "/placeholder.jpg", address: "제주도" }
+          ],
+          즐길거리: [
+            { place_id: "8", displayName: "체험A", editorialSummary: "액티비티", photoUrl: "/placeholder.jpg", address: "제주도" }
+          ]
+        };
+      }
+      setPlacesByCategory(placesResult);
+    } catch (error) {
+      alert("추천 장소를 불러오는 중 오류가 발생했습니다.");
     } finally {
-      setIsLoading(false)
+      setIsLoading(false);
     }
   }
 
@@ -407,6 +425,57 @@ export default function CreateItineraryPage() {
           </div>
         </CardContent>
       </Card>
+      {/* 일정 생성 버튼 아래에 추천 결과가 있으면 카테고리별 카드 UI 표시 */}
+      {Object.keys(placesByCategory).length > 0 && (
+        <div className="mt-12">
+          <h2 className="text-2xl font-bold mb-6 text-center">카테고리별 추천 장소 선택</h2>
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
+            {Object.entries(placesByCategory).map(([category, places]) => (
+              <div key={category} className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+                <h3 className="text-xl font-semibold mb-4">{category}</h3>
+                <div className="flex flex-col gap-4">
+                  {places && places.length > 0 ? places.map((place: any) => (
+                    <label key={place.place_id} className="flex items-center gap-4 p-3 rounded-lg border hover:shadow cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={selectedPlaces[category]?.has(place.place_id) || false}
+                        onChange={() => handlePlaceSelect(category, place.place_id)}
+                        className="accent-blue-600 w-5 h-5"
+                      />
+                      <img src={place.photoUrl || '/placeholder.jpg'} alt={place.displayName} className="w-16 h-16 object-cover rounded-md" />
+                      <div>
+                        <div className="font-bold">{place.displayName}</div>
+                        <div className="text-sm text-gray-500 dark:text-gray-300">{place.editorialSummary || place.address}</div>
+                      </div>
+                    </label>
+                  )) : <div className="text-gray-400">추천 결과가 없습니다.</div>}
+                </div>
+              </div>
+            ))}
+          </div>
+          {/* 최종 일정 생성 버튼 */}
+          <div className="text-center mt-10">
+            <Button
+              size="lg"
+              className="w-full max-w-md bg-teal-600 hover:bg-teal-700 text-lg font-bold"
+              onClick={() => {
+                // 선택된 place_id 목록 추출
+                const selected = Object.entries(selectedPlaces).flatMap(([category, set]) => Array.from(set || []));
+                if (selected.length === 0) {
+                  alert('최소 1개 이상의 장소를 선택해주세요!');
+                  return;
+                }
+                // 선택값을 로컬스토리지에 저장
+                localStorage.setItem('selectedPlaceIds', JSON.stringify(selected));
+                // 결과 페이지로 이동
+                router.push('/itinerary-results');
+              }}
+            >
+              최종 일정 생성하기
+            </Button>
+          </div>
+        </div>
+      )}
     </div>
   )
 }

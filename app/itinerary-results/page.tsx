@@ -176,6 +176,8 @@ export default function ItineraryResultsPage() {
 
   // 여행 일정 데이터 상태 추가
   const [plans, setPlans] = useState<{ plan_a: any; plan_b: any } | null>(null)
+  const [finalItinerary, setFinalItinerary] = useState<any>(null);
+  const [isLoading, setIsLoading] = useState(false);
 
   const { language } = useLanguageStore()
   const t = translations[language as keyof typeof translations]
@@ -197,6 +199,52 @@ export default function ItineraryResultsPage() {
       }
     }
   }, [router]);
+
+  useEffect(() => {
+    // 1. 로컬스토리지에서 선택된 place_id 목록 읽기
+    const selected = localStorage.getItem('selectedPlaceIds');
+    if (!selected) return;
+    const placeIds: string[] = JSON.parse(selected);
+    if (!placeIds || placeIds.length === 0) return;
+    setIsLoading(true);
+    // 2. 최종 맞춤 일정 생성 API 호출
+    (async () => {
+      try {
+        let result;
+        try {
+          const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
+          const endpoint = '/api/v1/itinerary/create-final';
+          const url = apiBase.endsWith('/api/v1') ? `${apiBase}/itinerary/create-final` : `${apiBase}${endpoint}`;
+          const res = await fetch(url, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ place_ids: placeIds })
+          });
+          result = await res.json();
+        } catch (e) {
+          // 더미 데이터 (테스트용)
+          result = {
+            days: [
+              {
+                date: '2024-06-01',
+                items: [
+                  { time: '09:00', name: '호텔A', desc: '럭셔리 호텔에서 아침 식사', photoUrl: '/placeholder.jpg', move: null },
+                  { time: '11:00', name: '관광지A', desc: '유명 관광지 방문', photoUrl: '/placeholder.jpg', move: { duration: '20분', type: '도보' } },
+                  { time: '13:00', name: '맛집A', desc: '현지 맛집에서 점심', photoUrl: '/placeholder.jpg', move: { duration: '10분', type: '택시' } },
+                  { time: '15:00', name: '체험A', desc: '액티비티 체험', photoUrl: '/placeholder.jpg', move: { duration: '15분', type: '버스' } }
+                ]
+              }
+            ]
+          };
+        }
+        setFinalItinerary(result);
+      } catch (err) {
+        alert('최종 일정을 불러오는 중 오류가 발생했습니다.');
+      } finally {
+        setIsLoading(false);
+      }
+    })();
+  }, []);
 
   const handleCheckboxChange = (itemId: string) => {
     const newSelected = new Set(selectedItems)
@@ -261,6 +309,42 @@ export default function ItineraryResultsPage() {
       ))}
     </div>
   )
+
+  // 일정 결과 렌더링
+  if (isLoading) {
+    return (
+      <div className="flex flex-col items-center justify-center min-h-[60vh]">
+        <div className="animate-spin rounded-full h-24 w-24 border-t-2 border-b-2 border-blue-500"></div>
+        <h2 className="text-2xl font-bold mt-8">AI가 최적의 일정을 생성 중입니다...</h2>
+      </div>
+    );
+  }
+  if (finalItinerary) {
+    return (
+      <div className="container mx-auto px-4 py-12 md:px-6 lg:py-16">
+        <h1 className="text-4xl font-extrabold mb-6 text-center">최종 맞춤 일정</h1>
+        {finalItinerary.days.map((day: any, idx: number) => (
+          <div key={idx} className="mb-10">
+            <h2 className="text-2xl font-bold mb-4">Day {idx + 1} ({day.date})</h2>
+            <div className="space-y-6">
+              {day.items.map((item: any, i: number) => (
+                <div key={i} className="flex items-center gap-6 bg-white dark:bg-gray-800 rounded-xl shadow p-6">
+                  <img src={item.photoUrl || '/placeholder.jpg'} alt={item.name} className="w-20 h-20 object-cover rounded-lg" />
+                  <div className="flex-1">
+                    <div className="font-bold text-lg">{item.time} - {item.name}</div>
+                    <div className="text-gray-600 dark:text-gray-300">{item.desc}</div>
+                    {item.move && (
+                      <div className="text-sm text-blue-500 mt-1">→ 이동: {item.move.duration} ({item.move.type})</div>
+                    )}
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        ))}
+      </div>
+    );
+  }
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-blue-50 via-purple-50 to-green-50 dark:from-gray-900 dark:via-purple-900/20 dark:to-blue-900/20 py-12">
