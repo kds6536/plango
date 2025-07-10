@@ -91,19 +91,18 @@ export default function CreateItineraryPage() {
         </p>
       </div>
       <div className="w-full max-w-2xl mx-auto bg-white dark:bg-gray-800 rounded-2xl shadow-2xl p-8">
-        {/* 국가 선택 */}
+        {/* 국가 입력을 <Input /> 텍스트 인풋으로 변경 */}
+        {/* 도시 입력은 Chip UI 유지, 태그는 '국가 도시' 조합으로 표시 */}
+        {/* 나머지 입력 항목(날짜, 인원, 예산 등)은 그대로 유지 */}
         <div className="mb-6">
-          <Label htmlFor="country" className="text-lg font-semibold">국가 선택</Label>
-          <Select value={country} onValueChange={setCountry}>
-            <SelectTrigger id="country">
-              <SelectValue placeholder="국가를 선택하세요" />
-            </SelectTrigger>
-            <SelectContent>
-              {COUNTRY_LIST.map((c) => (
-                <SelectItem key={c} value={c}>{c}</SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+          <Label htmlFor="country" className="text-lg font-semibold">국가 입력</Label>
+          <Input
+            id="country"
+            placeholder="예: 한국, 일본, 미국..."
+            value={country}
+            onChange={e => setCountry(e.target.value)}
+            className="mb-4"
+          />
         </div>
         {/* 도시 입력 + Chip UI */}
         <div className="mb-6">
@@ -124,7 +123,7 @@ export default function CreateItineraryPage() {
           <div className="flex flex-wrap gap-2 pt-2">
             {cities.map((city, idx) => (
               <div key={idx} className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm">
-                <span>{city}</span>
+                <span>{country ? `${country} ${city}` : city}</span>
                 <button onClick={() => handleRemoveCity(idx)} className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">
                   <X className="h-3 w-3" />
                 </button>
