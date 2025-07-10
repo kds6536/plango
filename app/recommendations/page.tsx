@@ -1,7 +1,20 @@
 "use client"
+
 import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { Button } from "@/components/ui/button";
+// Modal 컴포넌트가 없다면 아래처럼 간단히 직접 구현하거나, 기존 UI 라이브러리 사용
+function Modal({ open, onClose, children }: any) {
+  if (!open) return null;
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+      <div className="bg-white dark:bg-gray-800 rounded-lg max-w-lg w-full p-6 relative">
+        <button className="absolute top-2 right-2 text-gray-400" onClick={onClose}>✕</button>
+        {children}
+      </div>
+    </div>
+  );
+}
 
 const CATEGORY_ORDER = ["볼거리", "즐길거리", "먹거리", "숙소"];
 
@@ -9,6 +22,11 @@ export default function RecommendationsPage() {
   const router = useRouter();
   const [placesByCategory, setPlacesByCategory] = useState<any>({});
   const [selectedPlaces, setSelectedPlaces] = useState<{ [category: string]: Set<string> }>({});
+  const [modalOpen, setModalOpen] = useState(false);
+  const [modalDetails, setModalDetails] = useState<any>(null);
+
+  // 다국어: 언어코드 가져오기(예: localStorage, context 등)
+  const userLang = typeof window !== "undefined" ? (localStorage.getItem("lang") || "ko") : "ko";
 
   useEffect(() => {
     // 로컬스토리지에서 추천 결과 데이터 읽기
@@ -39,6 +57,12 @@ export default function RecommendationsPage() {
     router.push("/itinerary-results");
   };
 
+  // 자세히 보기 모달 열기
+  const openModal = (details: any) => {
+    setModalDetails(details);
+    setModalOpen(true);
+  };
+
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 lg:py-16">
       <h2 className="text-2xl font-bold mb-6 text-center">카테고리별 추천 장소 선택</h2>
@@ -56,10 +80,13 @@ export default function RecommendationsPage() {
                       onChange={() => handlePlaceSelect(category, place.place_id)}
                       className="accent-blue-600 w-5 h-5"
                     />
-                    <img src={place.photoUrl || "/placeholder.jpg"} alt={place.displayName} className="w-16 h-16 object-cover rounded-md" />
+                    <img src={place.photos?.[0] || place.photoUrl || "/placeholder.jpg"} alt={place.name} className="w-16 h-16 object-cover rounded-md" />
                     <div>
-                      <div className="font-bold">{place.displayName}</div>
-                      <div className="text-sm text-gray-500 dark:text-gray-300">{place.editorialSummary || place.address || "설명 없음"}</div>
+                      <div className="font-bold">{place.name}</div>
+                      <div className="text-sm text-gray-500 dark:text-gray-300">{place.short_description || place.editorialSummary || place.address || "설명 없음"}</div>
+                      <Button size="sm" variant="outline" onClick={(e) => { e.preventDefault(); openModal(place.full_details || place); }}>
+                        자세히 보기
+                      </Button>
                     </div>
                   </label>
                 ))
@@ -79,6 +106,24 @@ export default function RecommendationsPage() {
           최종 일정 생성하기
         </Button>
       </div>
+      {/* 자세히 보기 모달 */}
+      {modalOpen && modalDetails && (
+        <Modal open={modalOpen} onClose={() => setModalOpen(false)}>
+          <div>
+            <h2 className="text-2xl font-bold mb-4">{modalDetails.name}</h2>
+            <img src={modalDetails.photos?.[0] || "/placeholder.jpg"} alt={modalDetails.name} className="w-full h-48 object-cover rounded-lg mb-4" />
+            <div className="mb-2">{modalDetails.address}</div>
+            <div className="mb-2">평점: {modalDetails.rating} ({modalDetails.user_rating_count}명)</div>
+            <div className="mb-2">{modalDetails.short_description}</div>
+            <div className="mb-2">{modalDetails.website_uri && <a href={modalDetails.website_uri} target="_blank" rel="noopener noreferrer">공식 웹사이트</a>}</div>
+            <div className="mb-2">
+              {modalDetails.reviews && modalDetails.reviews.map((r: any, i: number) => (
+                <div key={i} className="text-sm text-gray-600 mb-1">"{r}"</div>
+              ))}
+            </div>
+          </div>
+        </Modal>
+      )}
     </div>
   );
-} 
+}
