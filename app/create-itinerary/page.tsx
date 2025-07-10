@@ -266,6 +266,7 @@ export default function CreateItineraryPage() {
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') addCountry()
                   }}
+                  onBlur={addCountry}
                   className="flex-grow"
                 />
                 <Button onClick={addCountry} size="icon" variant="outline">
@@ -304,6 +305,7 @@ export default function CreateItineraryPage() {
                   onKeyDown={(e) => {
                     if (e.key === 'Enter') addCity()
                   }}
+                  onBlur={addCity}
                   className="flex-grow"
                 />
                 <Button onClick={addCity} size="icon" variant="outline">
