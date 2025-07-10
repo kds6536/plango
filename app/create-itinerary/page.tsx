@@ -17,13 +17,14 @@ import { ko } from "date-fns/locale"
 import type { DateRange } from "react-day-picker"
 import { useLanguageStore } from "@/lib/language-store"
 import { useEffect } from "react"
+import { useRef } from "react"
 
 const translations = {
   ko: {
     title: "✈️ 여행 일정 만들기",
     subtitle: "몇 가지 정보만 입력하시면 AI가 완벽한 맞춤형 여행 일정을 생성해드립니다 🎯",
     cardTitle: "🌟 여행 정보 입력",
-    destination: "🌍 국가 선택 또는 도시 입력",
+    destination: "🌍 국가  도시 입력",
     destinationPlaceholder: "예: 일본, 도쿄, 파리, 뉴욕...",
     dateSelection: "📅 여행 날짜 선택",
     dateSelectionPlaceholder: "날짜를 선택하세요",
@@ -125,41 +126,59 @@ export default function CreateItineraryPage() {
     });
   };
 
+  // 국가 목록 예시
+  const COUNTRY_LIST = ["한국", "일본", "미국", "프랑스", "영국", "이탈리아", "스페인", "호주", "캐나다", "태국"];
+  const [country, setCountry] = useState("");
+  const [cityInput, setCityInput] = useState("");
+  const [cities, setCities] = useState<string[]>([]);
+  const cityInputRef = useRef<HTMLInputElement>(null);
+
+  // 도시 자동 추가 (Enter/Blur)
+  const handleCityInputAdd = () => {
+    const value = cityInput.trim();
+    if (value && !cities.includes(value)) {
+      setCities([...cities, value]);
+      setCityInput("");
+    }
+  };
+
+  // +버튼 클릭
+  const handleAddCity = () => {
+    handleCityInputAdd();
+    if (cityInputRef.current) cityInputRef.current.focus();
+  };
+
+  // X버튼으로 도시 삭제
+  const handleRemoveCity = (idx: number) => {
+    setCities(cities.filter((_, i) => i !== idx));
+  };
+
+  // 유효성 검사
+  const isFormValid = country && cities.length > 0 && dateRange && dateRange.from && travelers > 0 && budget;
+
   const handleGenerateItinerary = async () => {
-    // ---- v3.0: AI 브레인스토밍 + Google Places API 연동 구조 ----
-    let updatedDestinations = [...destinations];
-    if (currentDestination.trim() && !updatedDestinations.includes(currentDestination.trim())) {
-      updatedDestinations = [...updatedDestinations, currentDestination.trim()];
-      setDestinations(updatedDestinations);
-      setCurrentDestination("");
+    if (!isFormValid) {
+      alert("모든 필수 정보를 입력해주세요!");
+      return;
     }
-    if (updatedDestinations.length === 0) {
-      alert(t.destinationPlaceholder)
-      return
-    }
-    if (!dateRange || !dateRange.from) {
-      alert(t.dateSelectionPlaceholder)
-      return
-    }
-    setIsLoading(true)
+    setIsLoading(true);
     try {
       // 1. AI 브레인스토밍: 4개 카테고리별 5개 키워드 요청
-      // 실제 API가 준비되지 않았다면 더미 데이터로 대체
       let brainstormResult;
       try {
         const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
         const endpoint = '/api/v1/itinerary/generate-recommendations';
         const url = apiBase.endsWith('/api/v1') ? `${apiBase}/itinerary/generate-recommendations` : `${apiBase}${endpoint}`;
         const aiRes = await axios.post(url, {
-          destination: updatedDestinations[0],
+          country,
+          cities,
           duration: 1, // 예시
           travelers_count: travelers,
           budget_range: 'medium',
           special_requests: specialRequests,
         });
-        brainstormResult = aiRes.data; // { 숙소: [키워드], 볼거리: [키워드], ... }
+        brainstormResult = aiRes.data;
       } catch (e) {
-        // 더미 데이터 (테스트용)
         brainstormResult = {
           숙소: ["호텔A", "호텔B", "호텔C", "호텔D", "호텔E"],
           볼거리: ["관광지A", "관광지B", "관광지C", "관광지D", "관광지E"],
@@ -174,9 +193,8 @@ export default function CreateItineraryPage() {
         const endpoint = '/api/v1/places/batch-search';
         const url = apiBase.endsWith('/api/v1') ? `${apiBase}/places/batch-search` : `${apiBase}${endpoint}`;
         const placesRes = await axios.post(url, { brainstormResult });
-        placesResult = placesRes.data; // { 숙소: [장소], 볼거리: [장소], ... }
+        placesResult = placesRes.data;
       } catch (e) {
-        // 더미 데이터 (테스트용)
         placesResult = {
           숙소: [
             { place_id: "1", displayName: "호텔A", editorialSummary: "럭셔리 호텔", photoUrl: "/placeholder.jpg", address: "제주도" },
@@ -196,13 +214,15 @@ export default function CreateItineraryPage() {
           ]
         };
       }
-      setPlacesByCategory(placesResult);
+      // 추천 결과를 localStorage에 저장 후 /recommendations로 이동
+      localStorage.setItem("recommendationResults", JSON.stringify(placesResult));
+      router.push("/recommendations");
     } catch (error) {
       alert("추천 장소를 불러오는 중 오류가 발생했습니다.");
     } finally {
       setIsLoading(false);
     }
-  }
+  };
 
   const addDestination = () => {
     if (currentDestination.trim() && !destinations.includes(currentDestination.trim())) {
@@ -245,6 +265,7 @@ export default function CreateItineraryPage() {
     )
   }
 
+  // 렌더링 부분(입력 폼)
   return (
     <div className="container mx-auto px-4 py-12 md:px-6 lg:py-16">
       <div className="text-center mb-12">
@@ -255,41 +276,57 @@ export default function CreateItineraryPage() {
           {t.subtitle}
         </p>
       </div>
-
       <Card className="w-full max-w-4xl mx-auto shadow-2xl rounded-2xl border-none bg-white dark:bg-gray-800/50 backdrop-blur-sm">
         <CardHeader>
           <CardTitle className="text-2xl font-bold text-center text-gray-800 dark:text-white">{t.cardTitle}</CardTitle>
         </CardHeader>
         <CardContent className="p-8">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            
+            {/* 국가 선택 */}
             <div className="space-y-2">
-              <Label htmlFor="destination" className="text-lg font-semibold">{t.destination}</Label>
+              <Label htmlFor="country" className="text-lg font-semibold">국가 선택</Label>
+              <Select value={country} onValueChange={setCountry}>
+                <SelectTrigger id="country">
+                  <SelectValue placeholder="국가를 선택하세요" />
+                </SelectTrigger>
+                <SelectContent>
+                  {COUNTRY_LIST.map((c) => (
+                    <SelectItem key={c} value={c}>{c}</SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+            </div>
+            {/* 도시 입력 + 태그 */}
+            <div className="space-y-2">
+              <Label htmlFor="city" className="text-lg font-semibold">도시 입력</Label>
               <div className="flex items-center gap-2">
                 <Input
-                  id="destination"
-                  placeholder={t.destinationPlaceholder}
-                  value={currentDestination}
-                  onChange={(e) => setCurrentDestination(e.target.value)}
-                  onKeyDown={(e) => e.key === 'Enter' && addDestination()}
+                  id="city"
+                  ref={cityInputRef}
+                  placeholder="예: 도쿄, 파리, 뉴욕..."
+                  value={cityInput}
+                  onChange={(e) => setCityInput(e.target.value)}
+                  onKeyDown={(e) => {
+                    if (e.key === "Enter") handleCityInputAdd();
+                  }}
+                  onBlur={handleCityInputAdd}
                   className="flex-grow"
                 />
-                <Button onClick={addDestination} size="icon" variant="outline">
-                  <Plus className="h-4 w-4" />
+                <Button onClick={handleAddCity} size="icon" variant="outline">+
                 </Button>
               </div>
               <div className="flex flex-wrap gap-2 pt-2">
-                {destinations.map((dest, index) => (
-                  <div key={index} className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm">
-                    <span>{dest}</span>
-                    <button onClick={() => removeDestination(index)} className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">
+                {cities.map((city, idx) => (
+                  <div key={idx} className="flex items-center gap-1 bg-gray-100 dark:bg-gray-700 rounded-full px-3 py-1 text-sm">
+                    <span>{city}</span>
+                    <button onClick={() => handleRemoveCity(idx)} className="text-gray-500 hover:text-gray-800 dark:text-gray-400 dark:hover:text-white">
                       <X className="h-3 w-3" />
                     </button>
                   </div>
                 ))}
               </div>
             </div>
-
+            
             <div className="space-y-2">
               <Label htmlFor="date" className="text-lg font-semibold">{t.dateSelection}</Label>
               <Popover>
@@ -417,7 +454,7 @@ export default function CreateItineraryPage() {
               size="lg" 
               className="w-full max-w-md bg-blue-600 hover:bg-blue-700 text-lg font-bold"
               onClick={handleGenerateItinerary}
-              disabled={isDisabled}
+              disabled={isLoading || !isFormValid}
             >
               <Plane className="mr-2 h-5 w-5" />
               {t.generateButton}
@@ -425,57 +462,6 @@ export default function CreateItineraryPage() {
           </div>
         </CardContent>
       </Card>
-      {/* 일정 생성 버튼 아래에 추천 결과가 있으면 카테고리별 카드 UI 표시 */}
-      {Object.keys(placesByCategory).length > 0 && (
-        <div className="mt-12">
-          <h2 className="text-2xl font-bold mb-6 text-center">카테고리별 추천 장소 선택</h2>
-          <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-            {Object.entries(placesByCategory).map(([category, places]) => (
-              <div key={category} className="bg-white dark:bg-gray-800 rounded-xl shadow p-6">
-                <h3 className="text-xl font-semibold mb-4">{category}</h3>
-                <div className="flex flex-col gap-4">
-                  {places && places.length > 0 ? places.map((place: any) => (
-                    <label key={place.place_id} className="flex items-center gap-4 p-3 rounded-lg border hover:shadow cursor-pointer">
-                      <input
-                        type="checkbox"
-                        checked={selectedPlaces[category]?.has(place.place_id) || false}
-                        onChange={() => handlePlaceSelect(category, place.place_id)}
-                        className="accent-blue-600 w-5 h-5"
-                      />
-                      <img src={place.photoUrl || '/placeholder.jpg'} alt={place.displayName} className="w-16 h-16 object-cover rounded-md" />
-                      <div>
-                        <div className="font-bold">{place.displayName}</div>
-                        <div className="text-sm text-gray-500 dark:text-gray-300">{place.editorialSummary || place.address}</div>
-                      </div>
-                    </label>
-                  )) : <div className="text-gray-400">추천 결과가 없습니다.</div>}
-                </div>
-              </div>
-            ))}
-          </div>
-          {/* 최종 일정 생성 버튼 */}
-          <div className="text-center mt-10">
-            <Button
-              size="lg"
-              className="w-full max-w-md bg-teal-600 hover:bg-teal-700 text-lg font-bold"
-              onClick={() => {
-                // 선택된 place_id 목록 추출
-                const selected = Object.entries(selectedPlaces).flatMap(([category, set]) => Array.from(set || []));
-                if (selected.length === 0) {
-                  alert('최소 1개 이상의 장소를 선택해주세요!');
-                  return;
-                }
-                // 선택값을 로컬스토리지에 저장
-                localStorage.setItem('selectedPlaceIds', JSON.stringify(selected));
-                // 결과 페이지로 이동
-                router.push('/itinerary-results');
-              }}
-            >
-              최종 일정 생성하기
-            </Button>
-          </div>
-        </div>
-      )}
     </div>
   )
 }
