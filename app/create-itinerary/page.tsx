@@ -145,8 +145,8 @@ export default function CreateItineraryPage() {
       let brainstormResult;
       try {
         const apiBase = (process.env.NEXT_PUBLIC_API_URL || '').replace(/\/$/, '');
-        const endpoint = '/api/v1/itinerary/generate-recommendations';
-        const url = apiBase.endsWith('/api/v1') ? `${apiBase}/itinerary/generate-recommendations` : `${apiBase}${endpoint}`;
+        const endpoint = '/api/v1/itinerary/generate';
+        const url = apiBase.endsWith('/api/v1') ? `${apiBase}/itinerary/generate` : `${apiBase}${endpoint}`;
         const aiRes = await axios.post(url, {
           destination: cities[0] || countries[0],
           duration: dateRange?.to && dateRange.from ? (dateRange.to.getTime() - dateRange.from.getTime()) / (1000 * 3600 * 24) + 1 : 1,
