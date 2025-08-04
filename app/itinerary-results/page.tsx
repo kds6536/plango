@@ -8,73 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
 import { Calendar, MapPin, Clock, Sparkles, Heart, Star, Users, Navigation } from "lucide-react"
 import { useLanguageStore } from "@/lib/language-store"
-
-const translations = {
-  ko: {
-    title: "🎉 완성된 여행 일정",
-    subtitle: "AI가 최적 동선으로 구성한 나만의 여행 계획을 확인해보세요",
-    tabs: {
-      timeline: "📅 일정표",
-      map: "🗺️ 지도",
-      diary: "📔 다이어리"
-    },
-    timeline: {
-      title: "날짜별 일정표",
-      day: "일차",
-      duration: "소요시간",
-      travel: "이동시간",
-      totalTime: "총 시간"
-    },
-    map: {
-      title: "여행 경로 지도",
-      loading: "지도를 로딩 중입니다...",
-      route: "이동 경로"
-    },
-    diary: {
-      title: "나만의 여행 다이어리",
-      subtitle: "특별한 순간들을 기록해보세요",
-      tip: "오늘의 팁"
-    },
-    noData: "일정 데이터가 없습니다.",
-    backToStart: "처음으로 돌아가기",
-    loading: "일정을 생성하고 있습니다...",
-    share: "공유하기",
-    save: "저장하기",
-    download: "PDF 다운로드"
-  },
-  en: {
-    title: "🎉 Your Complete Itinerary", 
-    subtitle: "Check out your personalized travel plan optimized by AI",
-    tabs: {
-      timeline: "📅 Timeline",
-      map: "🗺️ Map", 
-      diary: "📔 Diary"
-    },
-    timeline: {
-      title: "Daily Schedule",
-      day: "Day",
-      duration: "Duration", 
-      travel: "Travel Time",
-      totalTime: "Total Time"
-    },
-    map: {
-      title: "Travel Route Map",
-      loading: "Loading map...",
-      route: "Route"
-    },
-    diary: {
-      title: "My Travel Diary",
-      subtitle: "Record your special moments",
-      tip: "Today's Tip"
-    },
-    noData: "No itinerary data found.",
-    backToStart: "Back to Start",
-    loading: "Creating your itinerary...",
-    share: "Share",
-    save: "Save", 
-    download: "Download PDF"
-  }
-}
+import { useTranslations } from "@/components/language-wrapper"
 
 interface Place {
   place_id: string
@@ -102,7 +36,7 @@ export default function ItineraryResultsPage() {
   const [activeTab, setActiveTab] = useState("timeline")
   const router = useRouter()
   const { language } = useLanguageStore()
-  const t = translations[language as keyof typeof translations] || translations.ko
+  const t = useTranslations()
 
   useEffect(() => {
     // localStorage에서 선택된 장소와 여행 정보 읽기
@@ -117,13 +51,13 @@ export default function ItineraryResultsPage() {
         }
 
         const places: Place[] = JSON.parse(selectedPlacesData)
-        const travelInfo = travelInfoData ? JSON.parse(travelInfoData) : { duration: 3 }
+        const travelInfo = travelInfoData ? JSON.parse(travelInfoData) : { total_duration: 3 }
         
         console.log("선택된 장소들:", places)
         console.log("여행 정보:", travelInfo)
         
         // v6.0: 간단한 일정 생성 (실제로는 AI API 호출)
-        const generatedItinerary = generateItinerary(places, travelInfo.duration || 3)
+        const generatedItinerary = generateItinerary(places, travelInfo.total_duration || 3)
         setSelectedPlaces(places)
         setItinerary(generatedItinerary)
         
@@ -171,7 +105,7 @@ export default function ItineraryResultsPage() {
           <div className="animate-spin rounded-full h-24 w-24 border-t-4 border-b-4 border-blue-500"></div>
           <Sparkles className="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 h-8 w-8 text-blue-500" />
         </div>
-        <h2 className="text-2xl font-bold text-center">{t.loading}</h2>
+        <h2 className="text-2xl font-bold text-center">{t.itineraryResults.loading}</h2>
         <p className="text-gray-600 dark:text-gray-300 text-center max-w-md">
           선택하신 장소들을 기반으로 최적의 동선과 일정을 계산하고 있습니다...
         </p>
@@ -183,10 +117,10 @@ export default function ItineraryResultsPage() {
     return (
       <div className="flex flex-col items-center justify-center min-h-[60vh] space-y-6">
         <div className="text-6xl">😅</div>
-        <h2 className="text-2xl font-bold text-center">{t.noData}</h2>
+        <h2 className="text-2xl font-bold text-center">{t.itineraryResults.noData}</h2>
         <Button onClick={() => router.replace("/create-itinerary")} size="lg">
           <Navigation className="mr-2 h-5 w-5" />
-          {t.backToStart}
+          {t.itineraryResults.backToStart}
         </Button>
       </div>
     )
@@ -196,22 +130,22 @@ export default function ItineraryResultsPage() {
     <div className="container mx-auto px-4 py-8 max-w-6xl">
       {/* 헤더 */}
       <div className="text-center mb-8">
-        <h1 className="text-4xl font-bold mb-4">{t.title}</h1>
-        <p className="text-gray-600 dark:text-gray-300 text-lg">{t.subtitle}</p>
+        <h1 className="text-4xl font-bold mb-4">{t.itineraryResults.title}</h1>
+        <p className="text-gray-600 dark:text-gray-300 text-lg">{t.itineraryResults.subtitle}</p>
         
         {/* 액션 버튼들 */}
         <div className="flex justify-center gap-4 mt-6">
           <Button variant="outline" size="sm">
             <Heart className="mr-2 h-4 w-4" />
-            {t.save}
+            {t.itineraryResults.save}
           </Button>
           <Button variant="outline" size="sm">
             <Users className="mr-2 h-4 w-4" />
-            {t.share}
+            {t.itineraryResults.share}
           </Button>
           <Button variant="outline" size="sm">
             <Calendar className="mr-2 h-4 w-4" />
-            {t.download}
+            {t.itineraryResults.download}
           </Button>
         </div>
       </div>
@@ -220,13 +154,13 @@ export default function ItineraryResultsPage() {
       <Tabs value={activeTab} onValueChange={setActiveTab} className="w-full">
         <TabsList className="grid w-full grid-cols-3 mb-8">
           <TabsTrigger value="timeline" className="text-lg py-3">
-            {t.tabs.timeline}
+            {t.itineraryResults.tabs.timeline}
           </TabsTrigger>
           <TabsTrigger value="map" className="text-lg py-3">
-            {t.tabs.map}
+            {t.itineraryResults.tabs.map}
           </TabsTrigger>
           <TabsTrigger value="diary" className="text-lg py-3">
-            {t.tabs.diary}
+            {t.itineraryResults.tabs.diary}
           </TabsTrigger>
         </TabsList>
 
@@ -236,7 +170,7 @@ export default function ItineraryResultsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <Calendar className="h-6 w-6 text-blue-500" />
-                {t.timeline.title}
+                {t.itineraryResults.timeline.title}
               </CardTitle>
             </CardHeader>
             <CardContent className="space-y-6">
@@ -247,12 +181,12 @@ export default function ItineraryResultsPage() {
                       {day.day}
                     </div>
                     <div>
-                      <h3 className="text-xl font-bold">{t.timeline.day} {day.day}</h3>
+                      <h3 className="text-xl font-bold">{t.itineraryResults.timeline.day} {day.day}</h3>
                       <p className="text-gray-600 dark:text-gray-300">{day.date}</p>
                       <Badge variant="outline" className="mt-1">{day.theme}</Badge>
                     </div>
                     <div className="ml-auto text-right">
-                      <div className="text-sm text-gray-500">{t.timeline.totalTime}</div>
+                      <div className="text-sm text-gray-500">{t.itineraryResults.timeline.totalTime}</div>
                       <div className="font-semibold">{day.totalTime}</div>
                     </div>
                   </div>
@@ -285,7 +219,7 @@ export default function ItineraryResultsPage() {
                             </div>
                           </div>
                           <div className="text-right">
-                            <div className="text-sm text-gray-500">{t.timeline.duration}</div>
+                            <div className="text-sm text-gray-500">{t.itineraryResults.timeline.duration}</div>
                             <div className="font-semibold">1-2시간</div>
                             {placeIndex < day.places.length - 1 && (
                               <div className="text-xs text-blue-500 mt-1">
@@ -310,14 +244,14 @@ export default function ItineraryResultsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2">
                 <MapPin className="h-6 w-6 text-green-500" />
-                {t.map.title}
+                {t.itineraryResults.map.title}
               </CardTitle>
             </CardHeader>
             <CardContent>
               <div className="bg-gray-100 dark:bg-gray-800 rounded-lg h-96 flex items-center justify-center">
                 <div className="text-center">
                   <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">{t.map.loading}</p>
+                  <p className="text-gray-500">{t.itineraryResults.map.loading}</p>
                   <p className="text-sm text-gray-400 mt-2">
                     Google Maps API 연동 예정
                   </p>
@@ -353,10 +287,10 @@ export default function ItineraryResultsPage() {
             <CardHeader>
               <CardTitle className="flex items-center gap-2 font-serif">
                 <Sparkles className="h-6 w-6 text-amber-500" />
-                {t.diary.title}
+                {t.itineraryResults.diary.title}
               </CardTitle>
               <p className="text-gray-600 dark:text-gray-300 font-serif italic">
-                {t.diary.subtitle}
+                {t.itineraryResults.diary.subtitle}
               </p>
             </CardHeader>
             <CardContent className="space-y-8">
@@ -388,7 +322,7 @@ export default function ItineraryResultsPage() {
                       
                       <div className="bg-amber-100 dark:bg-amber-900/20 p-4 rounded-lg mt-4">
                         <h4 className="font-serif font-semibold text-amber-800 dark:text-amber-200 mb-2">
-                          💡 {t.diary.tip}
+                          💡 {t.itineraryResults.diary.tip}
                         </h4>
                         <p className="text-amber-700 dark:text-amber-300 font-serif">
                           {day.places.length > 1 

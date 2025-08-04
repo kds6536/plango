@@ -249,6 +249,97 @@ const translations = {
         items: ["자주 묻는 질문", "문의하기", "이용약관", "개인정보처리방침"]
       },
       copyright: "© 2025 Plan Go. All rights reserved."
+    },
+    createItinerary: {
+      title: "✈️ 여행 일정 만들기",
+      subtitle: "국가, 도시, 기간을 선택하면 AI가 맞춤형 여행 일정을 생성해드립니다",
+      cardTitle: "🌟 여행 정보 입력",
+      country: "🌍 국가",
+      countryPlaceholder: "국가를 선택하세요",
+      city: "🏙️ 도시",
+      cityPlaceholder: "도시를 입력하세요",
+      startDate: "📅 시작일",
+      endDate: "📅 종료일",
+      datePlaceholder: "날짜를 선택하세요",
+      addDestination: "➕ 목적지 추가",
+      removeDestination: "❌ 삭제",
+      generateButton: "🎯 일정 생성하기",
+      generating: "AI가 최적의 여행 코스를 생성 중입니다...",
+      generatingSubtitle: "잠시만 기다려주세요! 평균 15초 내로 완료됩니다.",
+      validationError: "국가, 도시, 시작일, 종료일을 모두 입력해주세요.",
+      destination: "목적지",
+      duration: "기간",
+      countries: {
+        southKorea: "대한민국",
+        japan: "일본",
+        china: "중국",
+        thailand: "태국",
+        vietnam: "베트남",
+        singapore: "싱가포르",
+        malaysia: "말레이시아",
+        philippines: "필리핀",
+        indonesia: "인도네시아",
+        france: "프랑스",
+        italy: "이탈리아",
+        spain: "스페인",
+        germany: "독일",
+        uk: "영국",
+        usa: "미국",
+        canada: "캐나다",
+        australia: "호주",
+        newZealand: "뉴질랜드"
+      }
+    },
+    recommendations: {
+      title: "🎉 완성된 장소 추천",
+      subtitle: "AI가 엄선한 테마별 장소들을 확인하고 원하는 곳을 선택해보세요",
+      tabs: {
+        tourism: "🏛️ 관광",
+        food: "🍴 음식",
+        activity: "🎯 액티비티",
+        accommodation: "🏨 숙박"
+      },
+      selectButton: "선택하기",
+      selectedButton: "선택됨",
+      selectedPlaces: "선택된 장소",
+      createItinerary: "나만의 일정 만들기",
+      rating: "평점",
+      reviews: "리뷰",
+      loading: "추천 장소를 불러오는 중입니다...",
+      noData: "추천 장소가 없습니다.",
+      backToInput: "처음으로 돌아가기"
+    },
+    itineraryResults: {
+      title: "🎉 완성된 여행 일정",
+      subtitle: "AI가 최적 동선으로 구성한 나만의 여행 계획을 확인해보세요",
+      tabs: {
+        timeline: "📅 일정표",
+        map: "🗺️ 지도",
+        diary: "📔 다이어리"
+      },
+      timeline: {
+        title: "날짜별 일정표",
+        day: "일차",
+        duration: "소요시간",
+        travel: "이동시간",
+        totalTime: "총 시간"
+      },
+      map: {
+        title: "여행 경로 지도",
+        loading: "지도를 로딩 중입니다...",
+        route: "이동 경로"
+      },
+      diary: {
+        title: "나만의 여행 다이어리",
+        subtitle: "특별한 순간들을 기록해보세요",
+        tip: "오늘의 팁"
+      },
+      noData: "일정 데이터가 없습니다.",
+      backToStart: "처음으로 돌아가기",
+      loading: "일정을 생성하고 있습니다...",
+      share: "공유하기",
+      save: "저장하기",
+      download: "PDF 다운로드"
     }
   },
   en: {
@@ -495,6 +586,97 @@ const translations = {
         items: ["FAQ", "Contact Us", "Terms of Service", "Privacy Policy"]
       },
       copyright: "© 2025 Plan Go. All rights reserved."
+    },
+    createItinerary: {
+      title: "✈️ Create Itinerary",
+      subtitle: "Select country, city, and dates, and AI will create a personalized travel itinerary for you",
+      cardTitle: "🌟 Enter Travel Information",
+      country: "🌍 Country",
+      countryPlaceholder: "Select a country",
+      city: "🏙️ City",
+      cityPlaceholder: "Enter a city",
+      startDate: "📅 Start Date",
+      endDate: "📅 End Date",
+      datePlaceholder: "Select a date",
+      addDestination: "➕ Add Destination",
+      removeDestination: "❌ Remove",
+      generateButton: "🎯 Generate Itinerary",
+      generating: "AI is creating the optimal travel route...",
+      generatingSubtitle: "Please wait a moment! This usually takes about 15 seconds.",
+      validationError: "Please enter country, city, start date, and end date.",
+      destination: "Destination",
+      duration: "Duration",
+      countries: {
+        southKorea: "South Korea",
+        japan: "Japan",
+        china: "China",
+        thailand: "Thailand",
+        vietnam: "Vietnam",
+        singapore: "Singapore",
+        malaysia: "Malaysia",
+        philippines: "Philippines",
+        indonesia: "Indonesia",
+        france: "France",
+        italy: "Italy",
+        spain: "Spain",
+        germany: "Germany",
+        uk: "United Kingdom",
+        usa: "United States",
+        canada: "Canada",
+        australia: "Australia",
+        newZealand: "New Zealand"
+      }
+    },
+    recommendations: {
+      title: "🎉 Complete Place Recommendations",
+      subtitle: "Check out AI-curated themed places and select your favorites",
+      tabs: {
+        tourism: "🏛️ Tourism",
+        food: "🍴 Food",
+        activity: "🎯 Activities",
+        accommodation: "🏨 Accommodation"
+      },
+      selectButton: "Select",
+      selectedButton: "Selected",
+      selectedPlaces: "Selected Places",
+      createItinerary: "Create My Itinerary",
+      rating: "Rating",
+      reviews: "Reviews",
+      loading: "Loading recommended places...",
+      noData: "No recommended places available.",
+      backToInput: "Back to Input"
+    },
+    itineraryResults: {
+      title: "🎉 Your Complete Itinerary",
+      subtitle: "Check out your personalized travel plan optimized by AI",
+      tabs: {
+        timeline: "📅 Timeline",
+        map: "🗺️ Map",
+        diary: "📔 Diary"
+      },
+      timeline: {
+        title: "Daily Schedule",
+        day: "Day",
+        duration: "Duration",
+        travel: "Travel Time",
+        totalTime: "Total Time"
+      },
+      map: {
+        title: "Travel Route Map",
+        loading: "Loading map...",
+        route: "Route"
+      },
+      diary: {
+        title: "My Travel Diary",
+        subtitle: "Record your special moments",
+        tip: "Today's Tip"
+      },
+      noData: "No itinerary data found.",
+      backToStart: "Back to Start",
+      loading: "Creating your itinerary...",
+      share: "Share",
+      save: "Save",
+      download: "Download PDF"
     }
   },
   zh: {
@@ -685,6 +867,97 @@ const translations = {
         items: ["常见问题", "联系我们", "服务条款", "隐私政策"]
       },
       copyright: "© 2025 Plan Go. All rights reserved."
+    },
+    createItinerary: {
+      title: "✈️ 制定旅行计划",
+      subtitle: "选择国家、城市和日期，AI将为您创建个性化旅行计划",
+      cardTitle: "🌟 输入旅行信息",
+      country: "🌍 国家",
+      countryPlaceholder: "选择国家",
+      city: "🏙️ 城市",
+      cityPlaceholder: "输入城市",
+      startDate: "📅 开始日期",
+      endDate: "📅 结束日期",
+      datePlaceholder: "选择日期",
+      addDestination: "➕ 添加目的地",
+      removeDestination: "❌ 删除",
+      generateButton: "🎯 生成行程",
+      generating: "AI正在创建最佳旅行路线...",
+      generatingSubtitle: "请稍等！通常需要约15秒。",
+      validationError: "请输入国家、城市、开始日期和结束日期。",
+      destination: "目的地",
+      duration: "持续时间",
+      countries: {
+        southKorea: "韩国",
+        japan: "日本",
+        china: "中国",
+        thailand: "泰国",
+        vietnam: "越南",
+        singapore: "新加坡",
+        malaysia: "马来西亚",
+        philippines: "菲律宾",
+        indonesia: "印度尼西亚",
+        france: "法国",
+        italy: "意大利",
+        spain: "西班牙",
+        germany: "德国",
+        uk: "英国",
+        usa: "美国",
+        canada: "加拿大",
+        australia: "澳大利亚",
+        newZealand: "新西兰"
+      }
+    },
+    recommendations: {
+      title: "🎉 完整地点推荐",
+      subtitle: "查看AI精选的主题地点并选择您的最爱",
+      tabs: {
+        tourism: "🏛️ 旅游",
+        food: "🍴 美食",
+        activity: "🎯 活动",
+        accommodation: "🏨 住宿"
+      },
+      selectButton: "选择",
+      selectedButton: "已选择",
+      selectedPlaces: "已选择的地点",
+      createItinerary: "创建我的行程",
+      rating: "评分",
+      reviews: "评价",
+      loading: "正在加载推荐地点...",
+      noData: "没有可用的推荐地点。",
+      backToInput: "返回输入"
+    },
+    itineraryResults: {
+      title: "🎉 您的完整行程",
+      subtitle: "查看AI优化的个性化旅行计划",
+      tabs: {
+        timeline: "📅 时间表",
+        map: "🗺️ 地图",
+        diary: "📔 日记"
+      },
+      timeline: {
+        title: "每日行程",
+        day: "第",
+        duration: "持续时间",
+        travel: "旅行时间",
+        totalTime: "总时间"
+      },
+      map: {
+        title: "旅行路线图",
+        loading: "正在加载地图...",
+        route: "路线"
+      },
+      diary: {
+        title: "我的旅行日记",
+        subtitle: "记录您的特殊时刻",
+        tip: "今日提示"
+      },
+      noData: "没有找到行程数据。",
+      backToStart: "返回开始",
+      loading: "正在创建您的行程...",
+      share: "分享",
+      save: "保存",
+      download: "下载PDF"
     }
   },
   ja: {
@@ -873,6 +1146,97 @@ const translations = {
         items: ["よくある質問", "お問い合わせ", "利用規約", "プライバシーポリシー"]
       },
       copyright: "© 2025 Plan Go. All rights reserved."
+    },
+    createItinerary: {
+      title: "✈️ 旅行プランを作成",
+      subtitle: "国、都市、日付を選択すると、AIがパーソナライズされた旅行プランを作成します",
+      cardTitle: "🌟 旅行情報を入力",
+      country: "🌍 国",
+      countryPlaceholder: "国を選択",
+      city: "🏙️ 都市",
+      cityPlaceholder: "都市を入力",
+      startDate: "📅 開始日",
+      endDate: "📅 終了日",
+      datePlaceholder: "日付を選択",
+      addDestination: "➕ 目的地を追加",
+      removeDestination: "❌ 削除",
+      generateButton: "🎯 旅程を生成",
+      generating: "AIが最適な旅行ルートを作成中...",
+      generatingSubtitle: "少々お待ちください！通常約15秒で完了します。",
+      validationError: "国、都市、開始日、終了日を入力してください。",
+      destination: "目的地",
+      duration: "期間",
+      countries: {
+        southKorea: "韓国",
+        japan: "日本",
+        china: "中国",
+        thailand: "タイ",
+        vietnam: "ベトナム",
+        singapore: "シンガポール",
+        malaysia: "マレーシア",
+        philippines: "フィリピン",
+        indonesia: "インドネシア",
+        france: "フランス",
+        italy: "イタリア",
+        spain: "スペイン",
+        germany: "ドイツ",
+        uk: "イギリス",
+        usa: "アメリカ",
+        canada: "カナダ",
+        australia: "オーストラリア",
+        newZealand: "ニュージーランド"
+      }
+    },
+    recommendations: {
+      title: "🎉 完全な場所の推薦",
+      subtitle: "AI厳選のテーマ別スポットをチェックしてお気に入りを選択",
+      tabs: {
+        tourism: "🏛️ 観光",
+        food: "🍴 グルメ",
+        activity: "🎯 アクティビティ",
+        accommodation: "🏨 宿泊"
+      },
+      selectButton: "選択",
+      selectedButton: "選択済み",
+      selectedPlaces: "選択した場所",
+      createItinerary: "私の旅程を作成",
+      rating: "評価",
+      reviews: "レビュー",
+      loading: "おすすめスポットを読み込み中...",
+      noData: "おすすめスポットがありません。",
+      backToInput: "入力に戻る"
+    },
+    itineraryResults: {
+      title: "🎉 完成した旅程",
+      subtitle: "AIが最適化したパーソナライズされた旅行計画をご確認ください",
+      tabs: {
+        timeline: "📅 タイムライン",
+        map: "🗺️ 地図",
+        diary: "📔 日記"
+      },
+      timeline: {
+        title: "日程表",
+        day: "日目",
+        duration: "所要時間",
+        travel: "移動時間",
+        totalTime: "総時間"
+      },
+      map: {
+        title: "旅行ルート地図",
+        loading: "地図を読み込み中...",
+        route: "ルート"
+      },
+      diary: {
+        title: "私の旅行日記",
+        subtitle: "特別な瞬間を記録しましょう",
+        tip: "今日のヒント"
+      },
+      noData: "旅程データが見つかりません。",
+      backToStart: "最初に戻る",
+      loading: "旅程を作成中...",
+      share: "共有",
+      save: "保存",
+      download: "PDFダウンロード"
     }
   },
   vi: {
@@ -1122,257 +1486,439 @@ const translations = {
         items: ["Câu hỏi thường gặp", "Liên hệ", "Điều khoản Dịch vụ", "Chính sách Bảo mật"]
       },
       copyright: "© 2025 Plan Go. All rights reserved."
-    }
-  },
-  id: {
-    logo: "Plan Go",
-    nav: {
-      createItinerary: "Buat Itinerary",
-      destinations: "Destinasi Populer",
-      community: "Komunitas Travel",
-      pricing: "Harga",
-      home: "Beranda",
-      profile: "Akun Saya",
     },
-    auth: {
-      login: "Masuk",
-      signup: "Daftar",
-    },
-    form: {
-      email: "Alamat Email",
-      emailPlaceholder: "example@email.com",
-      password: "Kata Sandi",
-      passwordPlaceholder: "Masukkan kata sandi Anda",
-      forgotPassword: "Lupa Kata Sandi",
-      or: "atau",
-      noAccount: "Belum punya akun?",
-      haveAccount: "Sudah punya akun?",
-      firstName: "Nama Depan",
-      lastName: "Nama Belakang",
-      confirmPassword: "Konfirmasi Kata Sandi",
-      confirmPasswordPlaceholder: "Masukkan ulang kata sandi",
-      phone: "Nomor Telepon (Opsional)",
-      phonePlaceholder: "010-1234-5678",
-      terms: "Saya setuju dengan Syarat Layanan (Wajib)",
-      privacy: "Saya setuju dengan Kebijakan Privasi (Wajib)",
-      marketing: "Saya setuju menerima informasi marketing (Opsional)",
-    },
-    social: {
-      google: "Masuk dengan Google",
-      kakao: "Masuk dengan Kakao",
-      apple: "Masuk dengan Apple",
-      googleSignup: "Daftar dengan Google",
-      kakaoSignup: "Daftar dengan Kakao",
-      appleSignup: "Daftar dengan Apple",
-    },
-    welcome: {
-      title: "Selamat datang di Plan Go!",
-      subtitle: "Rencanakan perjalanan sempurna dengan AI",
-    },
-    hero: {
-      title: "Perjalanan kustom bertenaga AI",
-      subtitle: "Ciptakan perjalanan yang tak terlupakan",
-      cta: "Rencanakan perjalanan Anda sekarang",
-    },
-    features: {
-      title: "Rasakan Keunggulan Plan Go",
-      subtitle: "Mengapa Plan Go berbeda dari layanan perencanaan perjalanan lainnya",
-      items: [
-        {
-          title: "Perjalanan Kustom",
-          description: "AI menciptakan rencana perjalanan kustom yang sempurna berdasarkan preferensi, minat, dan anggaran Anda."
-        },
-        {
-          title: "Perencanaan Cepat dan Efisien",
-          description: "Buat itinerary detail dalam hitungan menit untuk menghemat waktu dan tenaga."
-        },
-        {
-          title: "Informasi Terpercaya",
-          description: "Dapatkan informasi terkini tentang destinasi, tempat wisata, dan tips perjalanan."
-        }
-      ]
-    },
-    pricing: {
-      title: "Harga Plan Go",
-      subtitle: "Pilih paket harga yang sempurna untuk kebutuhan perencanaan perjalanan Anda",
-      aiIncluded: "Semua paket termasuk pembuatan itinerary kustom bertenaga AI",
-      free: {
-        name: "Gratis",
-        description: "Perencanaan perjalanan dasar",
-        button: "Paket saat ini",
-        features: {
-          basicContent: "Pembuatan konten perjalanan yang sangat sederhana",
-          basicInfo: "Informasi destinasi dasar",
-          monthlyLimit: "1 itinerary per bulan"
-        }
-      },
-      oneTime: {
-        name: "Tiket sekali pakai",
-        description: "Itinerary sempurna sekali",
-        button: "Beli",
-        features: {
-          oneItinerary: "Buat 1 itinerary perjalanan",
-          detailedContent: "Termasuk konten perjalanan detail",
-          recommendations: "Rekomendasi restoran dan tempat wisata",
-          pdfDownload: "Dukungan unduh PDF"
-        }
-      },
-      premium: {
-        name: "Premium",
-        badge: "Premium",
-        description: "Layanan premium tanpa batas",
-        period: "/ tahun",
-        button: "Berlangganan",
-        features: {
-          unlimited: "Pembuatan itinerary tanpa batas",
-          advanced: "Semua fitur kustomisasi lanjutan",
-          detailedInfo: "Termasuk gambar, tautan dan informasi detail",
-          realTimeEdit: "Pengeditan itinerary real-time",
-          prioritySupport: "Layanan dukungan prioritas"
-        }
-      },
-      comparison: {
-        title: "Perbandingan paket",
-        feature: "Fitur",
-        itineraryCount: "Jumlah pembuatan itinerary",
-        detailLevel: "Tingkat detail",
-        pdfDownload: "Unduh PDF",
-        realTimeEdit: "Pengeditan real-time",
-        prioritySupport: "Dukungan prioritas",
-        monthlyOne: "1 per bulan",
-        oneTime: "1 kali",
-        unlimited: "Tanpa batas",
-        basic: "Dasar",
-        detailed: "Detail",
-        premium: "Premium"
-      },
-      payment: {
-        title: "Metode pembayaran yang didukung",
-        card: "Kartu kredit",
-        cardDesc: "Mendukung semua kartu kredit utama",
-        mobile: "Pembayaran mobile",
-        mobileDesc: "KakaoPay, Toss, NaverPay",
-        bank: "Transfer bank",
-        bankDesc: "Transfer langsung dari rekening bank"
-      },
-      modal: {
-        title: "Informasi pembayaran",
-        cardNumber: "Nomor kartu",
-        expiry: "Tanggal kedaluwarsa",
-        cvc: "CVC",
-        name: "Nama pemegang kartu",
-        namePlaceholder: "John Doe",
-        confirm: "Selesaikan pembayaran"
-      }
-    },
-    destinations: {
-      title: "Destinasi Populer",
-      subtitle: "Temukan destinasi perjalanan terbaik dunia yang dicintai oleh traveler di mana-mana",
-      searchPlaceholder: "Cari kota atau negara...",
-      regionSelect: "Pilih Wilayah",
-      allRegions: "Semua Wilayah",
-      styleSelect: "Gaya Perjalanan",
-      recommendedDuration: "Durasi Rekomendasi",
-      recommendedPeople: "Ukuran Grup Rekomendasi",
-      createItinerary: "Buat Itinerary",
-      viewDetails: "Lihat Detail",
-      loadMore: "Lihat Lebih Banyak Destinasi",
-      regions: {
-        asia: "Asia",
-        europe: "Eropa",
-        northAmerica: "Amerika Utara",
-        southAmerica: "Amerika Selatan",
-        africa: "Afrika",
-        oceania: "Oseania"
-      },
-      tags: {
-        culture: "Budaya",
-        food: "Makanan",
-        shopping: "Belanja",
-        romantic: "Romantis",
-        art: "Seni",
-        history: "Sejarah",
-        nature: "Alam",
-        healing: "Penyembuhan",
-        beach: "Pantai",
-        city: "Kota",
-        affordable: "Terjangkau",
-        adventure: "Petualangan"
-      },
-      cities: {
-        tokyo: "Tokyo",
-        paris: "Paris",
-        jeju: "Pulau Jeju",
-        newYork: "New York",
-        bangkok: "Bangkok",
-        rome: "Roma"
-      },
+    createItinerary: {
+      title: "✈️ Buat Itinerary",
+      subtitle: "Pilih negara, kota, dan tanggal, AI akan membuat itinerary perjalanan personal untuk Anda",
+      cardTitle: "🌟 Masukkan Informasi Perjalanan",
+      country: "🌍 Negara",
+      countryPlaceholder: "Pilih negara",
+      city: "🏙️ Kota",
+      cityPlaceholder: "Masukkan kota",
+      startDate: "📅 Tanggal Mulai",
+      endDate: "📅 Tanggal Selesai",
+      datePlaceholder: "Pilih tanggal",
+      addDestination: "➕ Tambah Destinasi",
+      removeDestination: "❌ Hapus",
+      generateButton: "🎯 Buat Itinerary",
+      generating: "AI sedang membuat rute perjalanan optimal...",
+      generatingSubtitle: "Mohon tunggu sejenak! Biasanya membutuhkan sekitar 15 detik.",
+      validationError: "Harap masukkan negara, kota, tanggal mulai dan tanggal selesai.",
+      destination: "Destinasi",
+      duration: "Durasi",
       countries: {
+        southKorea: "Korea Selatan",
         japan: "Jepang",
-        france: "Prancis",
-        korea: "Korea Selatan",
-        usa: "Amerika Serikat",
+        china: "China",
         thailand: "Thailand",
-        italy: "Italia"
-      },
-      descriptions: {
-        tokyo: "Kota menawan di mana tradisi dan modernitas berpadu harmonis",
-        paris: "Kota cinta dan seni, destinasi romantis",
-        jeju: "Pulau dengan alam indah dan energi penyembuhan",
-        newYork: "Kota impian, tanah kemungkinan tak terbatas",
-        bangkok: "Destinasi Asia Tenggara dengan makanan lezat dan harga terjangkau",
-        rome: "Kota abadi, harta karun sejarah dan seni"
+        vietnam: "Vietnam",
+        singapore: "Singapore",
+        malaysia: "Malaysia",
+        philippines: "Philippines",
+        indonesia: "Indonesia",
+        france: "Prancis",
+        italy: "Italia",
+        spain: "Spanyol",
+        germany: "Jerman",
+        uk: "Inggris",
+        usa: "Amerika Serikat",
+        canada: "Kanada",
+        australia: "Australia",
+        newZealand: "Selandia Baru"
       }
     },
-    popularItineraries: {
-      title: "Itinerary Populer",
-      subtitle: "Temukan rute perjalanan terbaik yang dipilih oleh traveler di seluruh dunia",
-      viewItinerary: "Lihat Itinerary",
-      itinerary1: {
-        title: "Eksplorasi Tokyo 4 Hari",
-        description: "Rasakan pesona Tokyo di mana tradisi bertemu dengan modernitas. Dari Kuil Sensoji hingga Tokyo Skytree, temukan keindahan sejati Jepang."
-      },
-      itinerary2: {
-        title: "Penemuan Paris 5 Hari",
-        description: "Ciptakan momen romantis di Paris, kota cinta. Bangun kenangan spesial di Menara Eiffel, Museum Louvre, dan Champs-Élysées."
-      },
-      itinerary3: {
-        title: "Perjalanan Budaya Seoul",
-        description: "Alami budaya tradisional dan modern Korea. Dari Istana Gyeongbokgung hingga Gangnam, temukan pesona Seoul yang beragam."
-      }
-    },
-    testimonials: {
-      title: "Ulasan Pengguna",
-      subtitle: "Lihat ulasan nyata dari traveler yang telah menggunakan Plan Go",
-      user1: {
-        name: "Sari Dewi",
-        review: "Plan Go membuat perencanaan perjalanan sempurna saya menjadi sangat mudah! AI ini membantu saya menemukan permata tersembunyi yang tidak akan pernah saya temukan sendiri. Plan Go benar-benar menawarkan pengalaman perjalanan yang luar biasa!",
-        date: "Perjalanan April 2025"
-      },
-      user2: {
-        name: "Budi Santoso",
-        review: "Saya menggunakan Plan Go untuk merencanakan liburan keluarga dan anak-anak juga menyukainya! Dari akomodasi ramah anak hingga aktivitas menyenangkan, perencana perjalanan luar biasa ini memikirkan semua yang kami butuhkan.",
-        date: "Perjalanan Maret 2025"
-      },
-      user3: {
-        name: "Maya Putri",
-        review: "Saya baru-baru ini merencanakan perjalanan backpacking solo dengan Plan Go! Jadwal detail dan rekomendasi terjangkau semuanya sempurna. Terima kasih Plan Go atas pengalaman luar biasa seperti itu!",
-        date: "Perjalanan Mei 2025"
-      }
-    },
-    footer: {
-      description: "Ciptakan perjalanan sempurna dengan perencanaan perjalanan kustom bertenaga AI.",
-      services: {
-        title: "Layanan",
-        items: ["Buat Itinerary", "Harga", "Destinasi Populer"]
-      },
-      support: {
-        title: "Dukungan",
-        items: ["FAQ", "Hubungi Kami", "Syarat Layanan", "Kebijakan Privasi"]
-      },
-      copyright: "© 2025 Plan Go. All rights reserved."
-    }
-  },
+           recommendations: {
+         title: "🎉 Gợi Ý Địa Điểm Hoàn Chỉnh",
+         subtitle: "Xem các địa điểm theo chủ đề do AI tuyển chọn và chọn những nơi yêu thích",
+         tabs: {
+           tourism: "🏛️ Du Lịch",
+           food: "🍴 Ẩm Thực",
+           activity: "🎯 Hoạt Động",
+           accommodation: "🏨 Lưu Trú"
+         },
+         selectButton: "Chọn",
+         selectedButton: "Đã Chọn",
+         selectedPlaces: "Địa Điểm Đã Chọn",
+         createItinerary: "Tạo Lịch Trình Của Tôi",
+         rating: "Đánh Giá",
+         reviews: "Nhận Xét",
+         loading: "Đang tải địa điểm gợi ý...",
+         noData: "Không có địa điểm gợi ý.",
+         backToInput: "Quay Lại Nhập Liệu"
+       },
+       itineraryResults: {
+         title: "🎉 Lịch Trình Hoàn Chỉnh Của Bạn",
+         subtitle: "Xem kế hoạch du lịch cá nhân được AI tối ưu hóa",
+         tabs: {
+           timeline: "📅 Dòng Thời Gian",
+           map: "🗺️ Bản Đồ",
+           diary: "📔 Nhật Ký"
+         },
+         timeline: {
+           title: "Lịch Trình Hàng Ngày",
+           day: "Ngày",
+           duration: "Thời Gian",
+           travel: "Thời Gian Di Chuyển",
+           totalTime: "Tổng Thời Gian"
+         },
+         map: {
+           title: "Bản Đồ Tuyến Du Lịch",
+           loading: "Đang tải bản đồ...",
+           route: "Tuyến Đường"
+         },
+         diary: {
+           title: "Nhật Ký Du Lịch Của Tôi",
+           subtitle: "Ghi lại những khoảnh khắc đặc biệt",
+           tip: "Mẹo Hôm Nay"
+         },
+         noData: "Không tìm thấy dữ liệu lịch trình.",
+         backToStart: "Quay Về Đầu",
+         loading: "Đang tạo lịch trình của bạn...",
+         share: "Chia Sẻ",
+         save: "Lưu",
+         download: "Tải PDF"
+       }
+     },
+   id: {
+     logo: "Plan Go",
+     nav: {
+       createItinerary: "Buat Itinerary",
+       destinations: "Destinasi Populer",
+       community: "Komunitas Travel",
+       pricing: "Harga",
+       home: "Beranda",
+       profile: "Akun Saya",
+     },
+     auth: {
+       login: "Masuk",
+       signup: "Daftar",
+     },
+     form: {
+       email: "Alamat Email",
+       emailPlaceholder: "example@email.com",
+       password: "Kata Sandi",
+       passwordPlaceholder: "Masukkan kata sandi Anda",
+       forgotPassword: "Lupa Kata Sandi",
+       or: "atau",
+       noAccount: "Belum punya akun?",
+       haveAccount: "Sudah punya akun?",
+       firstName: "Nama Depan",
+       lastName: "Nama Belakang",
+       confirmPassword: "Konfirmasi Kata Sandi",
+       confirmPasswordPlaceholder: "Masukkan ulang kata sandi",
+       phone: "Nomor Telepon (Opsional)",
+       phonePlaceholder: "010-1234-5678",
+       terms: "Saya setuju dengan Syarat Layanan (Wajib)",
+       privacy: "Saya setuju dengan Kebijakan Privasi (Wajib)",
+       marketing: "Saya setuju menerima informasi marketing (Opsional)",
+     },
+     social: {
+       google: "Masuk dengan Google",
+       kakao: "Masuk dengan Kakao",
+       apple: "Masuk dengan Apple",
+       googleSignup: "Daftar dengan Google",
+       kakaoSignup: "Daftar dengan Kakao",
+       appleSignup: "Daftar dengan Apple",
+     },
+     welcome: {
+       title: "Selamat datang di Plan Go!",
+       subtitle: "Rencanakan perjalanan sempurna dengan AI",
+     },
+     hero: {
+       title: "Perjalanan kustom bertenaga AI",
+       subtitle: "Ciptakan perjalanan yang tak terlupakan",
+       cta: "Rencanakan perjalanan Anda sekarang",
+     },
+     features: {
+       title: "Rasakan Keunggulan Plan Go",
+       subtitle: "Mengapa Plan Go berbeda dari layanan perencanaan perjalanan lainnya",
+       items: [
+         {
+           title: "Perjalanan Kustom",
+           description: "AI menciptakan rencana perjalanan kustom yang sempurna berdasarkan preferensi, minat, dan anggaran Anda."
+         },
+         {
+           title: "Perencanaan Cepat dan Efisien",
+           description: "Buat itinerary detail dalam hitungan menit untuk menghemat waktu dan tenaga."
+         },
+         {
+           title: "Informasi Terpercaya",
+           description: "Dapatkan informasi terkini tentang destinasi, tempat wisata, dan tips perjalanan."
+         }
+       ]
+     },
+     pricing: {
+       title: "Harga Plan Go",
+       subtitle: "Pilih paket harga yang sempurna untuk kebutuhan perencanaan perjalanan Anda",
+       aiIncluded: "Semua paket termasuk pembuatan itinerary kustom bertenaga AI",
+       free: {
+         name: "Gratis",
+         description: "Perencanaan perjalanan dasar",
+         button: "Paket saat ini",
+         features: {
+           basicContent: "Pembuatan konten perjalanan yang sangat sederhana",
+           basicInfo: "Informasi destinasi dasar",
+           monthlyLimit: "1 itinerary per bulan"
+         }
+       },
+       oneTime: {
+         name: "Tiket sekali pakai",
+         description: "Itinerary sempurna sekali",
+         button: "Beli",
+         features: {
+           oneItinerary: "Buat 1 itinerary perjalanan",
+           detailedContent: "Termasuk konten perjalanan detail",
+           recommendations: "Rekomendasi restoran dan tempat wisata",
+           pdfDownload: "Dukungan unduh PDF"
+         }
+       },
+       premium: {
+         name: "Premium",
+         badge: "Premium",
+         description: "Layanan premium tanpa batas",
+         period: "/ tahun",
+         button: "Berlangganan",
+         features: {
+           unlimited: "Pembuatan itinerary tanpa batas",
+           advanced: "Semua fitur kustomisasi lanjutan",
+           detailedInfo: "Termasuk gambar, tautan dan informasi detail",
+           realTimeEdit: "Pengeditan itinerary real-time",
+           prioritySupport: "Layanan dukungan prioritas"
+         }
+       },
+       comparison: {
+         title: "Perbandingan paket",
+         feature: "Fitur",
+         itineraryCount: "Jumlah pembuatan itinerary",
+         detailLevel: "Tingkat detail",
+         pdfDownload: "Unduh PDF",
+         realTimeEdit: "Pengeditan real-time",
+         prioritySupport: "Dukungan prioritas",
+         monthlyOne: "1 per bulan",
+         oneTime: "1 kali",
+         unlimited: "Tanpa batas",
+         basic: "Dasar",
+         detailed: "Detail",
+         premium: "Premium"
+       },
+       payment: {
+         title: "Metode pembayaran yang didukung",
+         card: "Kartu kredit",
+         cardDesc: "Mendukung semua kartu kredit utama",
+         mobile: "Pembayaran mobile",
+         mobileDesc: "KakaoPay, Toss, NaverPay",
+         bank: "Transfer bank",
+         bankDesc: "Transfer langsung dari rekening bank"
+       },
+       modal: {
+         title: "Informasi pembayaran",
+         cardNumber: "Nomor kartu",
+         expiry: "Tanggal kedaluwarsa",
+         cvc: "CVC",
+         name: "Nama pemegang kartu",
+         namePlaceholder: "John Doe",
+         confirm: "Selesaikan pembayaran"
+       }
+     },
+     destinations: {
+       title: "Destinasi Populer",
+       subtitle: "Temukan destinasi perjalanan terbaik dunia yang dicintai oleh traveler di mana-mana",
+       searchPlaceholder: "Cari kota atau negara...",
+       regionSelect: "Pilih Wilayah",
+       allRegions: "Semua Wilayah",
+       styleSelect: "Gaya Perjalanan",
+       recommendedDuration: "Durasi Rekomendasi",
+       recommendedPeople: "Ukuran Grup Rekomendasi",
+       createItinerary: "Buat Itinerary",
+       viewDetails: "Lihat Detail",
+       loadMore: "Lihat Lebih Banyak Destinasi",
+       regions: {
+         asia: "Asia",
+         europe: "Eropa",
+         northAmerica: "Amerika Utara",
+         southAmerica: "Amerika Selatan",
+         africa: "Afrika",
+         oceania: "Oseania"
+       },
+       tags: {
+         culture: "Budaya",
+         food: "Makanan",
+         shopping: "Belanja",
+         romantic: "Romantis",
+         art: "Seni",
+         history: "Sejarah",
+         nature: "Alam",
+         healing: "Penyembuhan",
+         beach: "Pantai",
+         city: "Kota",
+         affordable: "Terjangkau",
+         adventure: "Petualangan"
+       },
+       cities: {
+         tokyo: "Tokyo",
+         paris: "Paris",
+         jeju: "Pulau Jeju",
+         newYork: "New York",
+         bangkok: "Bangkok",
+         rome: "Roma"
+       },
+       countries: {
+         japan: "Jepang",
+         france: "Prancis",
+         korea: "Korea Selatan",
+         usa: "Amerika Serikat",
+         thailand: "Thailand",
+         italy: "Italia"
+       },
+       descriptions: {
+         tokyo: "Kota menawan di mana tradisi dan modernitas berpadu harmonis",
+         paris: "Kota cinta dan seni, destinasi romantis",
+         jeju: "Pulau dengan alam indah dan energi penyembuhan",
+         newYork: "Kota impian, tanah kemungkinan tak terbatas",
+         bangkok: "Destinasi Asia Tenggara dengan makanan lezat dan harga terjangkau",
+         rome: "Kota abadi, harta karun sejarah dan seni"
+       }
+     },
+     popularItineraries: {
+       title: "Itinerary Populer",
+       subtitle: "Temukan rute perjalanan terbaik yang dipilih oleh traveler di seluruh dunia",
+       viewItinerary: "Lihat Itinerary",
+       itinerary1: {
+         title: "Eksplorasi Tokyo 4 Hari",
+         description: "Rasakan pesona Tokyo di mana tradisi bertemu dengan modernitas. Dari Kuil Sensoji hingga Tokyo Skytree, temukan keindahan sejati Jepang."
+       },
+       itinerary2: {
+         title: "Penemuan Paris 5 Hari",
+         description: "Ciptakan momen romantis di Paris, kota cinta. Bangun kenangan spesial di Menara Eiffel, Museum Louvre, dan Champs-Élysées."
+       },
+       itinerary3: {
+         title: "Perjalanan Budaya Seoul",
+         description: "Alami budaya tradisional dan modern Korea. Dari Istana Gyeongbokgung hingga Gangnam, temukan pesona Seoul yang beragam."
+       }
+     },
+     testimonials: {
+       title: "Ulasan Pengguna",
+       subtitle: "Lihat ulasan nyata dari traveler yang telah menggunakan Plan Go",
+       user1: {
+         name: "Sari Dewi",
+         review: "Plan Go membuat perencanaan perjalanan sempurna saya menjadi sangat mudah! AI ini membantu saya menemukan permata tersembunyi yang tidak akan pernah saya temukan sendiri. Plan Go benar-benar menawarkan pengalaman perjalanan yang luar biasa!",
+         date: "Perjalanan April 2025"
+       },
+       user2: {
+         name: "Budi Santoso",
+         review: "Saya menggunakan Plan Go untuk merencanakan liburan keluarga dan anak-anak juga menyukainya! Dari akomodasi ramah anak hingga aktivitas menyenangkan, perencana perjalanan luar biasa ini memikirkan semua yang kami butuhkan.",
+         date: "Perjalanan Maret 2025"
+       },
+       user3: {
+         name: "Maya Putri",
+         review: "Saya baru-baru ini merencanakan perjalanan backpacking solo dengan Plan Go! Jadwal detail dan rekomendasi terjangkau semuanya sempurna. Terima kasih Plan Go atas pengalaman luar biasa seperti itu!",
+         date: "Perjalanan Mei 2025"
+       }
+     },
+     footer: {
+       description: "Ciptakan perjalanan sempurna dengan perencanaan perjalanan kustom bertenaga AI.",
+       services: {
+         title: "Layanan",
+         items: ["Buat Itinerary", "Harga", "Destinasi Populer"]
+       },
+       support: {
+         title: "Dukungan",
+         items: ["FAQ", "Hubungi Kami", "Syarat Layanan", "Kebijakan Privasi"]
+       },
+       copyright: "© 2025 Plan Go. All rights reserved."
+     },
+     createItinerary: {
+       title: "✈️ Buat Itinerary",
+       subtitle: "Pilih negara, kota, dan tanggal, AI akan membuat itinerary perjalanan personal untuk Anda",
+       cardTitle: "🌟 Masukkan Informasi Perjalanan",
+       country: "🌍 Negara",
+       countryPlaceholder: "Pilih negara",
+       city: "🏙️ Kota",
+       cityPlaceholder: "Masukkan kota",
+       startDate: "📅 Tanggal Mulai",
+       endDate: "📅 Tanggal Selesai",
+       datePlaceholder: "Pilih tanggal",
+       addDestination: "➕ Tambah Destinasi",
+       removeDestination: "❌ Hapus",
+       generateButton: "🎯 Buat Itinerary",
+       generating: "AI sedang membuat rute perjalanan optimal...",
+       generatingSubtitle: "Mohon tunggu sejenak! Biasanya membutuhkan sekitar 15 detik.",
+       validationError: "Harap masukkan negara, kota, tanggal mulai, dan tanggal selesai.",
+       destination: "Destinasi",
+       duration: "Durasi",
+       countries: {
+         southKorea: "Korea Selatan",
+         japan: "Jepang",
+         china: "China",
+         thailand: "Thailand",
+         vietnam: "Vietnam",
+         singapore: "Singapura",
+         malaysia: "Malaysia",
+         philippines: "Filipina",
+         indonesia: "Indonesia",
+         france: "Prancis",
+         italy: "Italia",
+         spain: "Spanyol",
+         germany: "Jerman",
+         uk: "Inggris",
+         usa: "Amerika Serikat",
+         canada: "Kanada",
+         australia: "Australia",
+         newZealand: "Selandia Baru"
+       }
+     },
+     recommendations: {
+       title: "🎉 Rekomendasi Tempat Lengkap",
+       subtitle: "Lihat tempat-tempat bertema yang dipilih AI dan pilih favorit Anda",
+       tabs: {
+         tourism: "🏛️ Wisata",
+         food: "🍴 Kuliner",
+         activity: "🎯 Aktivitas",
+         accommodation: "🏨 Akomodasi"
+       },
+       selectButton: "Pilih",
+       selectedButton: "Terpilih",
+       selectedPlaces: "Tempat Terpilih",
+       createItinerary: "Buat Itinerary Saya",
+       rating: "Rating",
+       reviews: "Ulasan",
+       loading: "Memuat tempat rekomendasi...",
+       noData: "Tidak ada tempat rekomendasi.",
+       backToInput: "Kembali ke Input"
+     },
+     itineraryResults: {
+       title: "🎉 Itinerary Lengkap Anda",
+       subtitle: "Lihat rencana perjalanan personal yang dioptimalkan AI",
+       tabs: {
+         timeline: "📅 Timeline",
+         map: "🗺️ Peta",
+         diary: "📔 Diary"
+       },
+       timeline: {
+         title: "Jadwal Harian",
+         day: "Hari",
+         duration: "Durasi",
+         travel: "Waktu Perjalanan",
+         totalTime: "Total Waktu"
+       },
+       map: {
+         title: "Peta Rute Perjalanan",
+         loading: "Memuat peta...",
+         route: "Rute"
+       },
+       diary: {
+         title: "Diary Perjalanan Saya",
+         subtitle: "Catat momen-momen spesial Anda",
+         tip: "Tips Hari Ini"
+       },
+       noData: "Data itinerary tidak ditemukan.",
+       backToStart: "Kembali ke Awal",
+       loading: "Membuat itinerary Anda...",
+       share: "Bagikan",
+       save: "Simpan",
+       download: "Download PDF"
+     }
+   }
 }
 
 interface LanguageWrapperProps {
