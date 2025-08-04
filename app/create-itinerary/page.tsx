@@ -25,7 +25,7 @@ export default function CreateItineraryPage() {
   const t = useTranslations()
   const router = useRouter()
 
-  const [isLoading, setIsLoading] = useState(false)
+  const [isLoading, setIsLoading] = useState(false) 
   const [destinations, setDestinations] = useState<Destination[]>([
     {
       id: Date.now().toString(),
@@ -198,11 +198,11 @@ export default function CreateItineraryPage() {
         <div className="text-center mb-8">
           <h1 className="text-4xl font-bold text-gray-900 dark:text-white mb-4">
             {t.createItinerary.title}
-          </h1>
+        </h1>
           <p className="text-lg text-gray-600 dark:text-gray-300 max-w-2xl mx-auto">
             {t.createItinerary.subtitle}
-          </p>
-        </div>
+        </p>
+      </div>
 
         {/* 여행 정보 입력 카드 */}
         <Card className="shadow-xl border-0 bg-white/90 dark:bg-gray-800/90 backdrop-blur-sm">
@@ -211,7 +211,7 @@ export default function CreateItineraryPage() {
               <Plane className="h-6 w-6 text-blue-500" />
               {t.createItinerary.cardTitle}
             </CardTitle>
-          </CardHeader>
+        </CardHeader>
           <CardContent className="space-y-6">
             {/* 목적지 리스트 */}
             {destinations.map((destination, index) => (
@@ -253,14 +253,14 @@ export default function CreateItineraryPage() {
                         ))}
                       </SelectContent>
                     </Select>
-                  </div>
+            </div>
 
                   {/* 도시 입력 */}
-                  <div className="space-y-2">
+            <div className="space-y-2">
                     <Label htmlFor={`city-${destination.id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t.createItinerary.city}
                     </Label>
-                    <Input
+                <Input
                       id={`city-${destination.id}`}
                       type="text"
                       placeholder={t.createItinerary.cityPlaceholder}
@@ -268,12 +268,12 @@ export default function CreateItineraryPage() {
                       onChange={(e) => updateDestination(destination.id, 'city', e.target.value)}
                       className="w-full"
                     />
-                  </div>
-                </div>
+              </div>
+            </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   {/* 시작일 */}
-                  <div className="space-y-2">
+            <div className="space-y-2">
                     <Label htmlFor={`start-date-${destination.id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t.createItinerary.startDate}
                     </Label>
@@ -286,16 +286,16 @@ export default function CreateItineraryPage() {
                         className="w-full pl-10"
                       />
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    </div>
-                  </div>
-
+              </div>
+            </div>
+            
                   {/* 종료일 */}
-                  <div className="space-y-2">
+            <div className="space-y-2">
                     <Label htmlFor={`end-date-${destination.id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t.createItinerary.endDate}
                     </Label>
-                    <div className="relative">
-                      <Input
+              <div className="relative">
+                <Input
                         id={`end-date-${destination.id}`}
                         type="date"
                         value={destination.endDate}
@@ -304,10 +304,10 @@ export default function CreateItineraryPage() {
                         min={destination.startDate}
                       />
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                    </div>
-                  </div>
-                </div>
-
+                 </div>
+              </div>
+            </div>
+            
                 {/* 기간 표시 */}
                 {destination.startDate && destination.endDate && (
                   <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
@@ -326,7 +326,7 @@ export default function CreateItineraryPage() {
 
             {/* 목적지 추가 버튼 */}
             <div className="text-center">
-              <Button
+            <Button
                 type="button"
                 variant="outline"
                 onClick={addDestination}
@@ -334,8 +334,8 @@ export default function CreateItineraryPage() {
               >
                 <Plus className="h-5 w-5 mr-2" />
                 {t.createItinerary.addDestination}
-              </Button>
-            </div>
+            </Button>
+          </div>
 
             {/* 총 여행 기간 표시 */}
             {destinations.length > 0 && destinations[0].startDate && destinations[destinations.length - 1].endDate && (
@@ -358,18 +358,18 @@ export default function CreateItineraryPage() {
 
             {/* 일정 생성 버튼 */}
             <div className="text-center pt-6">
-              <Button
+                <Button
                 onClick={handleGenerateItinerary}
                 disabled={!isFormValid}
-                size="lg"
+                  size="lg"
                 className="w-full md:w-auto px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white font-semibold text-lg rounded-xl shadow-lg hover:shadow-xl transform hover:scale-105 transition-all duration-300 disabled:opacity-50 disabled:cursor-not-allowed disabled:transform-none"
-              >
+                >
                 <Sparkles className="h-5 w-5 mr-2" />
                 {t.createItinerary.generateButton}
-              </Button>
-            </div>
-          </CardContent>
-        </Card>
+                </Button>
+              </div>
+            </CardContent>
+          </Card>
       </div>
     </div>
   )

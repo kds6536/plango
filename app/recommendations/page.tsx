@@ -3,10 +3,10 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
-import { Card, CardContent } from "@/components/ui/card"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
-import { Star, MapPin, Users, Clock, Sparkles, ArrowRight } from "lucide-react"
+import { Star, MapPin, Users, Clock, Sparkles, ArrowRight, X, ShoppingCart, Trash2 } from "lucide-react"
 import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
 
@@ -147,6 +147,14 @@ export default function RecommendationsPage() {
     })
   }
 
+  const removePlaceFromSelection = (placeId: string) => {
+    setSelectedPlaces(prev => prev.filter(p => p.place_id !== placeId))
+  }
+
+  const clearAllSelections = () => {
+    setSelectedPlaces([])
+  }
+
   const isPlaceSelected = (place: Place) => {
     return selectedPlaces.some(p => p.place_id === place.place_id)
   }
@@ -218,180 +226,248 @@ export default function RecommendationsPage() {
           </p>
         </div>
 
-        {/* 선택된 장소 플로팅 바 */}
-        {selectedPlaces.length > 0 && (
-          <div className="fixed bottom-6 left-1/2 transform -translate-x-1/2 z-50">
-            <div className="bg-white dark:bg-gray-800 rounded-full shadow-2xl border border-gray-200 dark:border-gray-600 px-6 py-4 flex items-center gap-4">
-              <div className="flex items-center gap-2">
-                <Badge variant="secondary" className="bg-blue-100 text-blue-800 dark:bg-blue-900 dark:text-blue-200">
-                  {selectedPlaces.length}
-                </Badge>
-                <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                  {t.recommendations.selectedPlaces}
-                </span>
-              </div>
-              <Button 
-                onClick={handleCreateItinerary}
-                size="sm"
-                className="bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white rounded-full px-6"
-              >
-                <Sparkles className="h-4 w-4 mr-2" />
-                {t.recommendations.createItinerary}
-              </Button>
-            </div>
-          </div>
-        )}
-
-        {/* 카테고리별 탭 */}
-        <Tabs defaultValue="tourist" className="w-full">
-          <TabsList className="grid w-full grid-cols-4 mb-8 bg-white dark:bg-gray-800 shadow-lg rounded-xl">
-            {categories.map((category) => (
-              <TabsTrigger 
-                key={category.id} 
-                value={category.id}
-                className="text-lg py-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white"
-              >
-                <span className="mr-2">{category.icon}</span>
-                {category.label}
-              </TabsTrigger>
-            ))}
-          </TabsList>
-
-          {categories.map((category) => (
-            <TabsContent key={category.id} value={category.id} className="space-y-6">
-              <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-6">
-                {placesByCategory[category.id as keyof typeof placesByCategory].map((place) => (
-                  <Card 
-                    key={place.place_id} 
-                    className={`overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer ${
-                      isPlaceSelected(place) 
-                        ? 'ring-2 ring-blue-500 shadow-lg bg-blue-50 dark:bg-blue-900/20' 
-                        : 'hover:shadow-md bg-white dark:bg-gray-800'
-                    }`}
-                    onClick={() => togglePlaceSelection(place)}
+        {/* 2컬럼 레이아웃 */}
+        <div className="grid grid-cols-1 lg:grid-cols-4 gap-8">
+          {/* 좌측: 장소 추천 (3/4 너비) */}
+          <div className="lg:col-span-3">
+            {/* 카테고리별 탭 */}
+            <Tabs defaultValue="tourist" className="w-full">
+              <TabsList className="grid w-full grid-cols-4 mb-8 bg-white dark:bg-gray-800 shadow-lg rounded-xl">
+                {categories.map((category) => (
+                  <TabsTrigger 
+                    key={category.id} 
+                    value={category.id}
+                    className="text-lg py-4 data-[state=active]:bg-gradient-to-r data-[state=active]:from-blue-500 data-[state=active]:to-purple-500 data-[state=active]:text-white"
                   >
-                    {/* 이미지 */}
-                    <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
-                      {place.photos && place.photos[0] ? (
-                        <img 
-                          src={place.photos[0]} 
-                          alt={place.name}
-                          className="w-full h-full object-cover"
-                          onError={(e) => {
-                            (e.target as HTMLImageElement).style.display = 'none'
-                          }}
-                        />
-                      ) : (
-                        <div className="w-full h-full flex items-center justify-center text-gray-400">
-                          <MapPin className="h-12 w-12" />
-                        </div>
-                      )}
-                      
-                      {/* 선택 표시 */}
-                      {isPlaceSelected(place) && (
-                        <div className="absolute top-3 right-3 bg-blue-500 text-white rounded-full p-2">
-                          <Star className="h-4 w-4 fill-current" />
-                        </div>
-                      )}
+                    <span className="mr-2">{category.icon}</span>
+                    {category.label}
+                  </TabsTrigger>
+                ))}
+              </TabsList>
 
-                      {/* 가격 레벨 */}
-                      {place.price_level && (
-                        <div className="absolute top-3 left-3 bg-black bg-opacity-70 text-white px-2 py-1 rounded-full text-xs">
-                          {'₩'.repeat(place.price_level)}
-                        </div>
-                      )}
-                    </div>
+              {categories.map((category) => (
+                <TabsContent key={category.id} value={category.id} className="space-y-6">
+                  <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-3 gap-6">
+                    {placesByCategory[category.id as keyof typeof placesByCategory].map((place) => (
+                      <Card 
+                        key={place.place_id} 
+                        className={`overflow-hidden transition-all duration-300 hover:shadow-xl hover:scale-105 cursor-pointer ${
+                          isPlaceSelected(place) 
+                            ? 'ring-2 ring-blue-500 shadow-lg bg-blue-50 dark:bg-blue-900/20' 
+                            : 'hover:shadow-md bg-white dark:bg-gray-800'
+                        }`}
+                        onClick={() => togglePlaceSelection(place)}
+                      >
+                        {/* 이미지 */}
+                        <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
+                          {place.photos && place.photos[0] ? (
+                            <img 
+                              src={place.photos[0]} 
+                              alt={place.name}
+                              className="w-full h-full object-cover"
+                              onError={(e) => {
+                                (e.target as HTMLImageElement).style.display = 'none'
+                              }}
+                            />
+                          ) : (
+                            <div className="w-full h-full flex items-center justify-center text-gray-400">
+                              <MapPin className="h-12 w-12" />
+                            </div>
+                          )}
+                          
+                          {/* 선택 표시 */}
+                          {isPlaceSelected(place) && (
+                            <div className="absolute top-3 right-3 bg-blue-500 text-white rounded-full p-2">
+                              <Star className="h-4 w-4 fill-current" />
+                            </div>
+                          )}
 
-                    <CardContent className="p-4">
-                      {/* 장소명 */}
-                      <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
-                        {place.name}
-                      </h3>
-
-                      {/* 주소 */}
-                      {place.address && (
-                        <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 mb-2">
-                          <MapPin className="h-3 w-3" />
-                          <span className="line-clamp-1">{place.address}</span>
-                        </div>
-                      )}
-
-                      {/* 평점 및 리뷰 수 */}
-                      {place.rating && (
-                        <div className="flex items-center gap-2 mb-3">
-                          <div className="flex items-center gap-1">
-                            <Star className="h-4 w-4 text-yellow-500 fill-current" />
-                            <span className="text-sm font-medium text-gray-900 dark:text-white">
-                              {place.rating.toFixed(1)}
-                            </span>
-                          </div>
-                          {place.user_ratings_total && (
-                            <div className="flex items-center gap-1 text-xs text-gray-500">
-                              <Users className="h-3 w-3" />
-                              <span>
-                                {t.recommendations.reviews} {place.user_ratings_total.toLocaleString()}
-                              </span>
+                          {/* 가격 레벨 */}
+                          {place.price_level && (
+                            <div className="absolute top-3 left-3 bg-black bg-opacity-70 text-white px-2 py-1 rounded-full text-xs">
+                              {'₩'.repeat(place.price_level)}
                             </div>
                           )}
                         </div>
-                      )}
 
-                      {/* 태그 */}
-                      {place.tags && place.tags.length > 0 && (
-                        <div className="flex flex-wrap gap-1 mb-3">
-                          {place.tags.slice(0, 3).map((tag, index) => (
-                            <Badge key={index} variant="secondary" className="text-xs">
-                              {tag}
-                            </Badge>
-                          ))}
-                        </div>
-                      )}
+                        <CardContent className="p-4">
+                          {/* 장소명 */}
+                          <h3 className="text-lg font-semibold text-gray-900 dark:text-white mb-2 line-clamp-2">
+                            {place.name}
+                          </h3>
 
-                      {/* 설명 */}
-                      {place.description && (
-                        <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2">
-                          {place.description}
-                        </p>
-                      )}
+                          {/* 주소 */}
+                          {place.address && (
+                            <div className="flex items-center gap-1 text-sm text-gray-600 dark:text-gray-400 mb-2">
+                              <MapPin className="h-3 w-3" />
+                              <span className="line-clamp-1">{place.address}</span>
+                            </div>
+                          )}
 
-                      {/* 선택 버튼 */}
-                      <div className="mt-4">
-                        <Button 
-                          variant={isPlaceSelected(place) ? "default" : "outline"}
+                          {/* 평점 및 리뷰 수 */}
+                          {place.rating && (
+                            <div className="flex items-center gap-2 mb-3">
+                              <div className="flex items-center gap-1">
+                                <Star className="h-4 w-4 text-yellow-500 fill-current" />
+                                <span className="text-sm font-medium text-gray-900 dark:text-white">
+                                  {place.rating.toFixed(1)}
+                                </span>
+                              </div>
+                              {place.user_ratings_total && (
+                                <div className="flex items-center gap-1 text-xs text-gray-500">
+                                  <Users className="h-3 w-3" />
+                                  <span>
+                                    {t.recommendations.reviews} {place.user_ratings_total.toLocaleString()}
+                                  </span>
+                                </div>
+                              )}
+                            </div>
+                          )}
+
+                          {/* 태그 */}
+                          {place.tags && place.tags.length > 0 && (
+                            <div className="flex flex-wrap gap-1 mb-3">
+                              {place.tags.slice(0, 3).map((tag, index) => (
+                                <Badge key={index} variant="secondary" className="text-xs">
+                                  {tag}
+                                </Badge>
+                              ))}
+                            </div>
+                          )}
+
+                          {/* 설명 */}
+                          {place.description && (
+                            <p className="text-sm text-gray-600 dark:text-gray-400 line-clamp-2 mb-4">
+                              {place.description}
+                            </p>
+                          )}
+
+                          {/* 선택 버튼 */}
+                          <Button 
+                            variant={isPlaceSelected(place) ? "default" : "outline"}
+                            size="sm"
+                            className={`w-full ${
+                              isPlaceSelected(place) 
+                                ? 'bg-blue-500 hover:bg-blue-600 text-white' 
+                                : 'border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                            }`}
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              togglePlaceSelection(place)
+                            }}
+                          >
+                            {isPlaceSelected(place) ? t.recommendations.selectedButton : t.recommendations.selectButton}
+                      </Button>
+                        </CardContent>
+                      </Card>
+                    ))}
+                  </div>
+
+                  {/* 카테고리별 빈 상태 */}
+                  {placesByCategory[category.id as keyof typeof placesByCategory].length === 0 && (
+                    <div className="text-center py-12">
+                      <div className="text-4xl mb-4">{category.icon}</div>
+                      <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
+                        {category.label} 정보가 없습니다
+                      </h3>
+                      <p className="text-gray-600 dark:text-gray-400">
+                        다른 카테고리를 확인해보세요
+                      </p>
+                    </div>
+                  )}
+                </TabsContent>
+              ))}
+            </Tabs>
+          </div>
+
+          {/* 우측: 선택된 장소 관리 사이드바 (1/4 너비) */}
+          <div className="lg:col-span-1">
+            <div className="sticky top-8">
+              <Card className="shadow-xl bg-white dark:bg-gray-800">
+                <CardHeader className="pb-4">
+                  <CardTitle className="flex items-center gap-2 text-lg">
+                    <ShoppingCart className="h-5 w-5 text-blue-500" />
+                    {t.recommendations.selectedPlaces}
+                    <Badge variant="secondary" className="ml-auto">
+                      {selectedPlaces.length}
+                    </Badge>
+                  </CardTitle>
+                </CardHeader>
+                <CardContent className="space-y-4">
+                  {/* 선택된 장소가 없을 때 */}
+                  {selectedPlaces.length === 0 && (
+                    <div className="text-center py-8">
+                      <div className="text-4xl mb-4">🏞️</div>
+                      <p className="text-gray-500 dark:text-gray-400 text-sm">
+                        마음에 드는 장소를 선택해보세요
+                      </p>
+                    </div>
+                  )}
+
+                  {/* 선택된 장소 목록 */}
+                  {selectedPlaces.length > 0 && (
+                    <>
+                      <div className="max-h-96 overflow-y-auto space-y-3">
+                        {selectedPlaces.map((place) => (
+                          <div key={place.place_id} className="bg-gray-50 dark:bg-gray-700 rounded-lg p-3">
+                            <div className="flex items-start justify-between">
+                              <div className="flex-1 min-w-0">
+                                <h4 className="font-medium text-sm text-gray-900 dark:text-white truncate">
+                                  {place.name}
+                                </h4>
+                                <p className="text-xs text-gray-500 dark:text-gray-400 mt-1">
+                                  {place.category}
+                                </p>
+                                {place.rating && (
+                                  <div className="flex items-center gap-1 mt-1">
+                                    <Star className="h-3 w-3 text-yellow-500 fill-current" />
+                                    <span className="text-xs text-gray-600 dark:text-gray-300">
+                                      {place.rating.toFixed(1)}
+                                    </span>
+                                  </div>
+                                )}
+                              </div>
+                              <Button
+                                variant="ghost"
+                                size="sm"
+                                onClick={() => removePlaceFromSelection(place.place_id)}
+                                className="h-8 w-8 p-0 text-red-500 hover:text-red-700 hover:bg-red-50 dark:hover:bg-red-900/20"
+                              >
+                                <X className="h-4 w-4" />
+                              </Button>
+                            </div>
+          </div>
+        ))}
+      </div>
+
+                      {/* 관리 버튼들 */}
+                      <div className="space-y-2 pt-4 border-t border-gray-200 dark:border-gray-600">
+                        <Button
+                          variant="outline"
                           size="sm"
-                          className={`w-full ${
-                            isPlaceSelected(place) 
-                              ? 'bg-blue-500 hover:bg-blue-600 text-white' 
-                              : 'border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                          }`}
-                          onClick={(e) => {
-                            e.stopPropagation()
-                            togglePlaceSelection(place)
-                          }}
+                          onClick={clearAllSelections}
+                          className="w-full text-red-600 border-red-300 hover:bg-red-50 dark:hover:bg-red-900/20"
                         >
-                          {isPlaceSelected(place) ? t.recommendations.selectedButton : t.recommendations.selectButton}
+                          <Trash2 className="h-4 w-4 mr-2" />
+                          전체 선택 취소
                         </Button>
-                      </div>
-                    </CardContent>
-                  </Card>
-                ))}
-              </div>
-
-              {/* 카테고리별 빈 상태 */}
-              {placesByCategory[category.id as keyof typeof placesByCategory].length === 0 && (
-                <div className="text-center py-12">
-                  <div className="text-4xl mb-4">{category.icon}</div>
-                  <h3 className="text-xl font-semibold text-gray-900 dark:text-white mb-2">
-                    {category.label} 정보가 없습니다
-                  </h3>
-                  <p className="text-gray-600 dark:text-gray-400">
-                    다른 카테고리를 확인해보세요
-                  </p>
-                </div>
-              )}
-            </TabsContent>
-          ))}
-        </Tabs>
+                        
+        <Button
+                          onClick={handleCreateItinerary}
+                          size="sm"
+                          className="w-full bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-700 hover:to-purple-700 text-white"
+                        >
+                          <Sparkles className="h-4 w-4 mr-2" />
+                          {t.recommendations.createItinerary}
+        </Button>
+      </div>
+                    </>
+                  )}
+                </CardContent>
+              </Card>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   )

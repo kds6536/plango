@@ -198,7 +198,7 @@ export default function ItineraryResultsPage() {
                           <div className="text-sm font-mono bg-white dark:bg-gray-700 px-2 py-1 rounded">
                             {`${9 + placeIndex * 2}:00`}
                           </div>
-                          <div className="flex-1">
+                <div className="flex-1">
                             <h4 className="font-semibold text-lg">{place.name}</h4>
                             <div className="flex items-center gap-2 mt-1">
                               <MapPin className="h-4 w-4 text-gray-500" />
@@ -271,11 +271,11 @@ export default function ItineraryResultsPage() {
                             dayIndex === 1 ? 'bg-green-500' : 'bg-orange-500'
                           }`} />
                           <span>{place.name}</span>
-                        </div>
-                      ))}
-                    </div>
-                  </div>
-                ))}
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
               </div>
             </CardContent>
           </Card>
@@ -342,8 +342,8 @@ export default function ItineraryResultsPage() {
                   <p className="font-serif text-gray-700 dark:text-gray-300">
                     AI가 추천한 이 일정으로 특별한 추억을 만들어보세요.
                   </p>
-                </div>
-              </div>
+            </div>
+          </div>
             </CardContent>
           </Card>
         </TabsContent>
