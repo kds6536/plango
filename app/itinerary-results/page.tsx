@@ -10,6 +10,7 @@ import { Calendar, MapPin, Clock, Sparkles, Heart, Star, Users, Navigation } fro
 import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
 import SimpleMap from "@/components/simple-map"
+import PDFGenerator from "@/components/pdf-generator"
 
 interface Place {
   place_id: string
@@ -33,6 +34,7 @@ interface ItineraryDay {
 export default function ItineraryResultsPage() {
   const [selectedPlaces, setSelectedPlaces] = useState<Place[]>([])
   const [itinerary, setItinerary] = useState<ItineraryDay[]>([])
+  const [travelInfo, setTravelInfo] = useState<any>({})
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("timeline")
   const router = useRouter()
@@ -52,15 +54,16 @@ export default function ItineraryResultsPage() {
         }
 
         const places: Place[] = JSON.parse(selectedPlacesData)
-        const travelInfo = travelInfoData ? JSON.parse(travelInfoData) : { total_duration: 3 }
+        const parsedTravelInfo = travelInfoData ? JSON.parse(travelInfoData) : { total_duration: 3 }
         
         console.log("선택된 장소들:", places)
-        console.log("여행 정보:", travelInfo)
+        console.log("여행 정보:", parsedTravelInfo)
         
         // v6.0: 간단한 일정 생성 (실제로는 AI API 호출)
-        const generatedItinerary = generateItinerary(places, travelInfo.total_duration || 3)
+        const generatedItinerary = generateItinerary(places, parsedTravelInfo.total_duration || 3)
         setSelectedPlaces(places)
         setItinerary(generatedItinerary)
+        setTravelInfo(parsedTravelInfo)
         
       } catch (error) {
         console.error("일정 데이터 로드 실패:", error)
@@ -144,10 +147,14 @@ export default function ItineraryResultsPage() {
             <Users className="mr-2 h-4 w-4" />
             {t.itineraryResults.share}
           </Button>
-          <Button variant="outline" size="sm">
-            <Calendar className="mr-2 h-4 w-4" />
-            {t.itineraryResults.download}
-          </Button>
+          <PDFGenerator
+            itinerary={itinerary}
+            selectedPlaces={selectedPlaces}
+            travelInfo={travelInfo}
+            onGenerateStart={() => console.log('PDF 생성 시작')}
+            onGenerateComplete={() => console.log('PDF 생성 완료')}
+            onGenerateError={(error) => console.error('PDF 생성 오류:', error)}
+          />
         </div>
       </div>
 
