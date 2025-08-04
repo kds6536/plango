@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar, MapPin, Clock, Sparkles, Heart, Star, Users, Navigation } from "lucide-react"
 import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
+import SimpleMap from "@/components/simple-map"
 
 interface Place {
   place_id: string
@@ -248,15 +249,11 @@ export default function ItineraryResultsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <div className="bg-gray-100 dark:bg-gray-800 rounded-lg h-96 flex items-center justify-center">
-                <div className="text-center">
-                  <MapPin className="h-16 w-16 text-gray-400 mx-auto mb-4" />
-                  <p className="text-gray-500">{t.itineraryResults.map.loading}</p>
-                  <p className="text-sm text-gray-400 mt-2">
-                    Google Maps API 연동 예정
-                  </p>
-                </div>
-              </div>
+              {/* Simple Map 컴포넌트 */}
+              <SimpleMap 
+                places={selectedPlaces} 
+                className="h-96 w-full"
+              />
               
               {/* 경로 요약 */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
@@ -271,11 +268,11 @@ export default function ItineraryResultsPage() {
                             dayIndex === 1 ? 'bg-green-500' : 'bg-orange-500'
                           }`} />
                           <span>{place.name}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      ))}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+                ))}
               </div>
             </CardContent>
           </Card>

@@ -21,6 +21,10 @@ interface Place {
   description?: string
   tags?: string[]
   price_level?: number
+  location?: {
+    lat: number
+    lng: number
+  }
 }
 
 export default function RecommendationsPage() {
@@ -58,6 +62,38 @@ export default function RecommendationsPage() {
       accommodation: ["신라호텔", "롯데호텔", "파크하야트", "그랜드하야트", "워커힐"]
     }
 
+    // 위치 정보 매핑
+    const locations = {
+      tourist: [
+        { lat: 37.5796, lng: 126.9770 }, // 경복궁
+        { lat: 37.5512, lng: 126.9882 }, // N서울타워
+        { lat: 35.1586, lng: 129.1603 }, // 부산 해운대
+        { lat: 33.4584, lng: 126.9426 }, // 제주 성산일출봉
+        { lat: 35.7900, lng: 129.3320 }  // 경주 불국사
+      ],
+      food: [
+        { lat: 37.5636, lng: 126.9834 }, // 명동교자
+        { lat: 37.5704, lng: 126.9999 }, // 광장시장
+        { lat: 35.1796, lng: 129.0756 }, // 부산 국제시장
+        { lat: 33.4996, lng: 126.5312 }, // 제주 흑돼지
+        { lat: 35.8150, lng: 127.1530 }  // 전주 한옥마을
+      ],
+      activity: [
+        { lat: 37.5215, lng: 126.9369 }, // 한강공원
+        { lat: 37.5111, lng: 127.0982 }, // 롯데월드
+        { lat: 37.2944, lng: 127.2024 }, // 에버랜드
+        { lat: 33.4996, lng: 126.5312 }, // 제주 올레길
+        { lat: 38.1197, lng: 128.4653 }  // 설악산
+      ],
+      accommodation: [
+        { lat: 37.5563, lng: 126.9779 }, // 신라호텔
+        { lat: 37.5658, lng: 126.9389 }, // 롯데호텔
+        { lat: 37.5658, lng: 126.9389 }, // 파크하야트
+        { lat: 37.5658, lng: 126.9389 }, // 그랜드하야트
+        { lat: 37.5563, lng: 126.9779 }  // 워커힐
+      ]
+    }
+
     return (baseNames[category as keyof typeof baseNames] || []).map((name, index) => ({
       place_id: `${category}_${index}`,
       name,
@@ -68,7 +104,8 @@ export default function RecommendationsPage() {
       category,
       description: `${name}에 대한 설명입니다.`,
       tags: ["인기", "추천", "핫플레이스"],
-      price_level: Math.floor(Math.random() * 4) + 1
+      price_level: Math.floor(Math.random() * 4) + 1,
+      location: locations[category as keyof typeof locations]?.[index] || { lat: 37.5665, lng: 126.9780 }
     }))
   }
 
