@@ -9,16 +9,12 @@ import { Badge } from "@/components/ui/badge"
 import { Star, MapPin, Users, Clock, Sparkles, ArrowRight, X, ShoppingCart, Trash2 } from "lucide-react"
 import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
+import { PlaceData } from "@/lib/types"
 
-interface Place {
-  place_id: string
-  name: string
-  rating?: number
+// 기존 Place 인터페이스를 PlaceData와 호환되도록 확장
+interface Place extends Omit<PlaceData, 'lat' | 'lng'> {
   user_ratings_total?: number
   photos?: string[]
-  address?: string
-  category?: string
-  description?: string
   tags?: string[]
   price_level?: number
   location?: {
@@ -121,7 +117,7 @@ export default function RecommendationsPage() {
           const placesArray = JSON.parse(recommendationResults)
           console.log("API 데이터 로드:", placesArray)
           
-          // API 데이터를 카테고리별로 분류
+          // v6.0 API 데이터를 카테고리별로 분류 (한국어 카테고리명 지원)
           const categorizedPlaces: {
             tourist: Place[]
             food: Place[]
@@ -134,13 +130,32 @@ export default function RecommendationsPage() {
             accommodation: []
           }
           
-          placesArray.forEach((place: Place) => {
-            const category = place.category?.toLowerCase() || 'tourist'
-            if (categorizedPlaces[category as keyof typeof categorizedPlaces]) {
-              categorizedPlaces[category as keyof typeof categorizedPlaces].push(place)
-            } else {
-              categorizedPlaces.tourist.push(place)
+          placesArray.forEach((place: PlaceData) => {
+            // v6.0 API의 카테고리명을 UI 카테고리로 매핑
+            const categoryMapping: { [key: string]: keyof typeof categorizedPlaces } = {
+              '관광지': 'tourist',
+              '음식점': 'food', 
+              '활동': 'activity',
+              '숙박': 'accommodation',
+              'tourist': 'tourist',
+              'food': 'food',
+              'activity': 'activity',
+              'accommodation': 'accommodation'
             }
+            
+            const category = categoryMapping[place.category?.toLowerCase() || 'tourist'] || 'tourist'
+            
+            // PlaceData를 Place 형식으로 변환
+            const convertedPlace: Place = {
+              ...place,
+              location: place.lat && place.lng ? { lat: place.lat, lng: place.lng } : undefined,
+              photos: [`https://via.placeholder.com/400x300?text=${encodeURIComponent(place.name)}`],
+              tags: ["AI 추천", "인기"],
+              price_level: Math.floor(Math.random() * 4) + 1,
+              user_ratings_total: place.rating ? Math.floor(Math.random() * 1000) + 100 : undefined
+            }
+            
+            categorizedPlaces[category].push(convertedPlace)
           })
           
           setPlacesByCategory(categorizedPlaces)
@@ -202,8 +217,19 @@ export default function RecommendationsPage() {
       return
     }
 
-    // 선택된 장소들과 현재 여행 정보를 저장
-    localStorage.setItem('selectedPlacesForItinerary', JSON.stringify(selectedPlaces))
+    // v6.0: 선택된 장소들을 PlaceData 형식으로 변환하여 저장
+    const selectedPlacesData: PlaceData[] = selectedPlaces.map(place => ({
+      place_id: place.place_id,
+      name: place.name,
+      category: place.category || '',
+      lat: place.location?.lat || place.lat || 0,
+      lng: place.location?.lng || place.lng || 0,
+      rating: place.rating,
+      address: place.address,
+      description: place.description
+    }))
+
+    localStorage.setItem('selectedPlacesForItinerary', JSON.stringify(selectedPlacesData))
     localStorage.setItem('currentTravelInfo', localStorage.getItem('travelInfo') || '{}')
     
     // 결과 페이지로 이동
