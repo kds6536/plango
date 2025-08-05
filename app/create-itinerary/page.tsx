@@ -11,8 +11,9 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPin, Clock, Sparkles, Plane, Plus, X, Calendar } from "lucide-react"
 import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
+import { Destination, ItineraryRequest } from "@/lib/types"
 
-interface Destination {
+interface LocalDestination {
   id: string
   country: string
   city: string
@@ -26,7 +27,7 @@ export default function CreateItineraryPage() {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false) 
-  const [destinations, setDestinations] = useState<Destination[]>([
+  const [destinations, setDestinations] = useState<LocalDestination[]>([
     {
       id: Date.now().toString(),
       country: "",
@@ -64,7 +65,7 @@ export default function CreateItineraryPage() {
     dest.endDate !== ""
   )
 
-  const updateDestination = (id: string, field: keyof Destination, value: string) => {
+  const updateDestination = (id: string, field: keyof LocalDestination, value: string) => {
     setDestinations(prev => prev.map(dest => 
       dest.id === id ? { ...dest, [field]: value } : dest
     ))
@@ -97,6 +98,25 @@ export default function CreateItineraryPage() {
     return diffDays
   }
 
+  const convertToItineraryRequest = (): ItineraryRequest => {
+    const apiDestinations: Destination[] = destinations.map(dest => ({
+      country: dest.country,
+      city: dest.city,
+      start_date: dest.startDate,
+      end_date: dest.endDate
+    }))
+
+    return {
+      destinations: apiDestinations,
+      total_duration: calculateTotalDuration(),
+      travelers_count: 2, // 기본값
+      budget_range: "1000000 KRW", // 기본값
+      travel_style: [],
+      special_requests: "",
+      language_code: language
+    }
+  }
+
   const handleGenerateItinerary = async () => {
     if (!isFormValid) {
       alert(t.createItinerary.validationError)
@@ -106,21 +126,8 @@ export default function CreateItineraryPage() {
     setIsLoading(true)
 
     try {
-      // v6.0: 다중 목적지 지원하는 새로운 요청 데이터 구조
-      const requestBody = {
-        destinations: destinations.map(dest => ({
-          country: dest.country,
-          city: dest.city,
-          start_date: dest.startDate,
-          end_date: dest.endDate
-        })),
-        total_duration: calculateTotalDuration(),
-        travelers_count: 2, // 기본값
-        budget_range: "1000000 KRW", // 기본값
-        travel_style: [],
-        special_requests: "",
-        language_code: language
-      }
+      // v6.0: 새로운 요청 데이터 구조 사용
+      const requestBody = convertToItineraryRequest()
 
       console.log("Request URL:", `${process.env.NEXT_PUBLIC_API_URL}/api/v1/itinerary/generate-recommendations`)
       console.log("Request Body:", JSON.stringify(requestBody, null, 2))
@@ -152,11 +159,8 @@ export default function CreateItineraryPage() {
       
       // API 호출 실패시 더미 데이터로 폴백
       console.warn("API 호출 실패, 더미 데이터로 폴백합니다.")
-      localStorage.setItem('travelInfo', JSON.stringify({
-        destinations: destinations,
-        total_duration: calculateTotalDuration(),
-        language_code: language
-      }))
+      const requestBody = convertToItineraryRequest()
+      localStorage.setItem('travelInfo', JSON.stringify(requestBody))
       
       // 더미 데이터 생성 후 추천 페이지로 이동
       setTimeout(() => {
