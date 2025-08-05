@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
+import axios from "axios"
 import { Button } from "@/components/ui/button"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
@@ -11,7 +12,9 @@ import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
 import SimpleMap from "@/components/simple-map"
 import PDFGenerator from "@/components/pdf-generator"
+import { PlaceData, OptimizeResponse, TravelPlan, DayPlan } from "@/lib/types"
 
+// 기존 인터페이스 유지 (UI 호환성)
 interface Place {
   place_id: string
   name: string
@@ -43,7 +46,7 @@ export default function ItineraryResultsPage() {
 
   useEffect(() => {
     // localStorage에서 선택된 장소와 여행 정보 읽기
-    const loadItineraryData = () => {
+    const loadItineraryData = async () => {
       try {
         const selectedPlacesData = localStorage.getItem('selectedPlacesForItinerary')
         const travelInfoData = localStorage.getItem('currentTravelInfo')
@@ -53,20 +56,24 @@ export default function ItineraryResultsPage() {
           return
         }
 
-        const places: Place[] = JSON.parse(selectedPlacesData)
+        const places: PlaceData[] = JSON.parse(selectedPlacesData)
         const parsedTravelInfo = travelInfoData ? JSON.parse(travelInfoData) : { total_duration: 3 }
         
         console.log("선택된 장소들:", places)
         console.log("여행 정보:", parsedTravelInfo)
         
-        // v6.0: 간단한 일정 생성 (실제로는 AI API 호출)
-        const generatedItinerary = generateItinerary(places, parsedTravelInfo.total_duration || 3)
-        setSelectedPlaces(places)
-        setItinerary(generatedItinerary)
         setTravelInfo(parsedTravelInfo)
+        
+        // v6.0: 실제 /optimize API 호출
+        await generateOptimizedItinerary(places, parsedTravelInfo)
         
       } catch (error) {
         console.error("일정 데이터 로드 실패:", error)
+        // 에러 발생시 더미 데이터로 폴백
+        const places: Place[] = JSON.parse(localStorage.getItem('selectedPlacesForItinerary') || '[]')
+        const fallbackItinerary = generateFallbackItinerary(places, travelInfo.total_duration || 3)
+        setSelectedPlaces(places)
+        setItinerary(fallbackItinerary)
       } finally {
         setTimeout(() => setIsLoading(false), 2000) // 2초 로딩 시뮬레이션
       }
@@ -75,8 +82,77 @@ export default function ItineraryResultsPage() {
     loadItineraryData()
   }, [])
 
-  // 간단한 일정 생성 로직 (실제로는 AI API 호출)
-  const generateItinerary = (places: Place[], duration: number): ItineraryDay[] => {
+  // v6.0: 실제 AI API를 사용한 일정 최적화
+  const generateOptimizedItinerary = async (places: PlaceData[], travelInfo: any) => {
+    try {
+      console.log("v6.0 /optimize API 호출 시작")
+      
+      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      
+      const response = await axios.post(
+        `${apiUrl}/api/v1/itinerary/optimize`,
+        { places },
+        {
+          headers: {
+            'Content-Type': 'application/json',
+          },
+          timeout: 30000, // 30초 타임아웃
+        }
+      )
+
+      if (response.data && response.data.optimized_plan) {
+        console.log("API 응답 받음:", response.data)
+        const optimizedPlan: TravelPlan = response.data.optimized_plan
+        
+        // TravelPlan을 ItineraryDay 형식으로 변환
+        const convertedItinerary = convertTravelPlanToItinerary(optimizedPlan, travelInfo.total_duration)
+        
+        setItinerary(convertedItinerary)
+        setSelectedPlaces(places.map(convertPlaceDataToPlace))
+        
+      } else {
+        throw new Error("최적화된 일정을 받지 못했습니다.")
+      }
+
+    } catch (error) {
+      console.error("API 호출 실패:", error)
+      // 폴백으로 간단한 일정 생성
+      const places_converted = places.map(convertPlaceDataToPlace)
+      const fallbackItinerary = generateFallbackItinerary(places_converted, travelInfo.total_duration || 3)
+      setSelectedPlaces(places_converted)
+      setItinerary(fallbackItinerary)
+    }
+  }
+
+  // PlaceData를 Place로 변환
+  const convertPlaceDataToPlace = (placeData: PlaceData): Place => ({
+    place_id: placeData.place_id,
+    name: placeData.name,
+    rating: placeData.rating,
+    address: placeData.address,
+    category: placeData.category,
+    description: placeData.description,
+    photos: [`https://via.placeholder.com/400x300?text=${encodeURIComponent(placeData.name)}`],
+    tags: ["AI 최적화", "추천"]
+  })
+
+  // TravelPlan을 ItineraryDay로 변환
+  const convertTravelPlanToItinerary = (plan: TravelPlan, duration: number): ItineraryDay[] => {
+    if (!plan.daily_plans || plan.daily_plans.length === 0) {
+      return []
+    }
+
+    return plan.daily_plans.map((dayPlan: DayPlan, index: number) => ({
+      day: dayPlan.day,
+      date: getDateString(index),
+      places: plan.places?.slice(index * Math.ceil(plan.places.length / duration), (index + 1) * Math.ceil(plan.places.length / duration))?.map(convertPlaceDataToPlace) || [],
+      totalTime: dayPlan.estimated_cost || "6-8시간",
+      theme: dayPlan.theme
+    }))
+  }
+
+  // 폴백 일정 생성 로직
+  const generateFallbackItinerary = (places: Place[], duration: number): ItineraryDay[] => {
     const days: ItineraryDay[] = []
     const placesPerDay = Math.ceil(places.length / duration)
     
