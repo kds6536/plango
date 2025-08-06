@@ -6,7 +6,6 @@ import axios from "axios"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Label } from "@/components/ui/label"
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { MapPin, Clock, Sparkles, Plane, Plus, X, Calendar } from "lucide-react"
 import { useLanguageStore } from "@/lib/language-store"
@@ -36,27 +35,6 @@ export default function CreateItineraryPage() {
       endDate: ""
     }
   ])
-
-  const countries = [
-    { value: "southKorea", label: t.createItinerary.countries.southKorea },
-    { value: "japan", label: t.createItinerary.countries.japan },
-    { value: "china", label: t.createItinerary.countries.china },
-    { value: "thailand", label: t.createItinerary.countries.thailand },
-    { value: "vietnam", label: t.createItinerary.countries.vietnam },
-    { value: "singapore", label: t.createItinerary.countries.singapore },
-    { value: "malaysia", label: t.createItinerary.countries.malaysia },
-    { value: "philippines", label: t.createItinerary.countries.philippines },
-    { value: "indonesia", label: t.createItinerary.countries.indonesia },
-    { value: "france", label: t.createItinerary.countries.france },
-    { value: "italy", label: t.createItinerary.countries.italy },
-    { value: "spain", label: t.createItinerary.countries.spain },
-    { value: "germany", label: t.createItinerary.countries.germany },
-    { value: "uk", label: t.createItinerary.countries.uk },
-    { value: "usa", label: t.createItinerary.countries.usa },
-    { value: "canada", label: t.createItinerary.countries.canada },
-    { value: "australia", label: t.createItinerary.countries.australia },
-    { value: "newZealand", label: t.createItinerary.countries.newZealand }
-  ]
 
   const isFormValid = destinations.every(dest => 
     dest.country.trim() !== "" && 
@@ -240,31 +218,27 @@ export default function CreateItineraryPage() {
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                  {/* 국가 선택 */}
+                  {/* 국가 입력 (텍스트 필드로 변경) */}
                   <div className="space-y-2">
                     <Label htmlFor={`country-${destination.id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t.createItinerary.country}
                     </Label>
-                    <Select value={destination.country} onValueChange={(value) => updateDestination(destination.id, 'country', value)}>
-                      <SelectTrigger id={`country-${destination.id}`}>
-                        <SelectValue placeholder={t.createItinerary.countryPlaceholder} />
-                      </SelectTrigger>
-                      <SelectContent>
-                        {countries.map((country) => (
-                          <SelectItem key={country.value} value={country.value}>
-                            {country.label}
-                          </SelectItem>
-                        ))}
-                      </SelectContent>
-                    </Select>
-            </div>
+                    <Input
+                      id={`country-${destination.id}`}
+                      type="text"
+                      placeholder="예: 한국, 일본, 미국, 프랑스..."
+                      value={destination.country}
+                      onChange={(e) => updateDestination(destination.id, 'country', e.target.value)}
+                      className="w-full"
+                    />
+                  </div>
 
                   {/* 도시 입력 */}
-            <div className="space-y-2">
+                  <div className="space-y-2">
                     <Label htmlFor={`city-${destination.id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300">
                       {t.createItinerary.city}
                     </Label>
-                <Input
+                    <Input
                       id={`city-${destination.id}`}
                       type="text"
                       placeholder={t.createItinerary.cityPlaceholder}
@@ -272,15 +246,16 @@ export default function CreateItineraryPage() {
                       onChange={(e) => updateDestination(destination.id, 'city', e.target.value)}
                       className="w-full"
                     />
-              </div>
-            </div>
+                  </div>
+                </div>
 
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                  {/* 시작일 */}
-            <div className="space-y-2">
-                    <Label htmlFor={`start-date-${destination.id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {t.createItinerary.startDate}
-                    </Label>
+                {/* 날짜 범위 선택 (하나의 섹션으로 통합) */}
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    여행 기간
+                  </Label>
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    {/* 시작일 */}
                     <div className="relative">
                       <Input
                         id={`start-date-${destination.id}`}
@@ -290,16 +265,11 @@ export default function CreateItineraryPage() {
                         className="w-full pl-10"
                       />
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-              </div>
-            </div>
-            
-                  {/* 종료일 */}
-            <div className="space-y-2">
-                    <Label htmlFor={`end-date-${destination.id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {t.createItinerary.endDate}
-                    </Label>
-              <div className="relative">
-                <Input
+                    </div>
+                    
+                    {/* 종료일 */}
+                    <div className="relative">
+                      <Input
                         id={`end-date-${destination.id}`}
                         type="date"
                         value={destination.endDate}
@@ -308,9 +278,9 @@ export default function CreateItineraryPage() {
                         min={destination.startDate}
                       />
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
-                 </div>
-              </div>
-            </div>
+                    </div>
+                  </div>
+                </div>
             
                 {/* 기간 표시 */}
                 {destination.startDate && destination.endDate && (
