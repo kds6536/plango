@@ -77,22 +77,18 @@ export default function CreateItineraryPage() {
     return diffDays
   }
 
-  const convertToItineraryRequest = (): ItineraryRequest => {
-    const apiDestinations: Destination[] = destinations.map(dest => ({
-      country: dest.country,
-      city: dest.city,
-      start_date: dest.startDate,
-      end_date: dest.endDate
-    }))
-
+  const convertToPlaceRecommendationRequest = () => {
+    // v6.0: 첫 번째 목적지만 사용 (단순화)
+    const firstDestination = destinations[0]
+    
     return {
-      destinations: apiDestinations,
+      country: firstDestination.country,
+      city: firstDestination.city,
       total_duration: calculateTotalDuration(),
       travelers_count: 2, // 기본값
-      budget_range: "1000000 KRW", // 기본값
-      travel_style: [],
-      special_requests: "",
-      language_code: language
+      budget_range: "medium", // v6.0에 맞는 형식
+      travel_style: ["문화", "액티비티"], // 기본 여행 스타일
+      special_requests: "다양한 명소와 맛집을 포함해주세요"
     }
   }
 
@@ -106,16 +102,16 @@ export default function CreateItineraryPage() {
     setApiError(null) // 이전 에러 상태 초기화
 
     try {
-      // v6.0: 새로운 요청 데이터 구조 사용
-      const requestBody = convertToItineraryRequest()
+      // v6.0: 새로운 장소 추천 API 사용
+      const requestBody = convertToPlaceRecommendationRequest()
 
-      console.log("Request URL:", `${process.env.NEXT_PUBLIC_API_URL}/api/v1/itinerary/generate-recommendations`)
+      console.log("Request URL:", `${process.env.NEXT_PUBLIC_API_URL}/api/v1/place-recommendations/generate`)
       console.log("Request Body:", JSON.stringify(requestBody, null, 2))
 
-      // 실제 API 호출
+      // v6.0 장소 추천 API 호출
       const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
       const response = await axios.post(
-        `${apiUrl}/api/v1/itinerary/generate-recommendations`,
+        `${apiUrl}/api/v1/place-recommendations/generate`,
         requestBody,
         {
           headers: {
@@ -130,10 +126,19 @@ export default function CreateItineraryPage() {
         throw new Error(`서버 응답 오류: ${response?.status || 'Unknown'} ${response?.statusText || ''}`)
       }
 
-      if (response.data && response.data.places) {
-        // 성공: 받은 장소 데이터를 저장하고 추천 페이지로 이동
-        console.log("✅ API 성공:", response.data)
-        localStorage.setItem('recommendationResults', JSON.stringify(response.data.places))
+      if (response.data && response.data.success && response.data.recommendations) {
+        // 성공: v6.0 응답 구조에 맞게 데이터 처리
+        console.log("✅ v6.0 API 성공:", response.data)
+        
+        // v6.0 응답을 기존 형식으로 변환
+        const placesData = {
+          볼거리: response.data.recommendations['볼거리'] || [],
+          먹거리: response.data.recommendations['먹거리'] || [],
+          즐길거리: response.data.recommendations['즐길거리'] || [],
+          숙소: response.data.recommendations['숙소'] || []
+        }
+        
+        localStorage.setItem('recommendationResults', JSON.stringify(placesData))
         localStorage.setItem('travelInfo', JSON.stringify(requestBody))
         router.push('/recommendations')
       } else {
