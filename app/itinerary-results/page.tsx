@@ -40,6 +40,7 @@ export default function ItineraryResultsPage() {
   const [travelInfo, setTravelInfo] = useState<any>({})
   const [isLoading, setIsLoading] = useState(true)
   const [activeTab, setActiveTab] = useState("timeline")
+  const [apiError, setApiError] = useState<string | null>(null)
   const router = useRouter()
   const { language } = useLanguageStore()
   const t = useTranslations()
@@ -84,6 +85,8 @@ export default function ItineraryResultsPage() {
 
   // v6.0: 실제 AI API를 사용한 일정 최적화
   const generateOptimizedItinerary = async (places: PlaceData[], travelInfo: any) => {
+    setApiError(null) // 이전 에러 상태 초기화
+    
     try {
       console.log("v6.0 /optimize API 호출 시작")
       
@@ -100,8 +103,13 @@ export default function ItineraryResultsPage() {
         }
       )
 
+      // HTTP 상태 코드 확인
+      if (!response || response.status !== 200) {
+        throw new Error(`서버 응답 오류: ${response?.status || 'Unknown'} ${response?.statusText || ''}`)
+      }
+
       if (response.data && response.data.optimized_plan) {
-        console.log("API 응답 받음:", response.data)
+        console.log("✅ API 성공:", response.data)
         const optimizedPlan: TravelPlan = response.data.optimized_plan
         
         // TravelPlan을 ItineraryDay 형식으로 변환
@@ -114,8 +122,35 @@ export default function ItineraryResultsPage() {
         throw new Error("최적화된 일정을 받지 못했습니다.")
       }
 
-    } catch (error) {
-      console.error("API 호출 실패:", error)
+    } catch (error: any) {
+      // 상세한 에러 로깅 (개발자용)
+      console.error("❌ Itinerary Optimization API Error Details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          data: error.config?.data
+        }
+      })
+      
+      // 사용자 친화적 에러 메시지 설정
+      let userErrorMessage = "일정 최적화에 실패했습니다. 기본 일정으로 표시됩니다."
+      
+      if (error.code === 'ECONNABORTED') {
+        userErrorMessage = "서버 응답 시간이 초과되었습니다. 기본 일정으로 표시됩니다."
+      } else if (error.response?.status === 422) {
+        userErrorMessage = "선택하신 장소 정보에 문제가 있습니다. 기본 일정으로 표시됩니다."
+      } else if (error.response?.status === 500) {
+        userErrorMessage = "서버에 일시적인 문제가 발생했습니다. 기본 일정으로 표시됩니다."
+      } else if (!navigator.onLine) {
+        userErrorMessage = "인터넷 연결을 확인해 주세요. 기본 일정으로 표시됩니다."
+      }
+      
+      setApiError(userErrorMessage)
+      
       // 폴백으로 간단한 일정 생성
       const places_converted = places.map(convertPlaceDataToPlace)
       const fallbackItinerary = generateFallbackItinerary(places_converted, travelInfo.total_duration || 3)
@@ -247,6 +282,28 @@ export default function ItineraryResultsPage() {
             {t.itineraryResults.tabs.diary}
           </TabsTrigger>
         </TabsList>
+
+        {/* API 에러 메시지 표시 */}
+        {apiError && (
+          <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+            <div className="flex items-center gap-3">
+              <div className="flex-shrink-0">
+                <Sparkles className="h-5 w-5 text-red-500" />
+              </div>
+              <div className="flex-1">
+                <p className="text-red-700 dark:text-red-300 font-medium">
+                  {apiError}
+                </p>
+              </div>
+              <button
+                onClick={() => setApiError(null)}
+                className="flex-shrink-0 p-1 rounded-full hover:bg-red-100 dark:hover:bg-red-800/30 transition-colors"
+              >
+                <Star className="h-4 w-4 text-red-500" />
+              </button>
+            </div>
+          </div>
+        )}
 
         {/* 일정표 뷰 */}
         <TabsContent value="timeline" className="space-y-6">

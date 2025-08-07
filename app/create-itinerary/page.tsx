@@ -26,6 +26,7 @@ export default function CreateItineraryPage() {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(false) 
+  const [apiError, setApiError] = useState<string | null>(null)
   const [destinations, setDestinations] = useState<LocalDestination[]>([
     {
       id: Date.now().toString(),
@@ -102,6 +103,7 @@ export default function CreateItineraryPage() {
     }
 
     setIsLoading(true)
+    setApiError(null) // 이전 에러 상태 초기화
 
     try {
       // v6.0: 새로운 요청 데이터 구조 사용
@@ -123,8 +125,14 @@ export default function CreateItineraryPage() {
         }
       )
 
+      // HTTP 상태 코드 확인
+      if (!response || response.status !== 200) {
+        throw new Error(`서버 응답 오류: ${response?.status || 'Unknown'} ${response?.statusText || ''}`)
+      }
+
       if (response.data && response.data.places) {
         // 성공: 받은 장소 데이터를 저장하고 추천 페이지로 이동
+        console.log("✅ API 성공:", response.data)
         localStorage.setItem('recommendationResults', JSON.stringify(response.data.places))
         localStorage.setItem('travelInfo', JSON.stringify(requestBody))
         router.push('/recommendations')
@@ -133,22 +141,36 @@ export default function CreateItineraryPage() {
       }
 
     } catch (error: any) {
-      console.error("여행 일정 생성 실패:", error)
+      // 상세한 에러 로깅 (개발자용)
+      console.error("❌ API Error Details:", {
+        message: error.message,
+        response: error.response?.data,
+        status: error.response?.status,
+        statusText: error.response?.statusText,
+        config: {
+          url: error.config?.url,
+          method: error.config?.method,
+          data: error.config?.data
+        }
+      })
       
-      // API 호출 실패시 더미 데이터로 폴백
-      console.warn("API 호출 실패, 더미 데이터로 폴백합니다.")
-      const requestBody = convertToItineraryRequest()
-      localStorage.setItem('travelInfo', JSON.stringify(requestBody))
+      // 사용자 친화적 에러 메시지 설정
+      let userErrorMessage = "장소를 불러오는 데 실패했습니다. 잠시 후 다시 시도해 주세요."
       
-      // 더미 데이터 생성 후 추천 페이지로 이동
-      setTimeout(() => {
-        router.push('/recommendations')
-      }, 1000)
+      if (error.code === 'ECONNABORTED') {
+        userErrorMessage = "서버 응답 시간이 초과되었습니다. 네트워크 상태를 확인해 주세요."
+      } else if (error.response?.status === 422) {
+        userErrorMessage = "입력하신 여행 정보에 문제가 있습니다. 다시 확인해 주세요."
+      } else if (error.response?.status === 500) {
+        userErrorMessage = "서버에 일시적인 문제가 발생했습니다. 잠시 후 다시 시도해 주세요."
+      } else if (!navigator.onLine) {
+        userErrorMessage = "인터넷 연결을 확인해 주세요."
+      }
+      
+      setApiError(userErrorMessage)
       
     } finally {
-      setTimeout(() => {
-        setIsLoading(false)
-      }, 1000)
+      setIsLoading(false)
     }
   }
 
@@ -326,6 +348,28 @@ export default function CreateItineraryPage() {
                       ({calculateTotalDuration()}일)
                     </span>
                   </div>
+                </div>
+              </div>
+            )}
+
+            {/* API 에러 메시지 표시 */}
+            {apiError && (
+              <div className="p-4 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-lg">
+                <div className="flex items-center gap-3">
+                  <div className="flex-shrink-0">
+                    <X className="h-5 w-5 text-red-500" />
+                  </div>
+                  <div className="flex-1">
+                    <p className="text-red-700 dark:text-red-300 font-medium">
+                      {apiError}
+                    </p>
+                  </div>
+                  <button
+                    onClick={() => setApiError(null)}
+                    className="flex-shrink-0 p-1 rounded-full hover:bg-red-100 dark:hover:bg-red-800/30 transition-colors"
+                  >
+                    <X className="h-4 w-4 text-red-500" />
+                  </button>
                 </div>
               </div>
             )}
