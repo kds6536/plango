@@ -12,7 +12,7 @@ import { useTranslations } from "@/components/language-wrapper"
 import { PlaceData } from "@/lib/types"
 
 // 기존 Place 인터페이스를 PlaceData와 호환되도록 확장
-interface Place extends Omit<PlaceData, 'lat' | 'lng'> {
+interface Place extends PlaceData {
   user_ratings_total?: number
   photos?: string[]
   tags?: string[]
@@ -90,19 +90,24 @@ export default function RecommendationsPage() {
       ]
     }
 
-    return (baseNames[category as keyof typeof baseNames] || []).map((name, index) => ({
-      place_id: `${category}_${index}`,
-      name,
-      rating: 4.2 + Math.random() * 0.8,
-      user_ratings_total: Math.floor(Math.random() * 1000) + 100,
-      photos: [`https://via.placeholder.com/400x300?text=${encodeURIComponent(name)}`],
-      address: `주소 ${index + 1}`,
-      category,
-      description: `${name}에 대한 설명입니다.`,
-      tags: ["인기", "추천", "핫플레이스"],
-      price_level: Math.floor(Math.random() * 4) + 1,
-      location: locations[category as keyof typeof locations]?.[index] || { lat: 37.5665, lng: 126.9780 }
-    }))
+    return (baseNames[category as keyof typeof baseNames] || []).map((name, index) => {
+      const location = locations[category as keyof typeof locations]?.[index] || { lat: 37.5665, lng: 126.9780 }
+      return {
+        place_id: `${category}_${index}`,
+        name,
+        rating: 4.2 + Math.random() * 0.8,
+        user_ratings_total: Math.floor(Math.random() * 1000) + 100,
+        photos: [`https://via.placeholder.com/400x300?text=${encodeURIComponent(name)}`],
+        address: `주소 ${index + 1}`,
+        category,
+        description: `${name}에 대한 설명입니다.`,
+        tags: ["인기", "추천", "핫플레이스"],
+        price_level: Math.floor(Math.random() * 4) + 1,
+        location: location,
+        lat: location.lat,
+        lng: location.lng
+      }
+    })
   }
 
   useEffect(() => {
@@ -114,8 +119,8 @@ export default function RecommendationsPage() {
         
         if (recommendationResults) {
           // 실제 API 데이터 사용
-          const placesArray = JSON.parse(recommendationResults)
-          console.log("API 데이터 로드:", placesArray)
+          const placesData = JSON.parse(recommendationResults)
+          console.log("API 데이터 로드:", placesData)
           
           // v6.0 API 데이터를 카테고리별로 분류 (한국어 카테고리명 지원)
           const categorizedPlaces: {
@@ -130,32 +135,56 @@ export default function RecommendationsPage() {
             accommodation: []
           }
           
-          placesArray.forEach((place: PlaceData) => {
-            // v6.0 API의 카테고리명을 UI 카테고리로 매핑
-            const categoryMapping: { [key: string]: keyof typeof categorizedPlaces } = {
-              '관광지': 'tourist',
-              '음식점': 'food', 
-              '활동': 'activity',
-              '숙박': 'accommodation',
-              'tourist': 'tourist',
-              'food': 'food',
-              'activity': 'activity',
-              'accommodation': 'accommodation'
+          // 백엔드가 보내는 카테고리별 객체 구조 처리
+          const categoryMapping: { [key: string]: keyof typeof categorizedPlaces } = {
+            '볼거리': 'tourist',
+            '먹거리': 'food', 
+            '즐길거리': 'activity',
+            '숙소': 'accommodation',
+            'tourism': 'tourist',
+            'food': 'food',
+            'activity': 'activity',
+            'accommodation': 'accommodation'
+          }
+          
+          // placesData가 객체 형태인 경우 각 카테고리별로 처리
+          Object.keys(placesData).forEach(categoryKey => {
+            const places = placesData[categoryKey]
+            const targetCategory = categoryMapping[categoryKey] || 'tourist'
+            
+            if (Array.isArray(places)) {
+              places.forEach((place: any) => {
+                // 문자열인 경우 간단한 Place 객체로 변환
+                if (typeof place === 'string') {
+                  const convertedPlace: Place = {
+                    place_id: `${targetCategory}_${place}`,
+                    name: place,
+                    category: categoryKey,
+                    rating: 4.0 + Math.random() * 1.0,
+                    address: `${place} 주소`,
+                    description: `${place}에 대한 설명입니다.`,
+                    photos: [`https://via.placeholder.com/400x300?text=${encodeURIComponent(place)}`],
+                    tags: ["AI 추천", "인기"],
+                    price_level: Math.floor(Math.random() * 4) + 1,
+                    user_ratings_total: Math.floor(Math.random() * 1000) + 100,
+                    lat: 37.5665 + (Math.random() - 0.5) * 0.1,
+                    lng: 126.9780 + (Math.random() - 0.5) * 0.1
+                  }
+                  categorizedPlaces[targetCategory].push(convertedPlace)
+                } else {
+                  // 이미 객체 형태인 경우 변환
+                  const convertedPlace: Place = {
+                    ...place,
+                    location: place.lat && place.lng ? { lat: place.lat, lng: place.lng } : undefined,
+                    photos: place.photos || [`https://via.placeholder.com/400x300?text=${encodeURIComponent(place.name || place)}`],
+                    tags: place.tags || ["AI 추천", "인기"],
+                    price_level: place.price_level || Math.floor(Math.random() * 4) + 1,
+                    user_ratings_total: place.user_ratings_total || (place.rating ? Math.floor(Math.random() * 1000) + 100 : undefined)
+                  }
+                  categorizedPlaces[targetCategory].push(convertedPlace)
+                }
+              })
             }
-            
-            const category = categoryMapping[place.category?.toLowerCase() || 'tourist'] || 'tourist'
-            
-            // PlaceData를 Place 형식으로 변환
-            const convertedPlace: Place = {
-              ...place,
-              location: place.lat && place.lng ? { lat: place.lat, lng: place.lng } : undefined,
-              photos: [`https://via.placeholder.com/400x300?text=${encodeURIComponent(place.name)}`],
-              tags: ["AI 추천", "인기"],
-              price_level: Math.floor(Math.random() * 4) + 1,
-              user_ratings_total: place.rating ? Math.floor(Math.random() * 1000) + 100 : undefined
-            }
-            
-            categorizedPlaces[category].push(convertedPlace)
           })
           
           setPlacesByCategory(categorizedPlaces)
