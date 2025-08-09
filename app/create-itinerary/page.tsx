@@ -110,9 +110,11 @@ export default function CreateItineraryPage() {
       console.log("Request Body:", JSON.stringify(requestBody, null, 2))
 
       // v6.0 장소 추천 API 호출
-      const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
+      const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
+      const endpoint = '/api/v1/place-recommendations/generate'
+      const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
       const response = await axios.post(
-        `${apiUrl}/api/v1/place-recommendations/generate`,
+        url,
         requestBody,
         {
           headers: {
