@@ -105,11 +105,12 @@ export default function CreateItineraryPage() {
       // v6.0: 새로운 장소 추천 API 사용
       const requestBody = convertToPlaceRecommendationRequest()
 
-      console.log("Request URL:", `${process.env.NEXT_PUBLIC_API_URL}/api/v1/place-recommendations/generate`)
+      const apiBaseForLog = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
+      console.log("Request URL:", `${apiBaseForLog}/api/v1/place-recommendations/generate`)
       console.log("Request Body:", JSON.stringify(requestBody, null, 2))
 
       // v6.0 장소 추천 API 호출
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
       const response = await axios.post(
         `${apiUrl}/api/v1/place-recommendations/generate`,
         requestBody,
