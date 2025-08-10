@@ -11,6 +11,7 @@ import { MapPin, Clock, Sparkles, Plane, Plus, X, Calendar } from "lucide-react"
 import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
 import { Destination, ItineraryRequest } from "@/lib/types"
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
 
 interface LocalDestination {
   id: string
@@ -36,6 +37,11 @@ export default function CreateItineraryPage() {
       endDate: ""
     }
   ])
+
+  // AMBIGUOUS 응답 처리 상태
+  const [isAmbiguousOpen, setIsAmbiguousOpen] = useState(false)
+  const [ambiguousOptions, setAmbiguousOptions] = useState<string[]>([])
+  const [pendingRequestBody, setPendingRequestBody] = useState<any | null>(null)
 
   const isFormValid = destinations.every(dest => 
     dest.country.trim() !== "" && 
@@ -103,6 +109,20 @@ export default function CreateItineraryPage() {
   }
   const datePlaceholder = datePlaceholderMap[language] || 'YYYY-MM-DD'
 
+  const callPlaceRecommendations = async (requestBody: any) => {
+    const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
+    const endpoint = '/api/v1/place-recommendations/generate'
+    const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
+    const response = await axios.post(url, requestBody, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
+    if ((response.data?.status === 'AMBIGUOUS' || response.data?.main_theme === 'AMBIGUOUS') && Array.isArray(response.data?.options)) {
+      setPendingRequestBody(requestBody)
+      setAmbiguousOptions(response.data.options)
+      setIsAmbiguousOpen(true)
+      return { ambiguous: true }
+    }
+    return { response }
+  }
+
   const handleGenerateItinerary = async () => {
     if (!isFormValid) {
       alert(t.createItinerary.validationError)
@@ -120,20 +140,12 @@ export default function CreateItineraryPage() {
       console.log("Request URL:", `${apiBaseForLog}/api/v1/place-recommendations/generate`)
       console.log("Request Body:", JSON.stringify(requestBody, null, 2))
 
-      // v6.0 장소 추천 API 호출
-      const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
-      const endpoint = '/api/v1/place-recommendations/generate'
-      const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
-      const response = await axios.post(
-        url,
-        requestBody,
-        {
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          timeout: 30000, // 30초 타임아웃
-        }
-      )
+      // v6.0 장소 추천 API 호출 (AMBIGUOUS 지원)
+      const { response, ambiguous } = await callPlaceRecommendations(requestBody)
+      if (ambiguous) {
+        setIsLoading(false)
+        return
+      }
 
       // HTTP 상태 코드 확인
       if (!response || response.status !== 200) {
@@ -184,6 +196,33 @@ export default function CreateItineraryPage() {
       setApiError(userErrorMessage)
       
     } finally {
+      setIsLoading(false)
+    }
+  }
+
+  // AMBIGUOUS 모달에서 옵션 선택 시 재호출
+  const handleSelectAmbiguousOption = async (option: string) => {
+    setIsAmbiguousOpen(false)
+    if (!pendingRequestBody) return
+    const newBody = { ...pendingRequestBody, city: option }
+    setIsLoading(true)
+    try {
+      const { response, ambiguous } = await callPlaceRecommendations(newBody)
+      if (ambiguous) {
+        setIsLoading(false)
+        return
+      }
+      if (response?.data && response.data.success && response.data.recommendations) {
+        const placesData = response.data.recommendations
+        localStorage.setItem('recommendationResults', JSON.stringify(placesData))
+        localStorage.setItem('travelInfo', JSON.stringify(newBody))
+        setIsLoading(false)
+        router.push('/recommendations')
+      } else {
+        setIsLoading(false)
+      }
+    } catch (e) {
+      console.error(e)
       setIsLoading(false)
     }
   }
@@ -414,6 +453,29 @@ export default function CreateItineraryPage() {
             </CardContent>
           </Card>
       </div>
+
+      {/* AMBIGUOUS 도시 선택 모달 */}
+      <Dialog open={isAmbiguousOpen} onOpenChange={setIsAmbiguousOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle>어떤 도시를 찾으시나요?</DialogTitle>
+          </DialogHeader>
+          <div className="space-y-2">
+            {ambiguousOptions.length === 0 && (
+              <p className="text-sm text-gray-500">선택지가 없습니다.</p>
+            )}
+            {ambiguousOptions.map((opt) => (
+              <button
+                key={opt}
+                onClick={() => handleSelectAmbiguousOption(opt)}
+                className="w-full text-left px-3 py-2 rounded border hover:bg-blue-50 dark:hover:bg-blue-900/30"
+              >
+                {opt}
+              </button>
+            ))}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
