@@ -3,6 +3,7 @@
 import { useState, useEffect } from "react"
 import { useRouter } from "next/navigation"
 import { Button } from "@/components/ui/button"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription } from "@/components/ui/dialog"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs"
 import { Badge } from "@/components/ui/badge"
@@ -29,6 +30,8 @@ export default function RecommendationsPage() {
   const router = useRouter()
 
   const [isLoading, setIsLoading] = useState(true)
+  const [detailOpen, setDetailOpen] = useState(false)
+  const [detailPlace, setDetailPlace] = useState<Place | null>(null)
   const [selectedPlaces, setSelectedPlaces] = useState<Place[]>([])
   const [placesByCategory, setPlacesByCategory] = useState<{
     tourist: Place[]
@@ -444,7 +447,7 @@ export default function RecommendationsPage() {
                           )}
 
                           {/* 선택 버튼 */}
-                          <Button 
+                      <Button 
                             variant={isPlaceSelected(place) ? "default" : "outline"}
                             size="sm"
                             className={`w-full ${
@@ -457,22 +460,22 @@ export default function RecommendationsPage() {
                               togglePlaceSelection(place)
                             }}
                           >
-                            {isPlaceSelected(place) ? t.recommendations.selectedButton : t.recommendations.selectButton}
+                        {isPlaceSelected(place) ? t.recommendations.selectedButton : t.recommendations.selectButton}
                           </Button>
 
-                          {/* 자세히 보기: 새 탭 열기 (웹사이트 > 구글맵 우선순위) */}
-                          <Button 
-                            variant="ghost"
-                            size="sm"
-                            className="w-full mt-2 text-blue-600"
-                            onClick={(e) => {
-                              e.stopPropagation()
-                              const website = (place as any).website || (place as any).website_url
-                              const gmaps = place.place_id ? `https://www.google.com/maps/place/?q=place_id:${place.place_id}` : ''
-                              const url = website || gmaps
-                              if (url) window.open(url, '_blank', 'noopener,noreferrer')
-                            }}
-                          >자세히 보기</Button>
+                      {/* 자세히 보기: 모달로 상세 설명 → 링크는 내부에서 클릭 가능 */}
+                      <Button 
+                        variant="secondary"
+                        size="sm"
+                        className="w-full mt-2"
+                        onClick={(e) => {
+                          e.stopPropagation()
+                          setDetailPlace(place)
+                          setDetailOpen(true)
+                        }}
+                      >
+                        {language === 'en' ? 'View Details' : language === 'ja' ? '詳細を見る' : language === 'zh' ? '查看详情' : language === 'vi' ? 'Xem chi tiết' : language === 'id' ? 'Lihat Detail' : '자세히 보기'}
+                      </Button>
                         </CardContent>
                       </Card>
                     ))}
@@ -584,6 +587,67 @@ export default function RecommendationsPage() {
           </div>
         </div>
       </div>
+
+      {/* 상세 모달 */}
+      <Dialog open={detailOpen} onOpenChange={setDetailOpen}>
+        <DialogContent className="sm:max-w-lg">
+          <DialogHeader>
+            <DialogTitle className="text-xl font-semibold">
+              {detailPlace?.name}
+            </DialogTitle>
+            <DialogDescription>
+              {detailPlace?.address}
+            </DialogDescription>
+          </DialogHeader>
+          <div className="space-y-3">
+            {detailPlace && (
+              <>
+                {((detailPlace as any).photo_url || detailPlace.photos?.[0]) && (
+                  <img 
+                    src={(detailPlace as any).photo_url || (detailPlace.photos ? detailPlace.photos[0] : '')}
+                    alt={detailPlace.name}
+                    className="w-full h-56 object-cover rounded-md"
+                  />
+                )}
+                {detailPlace.description && (
+                  <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">{detailPlace.description}</p>
+                )}
+                <div className="flex flex-wrap items-center gap-2 text-sm">
+                  {detailPlace.rating && (
+                    <span className="inline-flex items-center gap-1"><Star className="h-4 w-4 text-yellow-500" />{detailPlace.rating}</span>
+                  )}
+                  {detailPlace.user_ratings_total && (
+                    <span className="text-gray-500">({detailPlace.user_ratings_total.toLocaleString()})</span>
+                  )}
+                  {detailPlace.category && (
+                    <Badge variant="secondary">{detailPlace.category}</Badge>
+                  )}
+                </div>
+                <div className="flex items-center gap-3">
+                  {((detailPlace as any).website || (detailPlace as any).website_url) && (
+                    <a
+                      href={(detailPlace as any).website || (detailPlace as any).website_url}
+                      target="_blank" rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {language === 'en' ? 'Visit Website' : language === 'ja' ? '公式サイト' : language === 'zh' ? '访问网站' : language === 'vi' ? 'Truy cập Website' : language === 'id' ? 'Kunjungi Situs' : '웹사이트 방문'}
+                    </a>
+                  )}
+                  {detailPlace.place_id && (
+                    <a
+                      href={`https://www.google.com/maps/place/?q=place_id:${detailPlace.place_id}`}
+                      target="_blank" rel="noopener noreferrer"
+                      className="text-blue-600 hover:underline"
+                    >
+                      {language === 'en' ? 'Open in Google Maps' : language === 'ja' ? 'Googleマップで開く' : language === 'zh' ? '在谷歌地图打开' : language === 'vi' ? 'Mở trên Google Maps' : language === 'id' ? 'Buka di Google Maps' : '구글 지도에서 열기'}
+                    </a>
+                  )}
+                </div>
+              </>
+            )}
+          </div>
+        </DialogContent>
+      </Dialog>
     </div>
   )
 }
