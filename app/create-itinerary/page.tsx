@@ -93,6 +93,16 @@ export default function CreateItineraryPage() {
     }
   }
 
+  // 날짜 입력 언어/플레이스홀더
+  const dateInputLangMap: Record<string, string> = {
+    ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN', vi: 'vi-VN', id: 'id-ID'
+  }
+  const inputLang = dateInputLangMap[language] || 'en-US'
+  const datePlaceholderMap: Record<string, string> = {
+    ko: '연도-월-일', en: 'YYYY-MM-DD', ja: 'YYYY-MM-DD', zh: 'YYYY-MM-DD', vi: 'YYYY-MM-DD', id: 'YYYY-MM-DD'
+  }
+  const datePlaceholder = datePlaceholderMap[language] || 'YYYY-MM-DD'
+
   const handleGenerateItinerary = async () => {
     if (!isFormValid) {
       alert(t.createItinerary.validationError)
@@ -134,13 +144,8 @@ export default function CreateItineraryPage() {
         // 성공: v6.0 응답 구조에 맞게 데이터 처리
         console.log("✅ v6.0 API 성공:", response.data)
         
-        // v6.0 응답을 기존 형식으로 변환
-        const placesData = {
-          볼거리: response.data.recommendations['볼거리'] || [],
-          먹거리: response.data.recommendations['먹거리'] || [],
-          즐길거리: response.data.recommendations['즐길거리'] || [],
-          숙소: response.data.recommendations['숙소'] || []
-        }
+        // v6.0 응답을 그대로 저장 (다국어 카테고리 키 유지)
+        const placesData = response.data.recommendations
         
         localStorage.setItem('recommendationResults', JSON.stringify(placesData))
         localStorage.setItem('travelInfo', JSON.stringify(requestBody))
@@ -301,6 +306,8 @@ export default function CreateItineraryPage() {
                         value={destination.startDate}
                         onChange={(e) => updateDestination(destination.id, 'startDate', e.target.value)}
                         className="w-full pl-10"
+                        placeholder={datePlaceholder}
+                        lang={inputLang}
                       />
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     </div>
@@ -314,6 +321,8 @@ export default function CreateItineraryPage() {
                         onChange={(e) => updateDestination(destination.id, 'endDate', e.target.value)}
                         className="w-full pl-10"
                         min={destination.startDate}
+                        placeholder={datePlaceholder}
+                        lang={inputLang}
                       />
                       <Calendar className="absolute left-3 top-1/2 transform -translate-y-1/2 h-4 w-4 text-gray-400" />
                     </div>

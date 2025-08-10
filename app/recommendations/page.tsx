@@ -135,16 +135,22 @@ export default function RecommendationsPage() {
             accommodation: []
           }
           
-          // 백엔드가 보내는 카테고리별 객체 구조 처리
+          // 백엔드가 보내는 다국어 카테고리 키 → 내부 키로 매핑
           const categoryMapping: { [key: string]: keyof typeof categorizedPlaces } = {
-            '볼거리': 'tourist',
-            '먹거리': 'food', 
-            '즐길거리': 'activity',
-            '숙소': 'accommodation',
-            'tourism': 'tourist',
-            'food': 'food',
-            'activity': 'activity',
-            'accommodation': 'accommodation'
+            // ko
+            '볼거리': 'tourist', '먹거리': 'food', '즐길거리': 'activity', '숙소': 'accommodation',
+            // en
+            'Tourism': 'tourist', 'Food': 'food', 'Activities': 'activity', 'Accommodation': 'accommodation',
+            // ja
+            '観光': 'tourist', 'グルメ': 'food', 'アクティビティ': 'activity', '宿泊': 'accommodation',
+            // zh
+            '旅游': 'tourist', '美食': 'food', '活动': 'activity', '住宿': 'accommodation',
+            // vi
+            'Tham quan': 'tourist', 'Ẩm thực': 'food', 'Hoạt động': 'activity', 'Lưu trú': 'accommodation',
+            // id
+            'Wisata': 'tourist', 'Makanan': 'food', 'Aktivitas': 'activity', 'Akomodasi': 'accommodation',
+            // fallback (영문 키)
+            'tourism': 'tourist', 'food': 'food', 'activity': 'activity', 'accommodation': 'accommodation'
           }
           
           // placesData가 객체 형태인 경우 각 카테고리별로 처리
