@@ -90,11 +90,11 @@ export default function ItineraryResultsPage() {
     try {
       console.log("v6.0 /optimize API 호출 시작")
       
-      const apiUrl = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000'
+      const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
       
       const response = await axios.post(
         `${apiUrl}/api/v1/itinerary/optimize`,
-        { places },
+        { places, language_code: language },
         {
           headers: {
             'Content-Type': 'application/json',
@@ -210,7 +210,11 @@ export default function ItineraryResultsPage() {
   const getDateString = (dayOffset: number) => {
     const date = new Date()
     date.setDate(date.getDate() + dayOffset)
-    return date.toLocaleDateString('ko-KR', { month: 'long', day: 'numeric', weekday: 'short' })
+    const localeMap: Record<string, string> = {
+      ko: 'ko-KR', en: 'en-US', ja: 'ja-JP', zh: 'zh-CN', vi: 'vi-VN', id: 'id-ID'
+    }
+    const locale = localeMap[language as keyof typeof localeMap] || 'en-US'
+    return date.toLocaleDateString(locale, { year: 'numeric', month: 'long', day: 'numeric', weekday: 'short' })
   }
 
   if (isLoading) {

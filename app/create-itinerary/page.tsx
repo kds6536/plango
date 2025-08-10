@@ -88,7 +88,8 @@ export default function CreateItineraryPage() {
       travelers_count: 2, // 기본값
       budget_range: "medium", // v6.0에 맞는 형식
       travel_style: ["문화", "액티비티"], // 기본 여행 스타일
-      special_requests: "다양한 명소와 맛집을 포함해주세요"
+      special_requests: "다양한 명소와 맛집을 포함해주세요",
+      language_code: language || 'ko'
     }
   }
 
@@ -256,7 +257,14 @@ export default function CreateItineraryPage() {
                     <Input
                       id={`country-${destination.id}`}
                       type="text"
-                      placeholder="예: 한국, 일본, 미국, 프랑스..."
+                      placeholder={
+                        language === 'en' ? 'e.g., Korea, Japan, USA, France...' :
+                        language === 'ja' ? '例: 韓国、日本、アメリカ、フランス...' :
+                        language === 'zh' ? '例如：中国、日本、美国、法国…' :
+                        language === 'vi' ? 'VD: Hàn Quốc, Nhật Bản, Mỹ, Pháp...' :
+                        language === 'id' ? 'mis: Korea, Jepang, AS, Prancis...' :
+                        '예: 한국, 일본, 미국, 프랑스...'
+                      }
                       value={destination.country}
                       onChange={(e) => updateDestination(destination.id, 'country', e.target.value)}
                       className="w-full"
@@ -282,7 +290,7 @@ export default function CreateItineraryPage() {
                 {/* 날짜 범위 선택 (하나의 섹션으로 통합) */}
                 <div className="space-y-2">
                   <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    여행 기간
+                    {language === 'en' ? 'Travel Period' : language === 'ja' ? '旅行期間' : language === 'zh' ? '旅行时间' : language === 'vi' ? 'Thời gian du lịch' : language === 'id' ? 'Periode Perjalanan' : '여행 기간'}
                   </Label>
                   <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                     {/* 시작일 */}

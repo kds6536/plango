@@ -352,9 +352,12 @@ export default function RecommendationsPage() {
                       >
                         {/* 이미지 */}
                         <div className="relative h-48 bg-gradient-to-br from-gray-100 to-gray-200 dark:from-gray-700 dark:to-gray-800">
-                          {place.photos && place.photos[0] ? (
+                          {(
+                            // photo_url(백엔드) 또는 photos[0](프론트 변환) 지원
+                            (place as any).photo_url || (place.photos && place.photos[0])
+                          ) ? (
                             <img 
-                              src={place.photos[0]} 
+                              src={(place as any).photo_url || (place.photos ? place.photos[0] : '')} 
                               alt={place.name}
                               className="w-full h-full object-cover"
                               onError={(e) => {
@@ -449,7 +452,21 @@ export default function RecommendationsPage() {
                             }}
                           >
                             {isPlaceSelected(place) ? t.recommendations.selectedButton : t.recommendations.selectButton}
-                      </Button>
+                          </Button>
+
+                          {/* 자세히 보기: 새 탭 열기 (웹사이트 > 구글맵 우선순위) */}
+                          <Button 
+                            variant="ghost"
+                            size="sm"
+                            className="w-full mt-2 text-blue-600"
+                            onClick={(e) => {
+                              e.stopPropagation()
+                              const website = (place as any).website || (place as any).website_url
+                              const gmaps = place.place_id ? `https://www.google.com/maps/place/?q=place_id:${place.place_id}` : ''
+                              const url = website || gmaps
+                              if (url) window.open(url, '_blank', 'noopener,noreferrer')
+                            }}
+                          >자세히 보기</Button>
                         </CardContent>
                       </Card>
                     ))}
