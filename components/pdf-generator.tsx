@@ -2,7 +2,6 @@
 
 import { useRef } from 'react'
 import jsPDF from 'jspdf'
-import fontData from '../public/fonts/NotoSansKR-Regular.ttf?url'
 import html2canvas from 'html2canvas'
 
 interface Place {
@@ -72,15 +71,27 @@ export default function PDFGenerator({
 
       // PDF 생성 준비
       const pdf = new jsPDF('p', 'mm', 'a4')
+      // 배포 환경에서 모듈 번들 오류를 방지하기 위해, 폰트는 런타임에 public 폴더에서 동적으로 로드한다.
       try {
-        // 한글 폰트 임베드 (Noto Sans KR)
-        // @ts-ignore
-        pdf.addFileToVFS('NotoSansKR-Regular.ttf', fontData)
-        // @ts-ignore
-        pdf.addFont('NotoSansKR-Regular.ttf', 'NotoSansKR', 'normal')
-        pdf.setFont('NotoSansKR')
+        const res = await fetch('/fonts/NotoSansKR-Regular.ttf')
+        if (res.ok) {
+          const buffer = await res.arrayBuffer()
+          // ArrayBuffer -> Base64
+          let binary = ''
+          const bytes = new Uint8Array(buffer)
+          const chunk = 0x8000
+          for (let i = 0; i < bytes.length; i += chunk) {
+            binary += String.fromCharCode.apply(null, bytes.subarray(i, i + chunk) as any)
+          }
+          const base64 = btoa(binary)
+          // @ts-ignore
+          pdf.addFileToVFS('NotoSansKR-Regular.ttf', base64)
+          // @ts-ignore
+          pdf.addFont('NotoSansKR-Regular.ttf', 'NotoSansKR', 'normal')
+          pdf.setFont('NotoSansKR')
+        }
       } catch (e) {
-        // 폰트 로드 실패 시 기본 폰트 유지
+        // 폰트가 없어도 빌드/실행이 중단되지 않도록 무시
       }
       const pageWidth = pdf.internal.pageSize.getWidth()
       const pageHeight = pdf.internal.pageSize.getHeight()
