@@ -114,9 +114,15 @@ export default function CreateItineraryPage() {
     const endpoint = '/api/v1/place-recommendations/generate'
     const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
     const response = await axios.post(url, requestBody, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
-    if ((response.data?.status === 'AMBIGUOUS' || response.data?.main_theme === 'AMBIGUOUS') && Array.isArray(response.data?.options)) {
+    if ((response.data?.status === 'AMBIGUOUS' || response.data?.main_theme === 'AMBIGUOUS')) {
+      // options가 비어 있어도 사용자에게 직접 재입력 유도
       setPendingRequestBody(requestBody)
-      setAmbiguousOptions(response.data.options)
+      setAmbiguousOptions(Array.isArray(response.data?.options) && response.data.options.length > 0
+        ? response.data.options
+        : [
+            `${requestBody.city} (경기도)`,
+            `${requestBody.city} (전라남도)`
+          ])
       setIsAmbiguousOpen(true)
       return { ambiguous: true }
     }

@@ -2,6 +2,7 @@
 
 import { useRef } from 'react'
 import jsPDF from 'jspdf'
+import fontData from '../public/fonts/NotoSansKR-Regular.ttf?url'
 import html2canvas from 'html2canvas'
 
 interface Place {
@@ -71,6 +72,16 @@ export default function PDFGenerator({
 
       // PDF 생성 준비
       const pdf = new jsPDF('p', 'mm', 'a4')
+      try {
+        // 한글 폰트 임베드 (Noto Sans KR)
+        // @ts-ignore
+        pdf.addFileToVFS('NotoSansKR-Regular.ttf', fontData)
+        // @ts-ignore
+        pdf.addFont('NotoSansKR-Regular.ttf', 'NotoSansKR', 'normal')
+        pdf.setFont('NotoSansKR')
+      } catch (e) {
+        // 폰트 로드 실패 시 기본 폰트 유지
+      }
       const pageWidth = pdf.internal.pageSize.getWidth()
       const pageHeight = pdf.internal.pageSize.getHeight()
       const margin = 20
@@ -82,20 +93,20 @@ export default function PDFGenerator({
 
       // 제목
       pdf.setFontSize(24)
-      pdf.setFont('helvetica', 'bold')
+      pdf.setFont(undefined as any, 'bold')
       pdf.setTextColor(59, 130, 246) // blue-500
       pdf.text('🎉 Your Travel Itinerary', pageWidth / 2, currentY, { align: 'center' })
       currentY += lineHeight * 2
 
       // 여행 정보
       pdf.setFontSize(14)
-      pdf.setFont('helvetica', 'bold')
+      pdf.setFont(undefined as any, 'bold')
       pdf.setTextColor(0, 0, 0)
       pdf.text('Travel Information', margin, currentY)
       currentY += lineHeight
 
       pdf.setFontSize(10)
-      pdf.setFont('helvetica', 'normal')
+      pdf.setFont(undefined as any, 'normal')
       
       // 목적지 정보
       const destinations = travelInfo.destinations || []
@@ -128,12 +139,12 @@ export default function PDFGenerator({
 
       // 선택된 장소 요약
       pdf.setFontSize(14)
-      pdf.setFont('helvetica', 'bold')
+      pdf.setFont(undefined as any, 'bold')
       pdf.text('Selected Places', margin, currentY)
       currentY += lineHeight
 
       pdf.setFontSize(10)
-      pdf.setFont('helvetica', 'normal')
+      pdf.setFont(undefined as any, 'normal')
       
       selectedPlaces.forEach((place, index) => {
         const placeText = `${index + 1}. ${place.name}`

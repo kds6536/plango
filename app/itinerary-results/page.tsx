@@ -263,7 +263,15 @@ export default function ItineraryResultsPage() {
             <Heart className="mr-2 h-4 w-4" />
             {t.itineraryResults.save}
           </Button>
-          <Button variant="outline" size="sm">
+          <Button variant="outline" size="sm" onClick={() => {
+            try {
+              const url = window.location.href
+              navigator.clipboard.writeText(url)
+              alert('현재 페이지 링크가 복사되었습니다.')
+            } catch (e) {
+              alert('링크 복사에 실패했습니다.')
+            }
+          }}>
             <Users className="mr-2 h-4 w-4" />
             {t.itineraryResults.share}
           </Button>
