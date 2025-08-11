@@ -263,13 +263,22 @@ export default function ItineraryResultsPage() {
             <Heart className="mr-2 h-4 w-4" />
             {t.itineraryResults.save}
           </Button>
-          <Button variant="outline" size="sm" onClick={() => {
+          <Button variant="outline" size="sm" onClick={async () => {
+            const url = window.location.href
             try {
-              const url = window.location.href
-              navigator.clipboard.writeText(url)
-              alert('현재 페이지 링크가 복사되었습니다.')
+              if (navigator.share) {
+                await navigator.share({ title: document.title, url })
+              } else {
+                await navigator.clipboard.writeText(url)
+                alert('현재 페이지 링크가 복사되었습니다.')
+              }
             } catch (e) {
-              alert('링크 복사에 실패했습니다.')
+              try {
+                await navigator.clipboard.writeText(url)
+                alert('현재 페이지 링크가 복사되었습니다.')
+              } catch (_) {
+                alert('공유 기능을 사용할 수 없습니다.')
+              }
             }
           }}>
             <Users className="mr-2 h-4 w-4" />
