@@ -10,7 +10,8 @@ import { Badge } from "@/components/ui/badge"
 import { Calendar, MapPin, Clock, Sparkles, Heart, Star, Users, Navigation } from "lucide-react"
 import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
-import SimpleMap from "@/components/simple-map"
+// 실제 Google Maps를 사용하도록 교체
+import GoogleMaps from "@/components/google-maps"
 import PDFGenerator from "@/components/pdf-generator"
 import { PlaceData, OptimizeResponse, TravelPlan, DayPlan } from "@/lib/types"
 
@@ -24,6 +25,7 @@ interface Place {
   category?: string
   description?: string
   tags?: string[]
+  location?: { lat: number; lng: number }
 }
 
 interface ItineraryDay {
@@ -168,7 +170,9 @@ export default function ItineraryResultsPage() {
     category: placeData.category,
     description: placeData.description,
     photos: [`https://via.placeholder.com/400x300?text=${encodeURIComponent(placeData.name)}`],
-    tags: ["AI 최적화", "추천"]
+    tags: ["AI 최적화", "추천"],
+    // Google Maps 컴포넌트가 사용하는 좌표 필드
+    location: { lat: placeData.lat, lng: placeData.lng }
   })
 
   // TravelPlan을 ItineraryDay로 변환
@@ -383,7 +387,7 @@ export default function ItineraryResultsPage() {
           </Card>
         </TabsContent>
 
-        {/* 지도 뷰 */}
+        {/* 지도 뷰 (Google Maps) */}
         <TabsContent value="map" className="space-y-6">
           <Card>
             <CardHeader>
@@ -393,9 +397,8 @@ export default function ItineraryResultsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              {/* Simple Map 컴포넌트 */}
-              <SimpleMap 
-                places={selectedPlaces} 
+              <GoogleMaps
+                places={selectedPlaces}
                 className="h-96 w-full"
               />
               
@@ -422,69 +425,53 @@ export default function ItineraryResultsPage() {
           </Card>
         </TabsContent>
 
-        {/* 다이어리 뷰 */}
+        {/* 다이어리 뷰 - 가독성 개선 */}
         <TabsContent value="diary" className="space-y-6">
-          <Card className="bg-gradient-to-br from-amber-50 to-orange-50 dark:from-gray-800 dark:to-gray-900">
+          <Card className="bg-white dark:bg-gray-900">
             <CardHeader>
-              <CardTitle className="flex items-center gap-2 font-serif">
+              <CardTitle className="flex items-center gap-2 font-serif text-amber-700 dark:text-amber-300">
                 <Sparkles className="h-6 w-6 text-amber-500" />
                 {t.itineraryResults.diary.title}
               </CardTitle>
-              <p className="text-gray-600 dark:text-gray-300 font-serif italic">
+              <p className="text-gray-700 dark:text-gray-300 font-serif italic">
                 {t.itineraryResults.diary.subtitle}
               </p>
             </CardHeader>
-            <CardContent className="space-y-8">
+            <CardContent className="space-y-10 max-w-2xl mx-auto">
               {itinerary.map((day, dayIndex) => (
-                <div key={dayIndex} className="border-l-2 border-amber-300 pl-6">
-                  <div className="mb-4">
+                <section key={dayIndex} className="space-y-4">
+                  <header className="flex items-baseline justify-between">
                     <h3 className="text-2xl font-serif font-bold text-amber-800 dark:text-amber-200">
-                      Day {day.day} - {day.theme}
+                      Day {day.day} · {day.theme}
                     </h3>
-                    <p className="text-amber-600 dark:text-amber-300 font-serif">
-                      {day.date}
-                    </p>
-                  </div>
-                  
-                  <div className="bg-white dark:bg-gray-800 rounded-lg p-6 shadow-sm">
-                    <div className="prose prose-amber dark:prose-invert max-w-none">
-                      <p className="font-serif text-lg leading-relaxed">
-                        오늘은 {day.theme}의 하루입니다. 
-                        {day.places.map((place, index) => (
-                          <span key={place.place_id}>
-                            {index === 0 && " 먼저 "}
-                            {index > 0 && index < day.places.length - 1 && ", 그리고 "}
-                            {index === day.places.length - 1 && day.places.length > 1 && ", 마지막으로 "}
-                            <strong>{place.name}</strong>
-                            {index === day.places.length - 1 && "을(를) 방문합니다."}
-                          </span>
-                        ))}
-                      </p>
-                      
-                      <div className="bg-amber-100 dark:bg-amber-900/20 p-4 rounded-lg mt-4">
-                        <h4 className="font-serif font-semibold text-amber-800 dark:text-amber-200 mb-2">
-                          💡 {t.itineraryResults.diary.tip}
-                        </h4>
-                        <p className="text-amber-700 dark:text-amber-300 font-serif">
-                          {day.places.length > 1 
-                            ? `${day.places[0].name}과(와) ${day.places[day.places.length - 1].name} 사이의 이동시간을 고려하여 여유롭게 일정을 진행하세요.`
-                            : `${day.places[0]?.name}에서 충분한 시간을 보내며 여유로운 여행을 즐기세요.`
-                          }
-                        </p>
-                      </div>
-                    </div>
-                  </div>
-                </div>
+                    <span className="text-sm text-gray-500 dark:text-gray-400">{day.date}</span>
+                  </header>
+                  <ul className="space-y-3">
+                    {day.places.map((place, index) => (
+                      <li key={place.place_id} className="rounded-lg border border-amber-200/60 dark:border-amber-900/30 p-4 bg-amber-50/40 dark:bg-amber-900/10">
+                        <div className="flex items-start justify-between gap-4">
+                          <div className="space-y-1">
+                            <p className="font-semibold text-gray-900 dark:text-gray-100">{index + 1}. {place.name}</p>
+                            {place.address && (
+                              <p className="text-sm text-gray-600 dark:text-gray-300">{place.address}</p>
+                            )}
+                            <div className="flex gap-2 pt-1">
+                              <span className="text-[11px] px-2 py-0.5 rounded bg-amber-200/70 text-amber-900 dark:bg-amber-800/40 dark:text-amber-200">예상 1-2시간</span>
+                              <span className="text-[11px] px-2 py-0.5 rounded bg-blue-200/60 text-blue-900 dark:bg-blue-800/40 dark:text-blue-200">이동 15분</span>
+                            </div>
+                          </div>
+                          {place.rating && (
+                            <span className="text-sm text-yellow-600 dark:text-yellow-400">⭐ {place.rating.toFixed(1)}</span>
+                          )}
+                        </div>
+                      </li>
+                    ))}
+                  </ul>
+                </section>
               ))}
-              
-              <div className="text-center pt-8">
-                <div className="bg-gradient-to-r from-amber-200 to-orange-200 dark:from-amber-800 dark:to-orange-800 rounded-lg p-6">
-                  <h3 className="font-serif text-xl font-bold mb-2">✨ 멋진 여행이 되길 바랍니다!</h3>
-                  <p className="font-serif text-gray-700 dark:text-gray-300">
-                    AI가 추천한 이 일정으로 특별한 추억을 만들어보세요.
-                  </p>
-            </div>
-          </div>
+              <div className="text-center pt-2">
+                <p className="font-serif text-base text-gray-700 dark:text-gray-300">✨ 멋진 여행이 되길 바랍니다!</p>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>
