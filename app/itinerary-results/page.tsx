@@ -12,6 +12,7 @@ import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
 // 실제 Google Maps를 사용하도록 교체
 import GoogleMaps from "@/components/google-maps"
+import GmapsAdvanced from "@/components/gmaps-advanced"
 import PDFGenerator from "@/components/pdf-generator"
 import { PlaceData, OptimizeResponse, TravelPlan, DayPlan } from "@/lib/types"
 
@@ -397,10 +398,8 @@ export default function ItineraryResultsPage() {
               </CardTitle>
             </CardHeader>
             <CardContent>
-              <GoogleMaps
-                places={selectedPlaces}
-                className="h-96 w-full"
-              />
+              {/* 고급 지도: 날짜별 색상/경로 */}
+              <GmapsAdvanced itinerary={itinerary as any} className="h-96 w-full" />
               
               {/* 경로 요약 */}
               <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6">
@@ -439,19 +438,25 @@ export default function ItineraryResultsPage() {
             </CardHeader>
             <CardContent className="space-y-10 max-w-2xl mx-auto">
               {itinerary.map((day, dayIndex) => (
-                <section key={dayIndex} className="space-y-4">
-                  <header className="flex items-baseline justify-between">
+                <section key={dayIndex} className="space-y-4 relative">
+                  {/* 타임라인 수직선 */}
+                  <div className="absolute left-4 top-10 bottom-0 w-0.5 bg-amber-200 dark:bg-amber-800" />
+                  <header className="flex items-baseline justify-between pl-8">
                     <h3 className="text-2xl font-serif font-bold text-amber-800 dark:text-amber-200">
                       Day {day.day} · {day.theme}
                     </h3>
                     <span className="text-sm text-gray-500 dark:text-gray-400">{day.date}</span>
                   </header>
-                  <ul className="space-y-3">
+                  <ul className="space-y-3 pl-8">
                     {day.places.map((place, index) => (
-                      <li key={place.place_id} className="rounded-lg border border-amber-200/60 dark:border-amber-900/30 p-4 bg-amber-50/40 dark:bg-amber-900/10">
+                      <li key={place.place_id} className="relative rounded-lg border border-amber-200/60 dark:border-amber-900/30 p-4 bg-amber-50/40 dark:bg-amber-900/10">
+                        {/* 타임라인 노드 */}
+                        <div className="absolute -left-4 top-5 w-3 h-3 rounded-full bg-amber-400 border-2 border-white dark:border-gray-900" />
                         <div className="flex items-start justify-between gap-4">
                           <div className="space-y-1">
-                            <p className="font-semibold text-gray-900 dark:text-gray-100">{index + 1}. {place.name}</p>
+                            <p className="font-semibold text-gray-900 dark:text-gray-100">
+                              {index + 1}. {place.name}
+                            </p>
                             {place.address && (
                               <p className="text-sm text-gray-600 dark:text-gray-300">{place.address}</p>
                             )}
