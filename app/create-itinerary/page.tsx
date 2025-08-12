@@ -236,6 +236,20 @@ export default function CreateItineraryPage() {
     setIsAmbiguousOpen(false)
     if (!pendingRequestBody) return
     const newBody = buildRequestBodyFromOption(option)
+
+    // 폼 상태(country/city)를 표준화된 정보로 동기화
+    if (newBody) {
+      setDestinations(prev => {
+        if (!prev.length) return prev
+        const first = prev[0]
+        const updatedFirst = {
+          ...first,
+          country: newBody.country || first.country,
+          city: newBody.city || first.city,
+        }
+        return [updatedFirst, ...prev.slice(1)]
+      })
+    }
     setIsLoading(true)
     try {
       const { response, ambiguous } = await callPlaceRecommendations(newBody)
