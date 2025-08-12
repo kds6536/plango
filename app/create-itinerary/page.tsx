@@ -40,9 +40,8 @@ export default function CreateItineraryPage() {
 
   // AMBIGUOUS 응답 처리 상태
   const [isAmbiguousOpen, setIsAmbiguousOpen] = useState(false)
-  // options는 문자열 또는 객체({ display_name, request_body }) 형태를 모두 허용
-  const [ambiguousOptions, setAmbiguousOptions] = useState<any[]>([])
-  const [pendingRequestBody, setPendingRequestBody] = useState<any | null>(null)
+  // 정규화된 옵션: { display_name: string, request_body: object }
+  const [ambiguousOptions, setAmbiguousOptions] = useState<Array<{ display_name: string; request_body: any }>>([])
 
   const isFormValid = destinations.every(dest => 
     dest.country.trim() !== "" && 
@@ -110,23 +109,41 @@ export default function CreateItineraryPage() {
   }
   const datePlaceholder = datePlaceholderMap[language] || 'YYYY-MM-DD'
 
-  const callPlaceRecommendations = async (requestBody: any) => {
+  // 단일 책임: 주어진 payload로만 API 호출/해석
+  const fetchRecommendations = async (payload: any) => {
     const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
     const endpoint = '/api/v1/place-recommendations/generate'
     const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
-    const response = await axios.post(url, requestBody, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
+    const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
+
+    // AMBIGUOUS 처리: 옵션을 표준 형태로 정규화하면서, 각 옵션의 request_body를 "완전한 payload"로 구성
     if ((response.data?.status === 'AMBIGUOUS' || response.data?.main_theme === 'AMBIGUOUS')) {
-      // options가 비어 있어도 사용자에게 직접 재입력 유도
-      setPendingRequestBody(requestBody)
-      setAmbiguousOptions(Array.isArray(response.data?.options) && response.data.options.length > 0
-        ? response.data.options
+      const rawOptions: any[] = Array.isArray(response.data?.options) ? response.data.options : []
+      const normalized = rawOptions.length > 0
+        ? rawOptions.map((opt: any) => {
+            if (typeof opt === 'string') {
+              return {
+                display_name: opt,
+                request_body: { ...payload, city: opt }
+              }
+            }
+            const label = opt?.display_name || opt?.formatted_address || opt?.city || opt?.name || 'Option'
+            // 백엔드가 준 request_body가 있으면 병합하여 완전한 payload 생성
+            const rb = opt?.request_body && typeof opt.request_body === 'object' ? opt.request_body : {}
+            return {
+              display_name: label,
+              request_body: { ...payload, ...rb }
+            }
+          })
         : [
-            { display_name: `${requestBody.city} (경기도)`, request_body: { city: `${requestBody.city}` } },
-            { display_name: `${requestBody.city} (전라남도)`, request_body: { city: `${requestBody.city}` } }
-          ])
+            { display_name: `${payload.city} (경기도)`, request_body: { ...payload, city: `${payload.city}` } },
+            { display_name: `${payload.city} (전라남도)`, request_body: { ...payload, city: `${payload.city}` } }
+          ]
+      setAmbiguousOptions(normalized)
       setIsAmbiguousOpen(true)
-      return { ambiguous: true }
+      return { ambiguous: true as const }
     }
+
     return { response }
   }
 
@@ -148,7 +165,7 @@ export default function CreateItineraryPage() {
       console.log("Request Body:", JSON.stringify(requestBody, null, 2))
 
       // v6.0 장소 추천 API 호출 (AMBIGUOUS 지원)
-      const { response, ambiguous } = await callPlaceRecommendations(requestBody)
+      const { response, ambiguous } = await fetchRecommendations(requestBody)
       if (ambiguous) {
         setIsLoading(false)
         return
@@ -208,51 +225,23 @@ export default function CreateItineraryPage() {
   }
 
   // 도우미: 옵션 표시 텍스트 추출
-  const getOptionLabel = (opt: any): string => {
-    if (typeof opt === 'string') return opt
-    return (
-      opt?.display_name || opt?.formatted_address || opt?.city || opt?.name || '선택지'
-    )
-  }
+  const getOptionLabel = (opt: any): string => (typeof opt === 'string' ? opt : (opt?.display_name || '선택지'))
 
   // 도우미: 옵션으로부터 다음 요청 바디 구성
+  // 옵션으로부터 payload를 바로 사용 (폼 상태 의존 제거)
   const buildRequestBodyFromOption = (opt: any): any => {
-    if (!pendingRequestBody) return null
-    if (typeof opt === 'string') {
-      return { ...pendingRequestBody, city: opt }
-    }
-    if (opt && typeof opt.request_body === 'object') {
-      return { ...pendingRequestBody, ...opt.request_body }
-    }
-    const next: any = { ...pendingRequestBody }
-    if (opt?.country) next.country = opt.country
-    if (opt?.region) next.region = opt.region
-    if (opt?.city || opt?.name || opt?.display_name) next.city = opt.city || opt.name || opt.display_name
-    return next
+    if (typeof opt === 'string') return { city: opt }
+    if (opt && typeof opt.request_body === 'object') return opt.request_body
+    return opt
   }
 
   // AMBIGUOUS 모달에서 옵션 선택 시 재호출
   const handleSelectAmbiguousOption = async (option: any) => {
     setIsAmbiguousOpen(false)
-    if (!pendingRequestBody) return
     const newBody = buildRequestBodyFromOption(option)
-
-    // 폼 상태(country/city)를 표준화된 정보로 동기화
-    if (newBody) {
-      setDestinations(prev => {
-        if (!prev.length) return prev
-        const first = prev[0]
-        const updatedFirst = {
-          ...first,
-          country: newBody.country || first.country,
-          city: newBody.city || first.city,
-        }
-        return [updatedFirst, ...prev.slice(1)]
-      })
-    }
     setIsLoading(true)
     try {
-      const { response, ambiguous } = await callPlaceRecommendations(newBody)
+      const { response, ambiguous } = await fetchRecommendations(newBody)
       if (ambiguous) {
         setIsLoading(false)
         return
