@@ -40,7 +40,7 @@ export default function CreateItineraryPage() {
 
   // AMBIGUOUS 응답 처리 상태
   const [isAmbiguousOpen, setIsAmbiguousOpen] = useState(false)
-  // 정규화된 옵션: { display_name: string, request_body: object }
+  // { display_name, request_body } 형태로 정규화해 저장
   const [ambiguousOptions, setAmbiguousOptions] = useState<Array<{ display_name: string; request_body: any }>>([])
 
   const isFormValid = destinations.every(dest => 
@@ -109,41 +109,24 @@ export default function CreateItineraryPage() {
   }
   const datePlaceholder = datePlaceholderMap[language] || 'YYYY-MM-DD'
 
-  // 단일 책임: 주어진 payload로만 API 호출/해석
+  // 단일 책임: payload로만 API 호출/해석
   const fetchRecommendations = async (payload: any) => {
     const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
     const endpoint = '/api/v1/place-recommendations/generate'
     const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
     const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
-
-    // AMBIGUOUS 처리: 옵션을 표준 형태로 정규화하면서, 각 옵션의 request_body를 "완전한 payload"로 구성
     if ((response.data?.status === 'AMBIGUOUS' || response.data?.main_theme === 'AMBIGUOUS')) {
-      const rawOptions: any[] = Array.isArray(response.data?.options) ? response.data.options : []
-      const normalized = rawOptions.length > 0
-        ? rawOptions.map((opt: any) => {
-            if (typeof opt === 'string') {
-              return {
-                display_name: opt,
-                request_body: { ...payload, city: opt }
-              }
-            }
-            const label = opt?.display_name || opt?.formatted_address || opt?.city || opt?.name || 'Option'
-            // 백엔드가 준 request_body가 있으면 병합하여 완전한 payload 생성
-            const rb = opt?.request_body && typeof opt.request_body === 'object' ? opt.request_body : {}
-            return {
-              display_name: label,
-              request_body: { ...payload, ...rb }
-            }
-          })
-        : [
-            { display_name: `${payload.city} (경기도)`, request_body: { ...payload, city: `${payload.city}` } },
-            { display_name: `${payload.city} (전라남도)`, request_body: { ...payload, city: `${payload.city}` } }
-          ]
+      const raw = Array.isArray(response.data?.options) ? response.data.options : []
+      const normalized = raw.filter(Boolean).map((opt: any) => {
+        if (typeof opt === 'string') return { display_name: opt, request_body: { ...payload, city: opt } }
+        const label = opt?.display_name || opt?.formatted_address || opt?.city || opt?.name || 'Option'
+        const rb = (opt && typeof opt.request_body === 'object') ? opt.request_body : {}
+        return { display_name: label, request_body: { ...payload, ...rb } }
+      })
       setAmbiguousOptions(normalized)
       setIsAmbiguousOpen(true)
       return { ambiguous: true as const }
     }
-
     return { response }
   }
 
@@ -228,7 +211,6 @@ export default function CreateItineraryPage() {
   const getOptionLabel = (opt: any): string => (typeof opt === 'string' ? opt : (opt?.display_name || '선택지'))
 
   // 도우미: 옵션으로부터 다음 요청 바디 구성
-  // 옵션으로부터 payload를 바로 사용 (폼 상태 의존 제거)
   const buildRequestBodyFromOption = (opt: any): any => {
     if (typeof opt === 'string') return { city: opt }
     if (opt && typeof opt.request_body === 'object') return opt.request_body
@@ -237,6 +219,8 @@ export default function CreateItineraryPage() {
 
   // AMBIGUOUS 모달에서 옵션 선택 시 재호출
   const handleSelectAmbiguousOption = async (option: any) => {
+    // 이전 AMBIGUOUS 상태를 즉시 초기화하여 반복 표시 방지
+    setAmbiguousOptions([])
     setIsAmbiguousOpen(false)
     const newBody = buildRequestBodyFromOption(option)
     setIsLoading(true)
@@ -490,7 +474,7 @@ export default function CreateItineraryPage() {
 
       {/* AMBIGUOUS 도시 선택 모달 */}
       <Dialog open={isAmbiguousOpen} onOpenChange={setIsAmbiguousOpen}>
-        <DialogContent className="sm:max-w-lg">
+        <DialogContent className="sm:max-w-lg" onInteractOutside={(e) => e.preventDefault()}>
           <DialogHeader>
             <DialogTitle>어떤 도시를 찾으시나요?</DialogTitle>
           </DialogHeader>
