@@ -40,7 +40,8 @@ export default function CreateItineraryPage() {
 
   // AMBIGUOUS 응답 처리 상태
   const [isAmbiguousOpen, setIsAmbiguousOpen] = useState(false)
-  const [ambiguousOptions, setAmbiguousOptions] = useState<string[]>([])
+  // options는 문자열 또는 객체({ display_name, request_body }) 형태를 모두 허용
+  const [ambiguousOptions, setAmbiguousOptions] = useState<any[]>([])
   const [pendingRequestBody, setPendingRequestBody] = useState<any | null>(null)
 
   const isFormValid = destinations.every(dest => 
@@ -120,8 +121,8 @@ export default function CreateItineraryPage() {
       setAmbiguousOptions(Array.isArray(response.data?.options) && response.data.options.length > 0
         ? response.data.options
         : [
-            `${requestBody.city} (경기도)`,
-            `${requestBody.city} (전라남도)`
+            { display_name: `${requestBody.city} (경기도)`, request_body: { city: `${requestBody.city}` } },
+            { display_name: `${requestBody.city} (전라남도)`, request_body: { city: `${requestBody.city}` } }
           ])
       setIsAmbiguousOpen(true)
       return { ambiguous: true }
@@ -206,11 +207,35 @@ export default function CreateItineraryPage() {
     }
   }
 
+  // 도우미: 옵션 표시 텍스트 추출
+  const getOptionLabel = (opt: any): string => {
+    if (typeof opt === 'string') return opt
+    return (
+      opt?.display_name || opt?.formatted_address || opt?.city || opt?.name || '선택지'
+    )
+  }
+
+  // 도우미: 옵션으로부터 다음 요청 바디 구성
+  const buildRequestBodyFromOption = (opt: any): any => {
+    if (!pendingRequestBody) return null
+    if (typeof opt === 'string') {
+      return { ...pendingRequestBody, city: opt }
+    }
+    if (opt && typeof opt.request_body === 'object') {
+      return { ...pendingRequestBody, ...opt.request_body }
+    }
+    const next: any = { ...pendingRequestBody }
+    if (opt?.country) next.country = opt.country
+    if (opt?.region) next.region = opt.region
+    if (opt?.city || opt?.name || opt?.display_name) next.city = opt.city || opt.name || opt.display_name
+    return next
+  }
+
   // AMBIGUOUS 모달에서 옵션 선택 시 재호출
-  const handleSelectAmbiguousOption = async (option: string) => {
+  const handleSelectAmbiguousOption = async (option: any) => {
     setIsAmbiguousOpen(false)
     if (!pendingRequestBody) return
-    const newBody = { ...pendingRequestBody, city: option }
+    const newBody = buildRequestBodyFromOption(option)
     setIsLoading(true)
     try {
       const { response, ambiguous } = await callPlaceRecommendations(newBody)
@@ -470,13 +495,13 @@ export default function CreateItineraryPage() {
             {ambiguousOptions.length === 0 && (
               <p className="text-sm text-gray-500">선택지가 없습니다.</p>
             )}
-            {ambiguousOptions.map((opt) => (
+            {ambiguousOptions.map((opt, idx) => (
               <button
-                key={opt}
+                key={idx}
                 onClick={() => handleSelectAmbiguousOption(opt)}
                 className="w-full text-left px-3 py-2 rounded border hover:bg-blue-50 dark:hover:bg-blue-900/30"
               >
-                {opt}
+                {getOptionLabel(opt)}
               </button>
             ))}
           </div>
