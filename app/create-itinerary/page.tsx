@@ -111,13 +111,16 @@ export default function CreateItineraryPage() {
   }
   const datePlaceholder = datePlaceholderMap[language] || 'YYYY-MM-DD'
 
-  // 단일 책임: payload로만 API 호출/해석
+  // 단일 책임: payload로만 API 호출/해석 (명확한 상태 분기)
   const fetchRecommendations = async (payload: any) => {
     const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
     const endpoint = '/api/v1/place-recommendations/generate'
     const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
     const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
-    if ((response.data?.status === 'AMBIGUOUS' || response.data?.main_theme === 'AMBIGUOUS')) {
+
+    const status = (response?.data?.status || '').toUpperCase()
+
+    if (status === 'AMBIGUOUS') {
       const raw = Array.isArray(response.data?.options) ? response.data.options : []
       const normalized = raw.filter(Boolean).map((opt: any) => {
         if (typeof opt === 'string') return { display_name: opt, request_body: { ...payload, city: opt } }
@@ -127,9 +130,13 @@ export default function CreateItineraryPage() {
       })
       setAmbiguousOptions(normalized)
       setIsAmbiguousOpen(true)
-      return { ambiguous: true as const }
+      return { status: 'AMBIGUOUS' as const }
     }
-    return { response }
+
+    // SUCCESS 또는 status 누락(성공) 처리: 모달/옵션 정리 후 진행
+    setAmbiguousOptions([])
+    setIsAmbiguousOpen(false)
+    return { status: 'SUCCESS' as const, response }
   }
 
   const handleGenerateItinerary = async () => {
@@ -149,14 +156,15 @@ export default function CreateItineraryPage() {
       console.log("Request URL:", `${apiBaseForLog}/api/v1/place-recommendations/generate`)
       console.log("Request Body:", JSON.stringify(requestBody, null, 2))
 
-      // v6.0 장소 추천 API 호출 (AMBIGUOUS 지원)
-      const { response, ambiguous } = await fetchRecommendations(requestBody)
-      if (ambiguous) {
+      // v6.0 장소 추천 API 호출 (명확한 상태 분기)
+      const result = await fetchRecommendations(requestBody)
+      if (result.status === 'AMBIGUOUS') {
         setIsLoading(false)
         return
       }
 
       // HTTP 상태 코드 확인
+      const response = result.response
       if (!response || response.status !== 200) {
         throw new Error(`서버 응답 오류: ${response?.status || 'Unknown'} ${response?.statusText || ''}`)
       }
@@ -250,15 +258,16 @@ export default function CreateItineraryPage() {
     console.log("⏳ [AMBIGUOUS_SELECT] 로딩 시작, API 호출 준비")
     
     try {
-      const { response, ambiguous } = await fetchRecommendations(newBody)
+      const result = await fetchRecommendations(newBody)
+      const response = (result as any).response
       console.log("📥 [AMBIGUOUS_SELECT] API 응답 받음:", {
+        status: result.status,
         hasResponse: !!response,
-        isAmbiguous: !!ambiguous,
         responseStatus: response?.status,
         responseDataKeys: response?.data ? Object.keys(response.data) : null
       })
       
-      if (ambiguous) {
+      if (result.status === 'AMBIGUOUS') {
         console.log("🔄 [AMBIGUOUS_SELECT] 또 다른 AMBIGUOUS 응답 - 재귀 상황")
         return
       }
