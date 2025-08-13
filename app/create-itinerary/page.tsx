@@ -214,9 +214,17 @@ export default function CreateItineraryPage() {
 
   // 도우미: 옵션으로부터 다음 요청 바디 구성
   const buildRequestBodyFromOption = (opt: any): any => {
-    if (typeof opt === 'string') return { city: opt }
-    if (opt && typeof opt.request_body === 'object') return opt.request_body
-    return opt
+    const baseRequest = convertToPlaceRecommendationRequest()
+    if (typeof opt === 'string') {
+      return { ...baseRequest, city: opt }
+    }
+    if (opt && typeof opt.request_body === 'object') {
+      return { ...baseRequest, ...opt.request_body }
+    }
+    if (opt && opt.display_name) {
+      return { ...baseRequest, city: opt.display_name }
+    }
+    return { ...baseRequest, city: opt }
   }
 
   // AMBIGUOUS 모달에서 옵션 선택 시 재호출
