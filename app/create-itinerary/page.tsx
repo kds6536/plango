@@ -116,7 +116,8 @@ export default function CreateItineraryPage() {
     const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
     const endpoint = '/api/v1/place-recommendations/generate'
     const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
-    const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
+    const response = await axios.post(url, { ...payload, // 강제 확정 힌트
+      __force_resolve__: true }, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
     if ((response.data?.status === 'AMBIGUOUS' || response.data?.main_theme === 'AMBIGUOUS')) {
       const raw = Array.isArray(response.data?.options) ? response.data.options : []
       const normalized = raw.filter(Boolean).map((opt: any) => {
