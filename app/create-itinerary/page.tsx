@@ -42,6 +42,8 @@ export default function CreateItineraryPage() {
   const [isAmbiguousOpen, setIsAmbiguousOpen] = useState(false)
   // { display_name, request_body } 형태로 정규화해 저장
   const [ambiguousOptions, setAmbiguousOptions] = useState<Array<{ display_name: string; request_body: any }>>([])
+  // AMBIGUOUS 선택 처리 중 중복 호출 방지
+  const [isResolvingAmbiguity, setIsResolvingAmbiguity] = useState(false)
 
   const isFormValid = destinations.every(dest => 
     dest.country.trim() !== "" && 
@@ -219,6 +221,8 @@ export default function CreateItineraryPage() {
 
   // AMBIGUOUS 모달에서 옵션 선택 시 재호출
   const handleSelectAmbiguousOption = async (option: any) => {
+    if (isResolvingAmbiguity) return
+    setIsResolvingAmbiguity(true)
     // 이전 AMBIGUOUS 상태를 즉시 초기화하여 반복 표시 방지
     setAmbiguousOptions([])
     setIsAmbiguousOpen(false)
@@ -227,20 +231,20 @@ export default function CreateItineraryPage() {
     try {
       const { response, ambiguous } = await fetchRecommendations(newBody)
       if (ambiguous) {
-        setIsLoading(false)
         return
       }
       if (response?.data && response.data.success && response.data.recommendations) {
         const placesData = response.data.recommendations
         localStorage.setItem('recommendationResults', JSON.stringify(placesData))
         localStorage.setItem('travelInfo', JSON.stringify(newBody))
-        setIsLoading(false)
         router.push('/recommendations')
       } else {
-        setIsLoading(false)
+        // 명시적 실패 처리만 수행
       }
     } catch (e) {
       console.error(e)
+    } finally {
+      setIsResolvingAmbiguity(false)
       setIsLoading(false)
     }
   }
@@ -486,7 +490,8 @@ export default function CreateItineraryPage() {
               <button
                 key={idx}
                 onClick={() => handleSelectAmbiguousOption(opt)}
-                className="w-full text-left px-3 py-2 rounded border hover:bg-blue-50 dark:hover:bg-blue-900/30"
+                disabled={isLoading || isResolvingAmbiguity}
+                className="w-full text-left px-3 py-2 rounded border hover:bg-blue-50 dark:hover:bg-blue-900/30 disabled:opacity-60"
               >
                 {getOptionLabel(opt)}
               </button>
