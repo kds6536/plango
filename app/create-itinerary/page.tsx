@@ -229,29 +229,67 @@ export default function CreateItineraryPage() {
 
   // AMBIGUOUS 모달에서 옵션 선택 시 재호출
   const handleSelectAmbiguousOption = async (option: any) => {
-    if (isResolvingAmbiguity) return
+    console.log("🚀 [AMBIGUOUS_SELECT] 옵션 선택 시작:", option)
+    
+    if (isResolvingAmbiguity) {
+      console.log("⚠️ [AMBIGUOUS_SELECT] 이미 처리 중이므로 무시")
+      return
+    }
+    
     setIsResolvingAmbiguity(true)
+    console.log("🔄 [AMBIGUOUS_SELECT] 상태 초기화 시작")
+    
     // 이전 AMBIGUOUS 상태를 즉시 초기화하여 반복 표시 방지
     setAmbiguousOptions([])
     setIsAmbiguousOpen(false)
+    
     const newBody = buildRequestBodyFromOption(option)
+    console.log("📋 [AMBIGUOUS_SELECT] 새로운 요청 바디 구성:", JSON.stringify(newBody, null, 2))
+    
     setIsLoading(true)
+    console.log("⏳ [AMBIGUOUS_SELECT] 로딩 시작, API 호출 준비")
+    
     try {
       const { response, ambiguous } = await fetchRecommendations(newBody)
+      console.log("📥 [AMBIGUOUS_SELECT] API 응답 받음:", {
+        hasResponse: !!response,
+        isAmbiguous: !!ambiguous,
+        responseStatus: response?.status,
+        responseDataKeys: response?.data ? Object.keys(response.data) : null
+      })
+      
       if (ambiguous) {
+        console.log("🔄 [AMBIGUOUS_SELECT] 또 다른 AMBIGUOUS 응답 - 재귀 상황")
         return
       }
+      
       if (response?.data && response.data.success && response.data.recommendations) {
+        console.log("✅ [AMBIGUOUS_SELECT] 성공 응답 확인됨")
+        console.log("📦 [AMBIGUOUS_SELECT] 추천 데이터:", Object.keys(response.data.recommendations))
+        
         const placesData = response.data.recommendations
         localStorage.setItem('recommendationResults', JSON.stringify(placesData))
         localStorage.setItem('travelInfo', JSON.stringify(newBody))
+        
+        console.log("🎯 [AMBIGUOUS_SELECT] 로컬스토리지 저장 완료, 페이지 이동 시작")
         router.push('/recommendations')
       } else {
-        // 명시적 실패 처리만 수행
+        console.log("❌ [AMBIGUOUS_SELECT] 응답 데이터 구조가 예상과 다름:", {
+          hasData: !!response?.data,
+          success: response?.data?.success,
+          hasRecommendations: !!response?.data?.recommendations,
+          fullResponse: response?.data
+        })
       }
-    } catch (e) {
-      console.error(e)
+    } catch (e: any) {
+      console.error("💥 [AMBIGUOUS_SELECT] 예외 발생:", e)
+      console.error("💥 [AMBIGUOUS_SELECT] 예외 상세:", {
+        message: e.message,
+        stack: e.stack,
+        response: e.response?.data
+      })
     } finally {
+      console.log("🏁 [AMBIGUOUS_SELECT] 처리 완료, 상태 정리")
       setIsResolvingAmbiguity(false)
       setIsLoading(false)
     }
