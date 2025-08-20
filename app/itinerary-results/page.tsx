@@ -97,7 +97,13 @@ export default function ItineraryResultsPage() {
       
       const response = await axios.post(
         `${apiUrl}/api/v1/itinerary/optimize`,
-        { places, language_code: language },
+        { 
+          places, 
+          language_code: language,
+          daily_start_time: travelInfo.dailyStartTime || "09:00",
+          daily_end_time: travelInfo.dailyEndTime || "22:00",
+          duration: travelInfo.total_duration || 3
+        },
         {
           headers: {
             'Content-Type': 'application/json',
