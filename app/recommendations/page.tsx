@@ -448,13 +448,13 @@ export default function RecommendationsPage() {
 
                           {/* 선택 버튼 */}
                       <Button 
-                            variant={isPlaceSelected(place) ? "default" : "outline"}
-                            size="sm"
-                            className={`w-full ${
-                              isPlaceSelected(place) 
-                                ? 'bg-blue-500 hover:bg-blue-600 text-white' 
-                                : 'border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20'
-                            }`}
+                        variant={isPlaceSelected(place) ? "default" : "outline"}
+                        size="sm"
+                        className={`w-full transition-colors ${
+                          isPlaceSelected(place) 
+                            ? 'bg-blue-500 hover:bg-blue-600 text-white' 
+                            : 'border-blue-500 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/20'
+                          }`}
                             onClick={(e) => {
                               e.stopPropagation()
                               togglePlaceSelection(place)
@@ -467,7 +467,7 @@ export default function RecommendationsPage() {
                       <Button 
                         variant="secondary"
                         size="sm"
-                        className="w-full mt-2"
+                        className="w-full mt-2 transition-colors hover:bg-indigo-100 dark:hover:bg-indigo-900/30"
                         onClick={(e) => {
                           e.stopPropagation()
                           setDetailPlace(place)
@@ -612,6 +612,10 @@ export default function RecommendationsPage() {
                 {detailPlace.description && (
                   <p className="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-line">{detailPlace.description}</p>
                 )}
+                {/* 리뷰 프리뷰: 리뷰 수만 제공되는 경우 간단한 안내 */}
+                {detailPlace.user_ratings_total ? (
+                  <p className="text-xs text-gray-500">{language === 'en' ? 'Reviews' : language === 'ja' ? 'レビュー' : language === 'zh' ? '点评' : language === 'vi' ? 'Đánh giá' : language === 'id' ? 'Ulasan' : '리뷰'}: {detailPlace.user_ratings_total.toLocaleString()}</p>
+                ) : null}
                 <div className="flex flex-wrap items-center gap-2 text-sm">
                   {detailPlace.rating && (
                     <span className="inline-flex items-center gap-1"><Star className="h-4 w-4 text-yellow-500" />{detailPlace.rating}</span>
