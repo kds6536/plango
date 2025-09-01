@@ -37,6 +37,8 @@ export default function CreateItineraryPage() {
       endDate: ""
     }
   ])
+  const [dailyStartTime, setDailyStartTime] = useState("09:00")
+  const [dailyEndTime, setDailyEndTime] = useState("22:00")
 
   // AMBIGUOUS 응답 처리 상태
   const [isAmbiguousOpen, setIsAmbiguousOpen] = useState(false)
@@ -492,6 +494,59 @@ export default function CreateItineraryPage() {
                 </div>
               </div>
             )}
+
+            {/* 일일 활동 시간 설정 */}
+            <div className="p-6 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
+                <Clock className="h-5 w-5 text-blue-500" />
+                일일 활동 시간 설정
+              </h3>
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    🌅 활동 시작 시간
+                  </Label>
+                  <select 
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    value={dailyStartTime}
+                    onChange={(e) => setDailyStartTime(e.target.value)}
+                  >
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const hour = i.toString().padStart(2, '0');
+                      return (
+                        <option key={hour} value={`${hour}:00`}>
+                          {hour}:00
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+                <div className="space-y-2">
+                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                    🌙 활동 종료 시간
+                  </Label>
+                  <select 
+                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
+                    value={dailyEndTime}
+                    onChange={(e) => setDailyEndTime(e.target.value)}
+                  >
+                    {Array.from({ length: 24 }, (_, i) => {
+                      const hour = i.toString().padStart(2, '0');
+                      return (
+                        <option key={hour} value={`${hour}:00`}>
+                          {hour}:00
+                        </option>
+                      );
+                    })}
+                  </select>
+                </div>
+              </div>
+              <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                <p className="text-sm text-blue-700 dark:text-blue-300">
+                  💡 설정한 시간 내에서 일정이 생성됩니다. 24시간을 넘지 않도록 조정됩니다.
+                </p>
+              </div>
+            </div>
 
             {/* API 에러 메시지 표시 */}
             {apiError && (
