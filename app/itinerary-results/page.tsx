@@ -49,6 +49,16 @@ export default function ItineraryResultsPage() {
   const t = useTranslations()
 
   useEffect(() => {
+    // 환경 변수 디버깅 로그 추가
+    const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+    console.log("--- VERCEL ENV CHECK (itinerary-results page) ---");
+    console.log("Type of API Key:", typeof apiKey);
+    console.log("Value of API Key:", apiKey);
+    console.log("Length of API Key:", apiKey ? apiKey.length : 'N/A');
+    console.log("First 10 chars:", apiKey ? apiKey.substring(0, 10) : 'N/A');
+    console.log("Last 10 chars:", apiKey ? apiKey.substring(apiKey.length - 10) : 'N/A');
+    console.log("------------------------------------------------");
+
     // localStorage에서 선택된 장소와 여행 정보 읽기
     const loadItineraryData = async () => {
       try {

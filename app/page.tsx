@@ -10,6 +10,7 @@ import { useLanguageStore } from "@/lib/language-store"
 import { useScrollPosition } from "@/hooks/use-scroll-position"
 import { ThemeToggle } from "@/components/theme-toggle"
 import { useTranslations } from "@/components/language-wrapper"
+import EnvDebug from "@/components/env-debug"
 
 export default function HomePage() {
   const { language, setLanguage } = useLanguageStore()
@@ -30,6 +31,7 @@ export default function HomePage() {
 
   return (
     <div className="min-h-screen bg-background text-foreground">
+      <EnvDebug />
       {/* Premium Header */}
       <header className="sticky top-0 z-50 bg-background/95 backdrop-blur-md border-b border-border shadow-sm">
         <div className="container mx-auto px-4 h-20 flex items-center justify-between">

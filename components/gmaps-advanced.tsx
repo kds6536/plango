@@ -24,8 +24,20 @@ export default function GmapsAdvanced({
   itinerary: ItineraryDay[]
   className?: string
 }) {
+  // 1. 변수에 할당하여 명확하게 만듭니다.
+  const apiKey = process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY;
+
+  // 2. 이 변수의 타입과 값을 콘솔에 직접 출력합니다.
+  console.log("--- VERCEL ENV CHECK (gmaps-advanced.tsx) ---");
+  console.log("Type of API Key:", typeof apiKey);
+  console.log("Value of API Key:", apiKey);
+  console.log("Length of API Key:", apiKey ? apiKey.length : 'N/A');
+  console.log("First 10 chars:", apiKey ? apiKey.substring(0, 10) : 'N/A');
+  console.log("Last 10 chars:", apiKey ? apiKey.substring(apiKey.length - 10) : 'N/A');
+  console.log("-------------------------------------------");
+
   const { isLoaded, loadError } = useJsApiLoader({
-    googleMapsApiKey: process.env.NEXT_PUBLIC_GOOGLE_MAPS_API_KEY || "",
+    googleMapsApiKey: apiKey || "",
     libraries: ["places", "geometry"],
   })
 
