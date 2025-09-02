@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+import React from "react"
 import { useRouter } from "next/navigation" 
 import axios from "axios"
 import { Button } from "@/components/ui/button"
@@ -21,6 +22,12 @@ interface LocalDestination {
   endDate: string
 }
 
+interface DayTimeConstraint {
+  day: number
+  startTime: string
+  endTime: string
+}
+
 export default function CreateItineraryPage() {
   const { language } = useLanguageStore()
   const t = useTranslations()
@@ -39,6 +46,9 @@ export default function CreateItineraryPage() {
   ])
   const [dailyStartTime, setDailyStartTime] = useState("09:00")
   const [dailyEndTime, setDailyEndTime] = useState("22:00")
+  
+  // 날짜별 시간 제약 조건
+  const [timeConstraints, setTimeConstraints] = useState<DayTimeConstraint[]>([])
 
   // AMBIGUOUS 응답 처리 상태
   const [isAmbiguousOpen, setIsAmbiguousOpen] = useState(false)
@@ -87,19 +97,110 @@ export default function CreateItineraryPage() {
     return diffDays
   }
 
+  // 날짜별 시간 제약 조건 초기화
+  const initializeTimeConstraints = (totalDays: number) => {
+    const constraints: DayTimeConstraint[] = []
+    for (let day = 1; day <= totalDays; day++) {
+      constraints.push({
+        day,
+        startTime: day === 1 ? "13:00" : "09:00", // 첫날은 13시 시작
+        endTime: day === totalDays ? "15:00" : "22:00" // 마지막날은 15시 종료
+      })
+    }
+    setTimeConstraints(constraints)
+  }
+
+  // 특정 날짜의 시간 제약 조건 업데이트
+  const updateTimeConstraint = (day: number, field: 'startTime' | 'endTime', value: string) => {
+    setTimeConstraints(prev => 
+      prev.map(constraint => 
+        constraint.day === day 
+          ? { ...constraint, [field]: value }
+          : constraint
+      )
+    )
+  }
+
+  // 날짜가 변경될 때마다 시간 제약 조건 재초기화
+  const handleDateChange = (id: string, field: keyof LocalDestination, value: string) => {
+    updateDestination(id, field, value)
+    
+    // 날짜 변경 후 총 기간 계산하여 시간 제약 조건 업데이트
+    // setTimeout을 사용하여 상태 업데이트가 완료된 후 실행
+    setTimeout(() => {
+      // 업데이트된 destinations 배열을 기반으로 새로운 총 기간 계산
+      const updatedDestinations = destinations.map(dest => 
+        dest.id === id ? { ...dest, [field]: value } : dest
+      )
+      
+      if (updatedDestinations.length > 0 && 
+          updatedDestinations[0].startDate && 
+          updatedDestinations[updatedDestinations.length - 1].endDate) {
+        
+        const start = new Date(updatedDestinations[0].startDate)
+        const end = new Date(updatedDestinations[updatedDestinations.length - 1].endDate)
+        const diffTime = Math.abs(end.getTime() - start.getTime())
+        const newTotalDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24))
+        
+        if (newTotalDays > 0 && newTotalDays !== timeConstraints.length) {
+          console.log(`📅 날짜 변경으로 인한 시간 제약 조건 업데이트: ${timeConstraints.length}일 → ${newTotalDays}일`)
+          initializeTimeConstraints(newTotalDays)
+        }
+      }
+    }, 50)
+  }
+
+  // 컴포넌트 마운트 시 및 destinations 변경 시 자동으로 시간 제약 조건 초기화
+  React.useEffect(() => {
+    const totalDays = calculateTotalDuration()
+    if (totalDays > 0) {
+      // 기존 시간 제약 조건의 길이와 새로운 총 일수가 다르면 재초기화
+      if (timeConstraints.length !== totalDays) {
+        console.log(`🔄 시간 제약 조건 재초기화: ${timeConstraints.length}일 → ${totalDays}일`)
+        initializeTimeConstraints(totalDays)
+      }
+    } else {
+      // 총 일수가 0이면 시간 제약 조건 초기화
+      if (timeConstraints.length > 0) {
+        console.log('🔄 시간 제약 조건 초기화 (총 일수 0)')
+        setTimeConstraints([])
+      }
+    }
+  }, [destinations, timeConstraints.length])
+
   const convertToPlaceRecommendationRequest = () => {
     // v6.0: 첫 번째 목적지만 사용 (단순화)
     const firstDestination = destinations[0]
     
+    // 데이터 검증
+    if (!firstDestination) {
+      throw new Error("목적지 정보가 없습니다.")
+    }
+    
+    if (!firstDestination.country?.trim()) {
+      throw new Error("국가명을 입력해주세요.")
+    }
+    
+    if (!firstDestination.city?.trim()) {
+      throw new Error("도시명을 입력해주세요.")
+    }
+    
+    const duration = calculateTotalDuration()
+    if (duration <= 0) {
+      throw new Error("여행 기간을 올바르게 설정해주세요.")
+    }
+    
     return {
-      country: firstDestination.country,
-      city: firstDestination.city,
-      total_duration: calculateTotalDuration(),
+      country: firstDestination.country.trim(),
+      city: firstDestination.city.trim(),
+      total_duration: duration,
       travelers_count: 2, // 기본값
       budget_range: "medium", // v6.0에 맞는 형식
       travel_style: ["문화", "액티비티"], // 기본 여행 스타일
       special_requests: "다양한 명소와 맛집을 포함해주세요",
-      language_code: language || 'ko'
+      language_code: language || 'ko',
+      daily_start_time: dailyStartTime || "09:00",
+      daily_end_time: dailyEndTime || "21:00"
     }
   }
 
@@ -179,7 +280,17 @@ export default function CreateItineraryPage() {
         const placesData = response.data.recommendations
         
         localStorage.setItem('recommendationResults', JSON.stringify(placesData))
-        localStorage.setItem('travelInfo', JSON.stringify(requestBody))
+        
+        // 일일 시간 정보를 포함한 여행 정보 저장
+        const travelInfoWithTime = {
+          ...requestBody,
+          dailyStartTime,
+          dailyEndTime,
+          timeConstraints: timeConstraints.length > 0 ? timeConstraints : [
+            { day: 1, startTime: dailyStartTime, endTime: dailyEndTime }
+          ]
+        }
+        localStorage.setItem('travelInfo', JSON.stringify(travelInfoWithTime))
         router.push('/recommendations')
       } else {
         throw new Error("추천 장소 데이터를 받지 못했습니다.")
@@ -422,7 +533,7 @@ export default function CreateItineraryPage() {
                         id={`start-date-${destination.id}`}
                         type="date"
                         value={destination.startDate}
-                        onChange={(e) => updateDestination(destination.id, 'startDate', e.target.value)}
+                        onChange={(e) => handleDateChange(destination.id, 'startDate', e.target.value)}
                         className="w-full pl-10"
                         placeholder={datePlaceholder}
                         lang={inputLang}
@@ -436,7 +547,7 @@ export default function CreateItineraryPage() {
                         id={`end-date-${destination.id}`}
                         type="date"
                         value={destination.endDate}
-                        onChange={(e) => updateDestination(destination.id, 'endDate', e.target.value)}
+                        onChange={(e) => handleDateChange(destination.id, 'endDate', e.target.value)}
                         className="w-full pl-10"
                         min={destination.startDate}
                         placeholder={datePlaceholder}
@@ -495,58 +606,107 @@ export default function CreateItineraryPage() {
               </div>
             )}
 
-            {/* 일일 활동 시간 설정 */}
-            <div className="p-6 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700/50">
-              <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
-                <Clock className="h-5 w-5 text-blue-500" />
-                일일 활동 시간 설정
-              </h3>
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    🌅 활동 시작 시간
-                  </Label>
-                  <select 
-                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                    value={dailyStartTime}
-                    onChange={(e) => setDailyStartTime(e.target.value)}
-                  >
-                    {Array.from({ length: 24 }, (_, i) => {
-                      const hour = i.toString().padStart(2, '0');
-                      return (
-                        <option key={hour} value={`${hour}:00`}>
-                          {hour}:00
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-                <div className="space-y-2">
-                  <Label className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                    🌙 활동 종료 시간
-                  </Label>
-                  <select 
-                    className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white"
-                    value={dailyEndTime}
-                    onChange={(e) => setDailyEndTime(e.target.value)}
-                  >
-                    {Array.from({ length: 24 }, (_, i) => {
-                      const hour = i.toString().padStart(2, '0');
-                      return (
-                        <option key={hour} value={`${hour}:00`}>
-                          {hour}:00
-                        </option>
-                      );
-                    })}
-                  </select>
-                </div>
-              </div>
-              <div className="mt-3 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
-                <p className="text-sm text-blue-700 dark:text-blue-300">
-                  💡 설정한 시간 내에서 일정이 생성됩니다. 24시간을 넘지 않도록 조정됩니다.
+            {/* 날짜별 활동 시간 설정 */}
+            {destinations.length > 0 && destinations[0].startDate && destinations[destinations.length - 1].endDate && (
+              <div className="p-6 border border-gray-200 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700/50">
+                <h3 className="text-lg font-semibold text-gray-900 dark:text-white flex items-center gap-2 mb-4">
+                  <Clock className="h-5 w-5 text-blue-500" />
+                  날짜별 활동 시간 설정
+                </h3>
+                <p className="text-sm text-gray-600 dark:text-gray-400 mb-4">
+                  각 날짜별로 활동 시간을 다르게 설정할 수 있습니다. (예: 첫날 늦은 도착, 마지막날 이른 출발)
                 </p>
+                
+                <div className="space-y-4">
+                  {Array.from({ length: calculateTotalDuration() }, (_, dayIndex) => {
+                    const currentDate = new Date(destinations[0].startDate);
+                    currentDate.setDate(currentDate.getDate() + dayIndex);
+                    const dateString = currentDate.toLocaleDateString('ko-KR', { 
+                      month: 'long', 
+                      day: 'numeric',
+                      weekday: 'short'
+                    });
+                    
+                    return (
+                      <div key={dayIndex} className="p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-600">
+                        <div className="flex items-center justify-between mb-3">
+                          <h4 className="font-medium text-gray-900 dark:text-white">
+                            {dayIndex + 1}일차 ({dateString})
+                          </h4>
+                          {dayIndex === 0 && (
+                            <span className="text-xs bg-blue-100 text-blue-800 px-2 py-1 rounded">첫날</span>
+                          )}
+                          {dayIndex === calculateTotalDuration() - 1 && (
+                            <span className="text-xs bg-orange-100 text-orange-800 px-2 py-1 rounded">마지막날</span>
+                          )}
+                        </div>
+                        
+                        <div className="grid grid-cols-2 gap-4">
+                          <div className="space-y-2">
+                            <Label className="text-sm text-gray-700 dark:text-gray-300">
+                              시작 시간
+                            </Label>
+                            <select 
+                              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
+                              value={timeConstraints.find(tc => tc.day === dayIndex + 1)?.startTime || (dayIndex === 0 ? "13:00" : "09:00")}
+                              onChange={(e) => updateTimeConstraint(dayIndex + 1, 'startTime', e.target.value)}
+                            >
+                              {Array.from({ length: 24 }, (_, i) => {
+                                const hour = i.toString().padStart(2, '0');
+                                return (
+                                  <option key={hour} value={`${hour}:00`}>
+                                    {hour}:00
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          </div>
+                          
+                          <div className="space-y-2">
+                            <Label className="text-sm text-gray-700 dark:text-gray-300">
+                              종료 시간
+                            </Label>
+                            <select 
+                              className="w-full p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-white dark:bg-gray-800 text-gray-900 dark:text-white text-sm"
+                              value={timeConstraints.find(tc => tc.day === dayIndex + 1)?.endTime || (dayIndex === calculateTotalDuration() - 1 ? "15:00" : "22:00")}
+                              onChange={(e) => updateTimeConstraint(dayIndex + 1, 'endTime', e.target.value)}
+                            >
+                              {Array.from({ length: 24 }, (_, i) => {
+                                const hour = i.toString().padStart(2, '0');
+                                return (
+                                  <option key={hour} value={`${hour}:00`}>
+                                    {hour}:00
+                                  </option>
+                                );
+                              })}
+                            </select>
+                          </div>
+                        </div>
+                        
+                        <div className="mt-2 text-xs text-gray-500 dark:text-gray-400">
+                          {(() => {
+                            const constraint = timeConstraints.find(tc => tc.day === dayIndex + 1);
+                            if (!constraint) return "활동 시간: 계산 중...";
+                            
+                            const startHour = parseInt(constraint.startTime.split(':')[0]);
+                            const endHour = parseInt(constraint.endTime.split(':')[0]);
+                            const duration = endHour - startHour;
+                            
+                            return `활동 시간: ${duration}시간 (${constraint.startTime} ~ ${constraint.endTime})`;
+                          })()}
+                        </div>
+                      </div>
+                    );
+                  })}
+                </div>
+                
+                <div className="mt-4 p-3 bg-blue-50 dark:bg-blue-900/20 rounded-lg">
+                  <p className="text-sm text-blue-700 dark:text-blue-300">
+                    💡 첫날과 마지막날은 이동 시간을 고려하여 기본값이 다르게 설정됩니다.
+                  </p>
+                </div>
               </div>
-            </div>
+            )}
 
             {/* API 에러 메시지 표시 */}
             {apiError && (
