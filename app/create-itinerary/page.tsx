@@ -219,27 +219,53 @@ export default function CreateItineraryPage() {
     const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
     const endpoint = '/api/v1/place-recommendations/generate'
     const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
-    const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
+    
+    try {
+      const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
+      
+      const status = (response?.data?.status || '').toUpperCase()
 
-    const status = (response?.data?.status || '').toUpperCase()
+      if (status === 'AMBIGUOUS') {
+        const raw = Array.isArray(response.data?.options) ? response.data.options : []
+        const normalized = raw.filter(Boolean).map((opt: any) => {
+          if (typeof opt === 'string') return { display_name: opt, request_body: { ...payload, city: opt } }
+          const label = opt?.display_name || opt?.formatted_address || opt?.city || opt?.name || 'Option'
+          const rb = (opt && typeof opt.request_body === 'object') ? opt.request_body : {}
+          return { display_name: label, request_body: { ...payload, ...rb } }
+        })
+        setAmbiguousOptions(normalized)
+        setIsAmbiguousOpen(true)
+        return { status: 'AMBIGUOUS' as const }
+      }
 
-    if (status === 'AMBIGUOUS') {
-      const raw = Array.isArray(response.data?.options) ? response.data.options : []
-      const normalized = raw.filter(Boolean).map((opt: any) => {
-        if (typeof opt === 'string') return { display_name: opt, request_body: { ...payload, city: opt } }
-        const label = opt?.display_name || opt?.formatted_address || opt?.city || opt?.name || 'Option'
-        const rb = (opt && typeof opt.request_body === 'object') ? opt.request_body : {}
-        return { display_name: label, request_body: { ...payload, ...rb } }
-      })
-      setAmbiguousOptions(normalized)
-      setIsAmbiguousOpen(true)
-      return { status: 'AMBIGUOUS' as const }
+      // SUCCESS 또는 status 누락(성공) 처리: 모달/옵션 정리 후 진행
+      setAmbiguousOptions([])
+      setIsAmbiguousOpen(false)
+      return { status: 'SUCCESS' as const, response }
+      
+    } catch (error: any) {
+      // 400 에러이고 AMBIGUOUS_LOCATION 에러 코드인 경우 처리
+      if (error.response?.status === 400 && error.response?.data?.error_code === 'AMBIGUOUS_LOCATION') {
+        const raw = Array.isArray(error.response.data?.options) ? error.response.data.options : []
+        const normalized = raw.filter(Boolean).map((opt: any) => {
+          const label = opt?.display_name || opt?.formatted_address || opt?.city || opt?.name || 'Option'
+          return { 
+            display_name: label, 
+            request_body: { 
+              ...payload, 
+              place_id: opt?.place_id,
+              city: opt?.display_name || payload.city
+            } 
+          }
+        })
+        setAmbiguousOptions(normalized)
+        setIsAmbiguousOpen(true)
+        return { status: 'AMBIGUOUS' as const }
+      }
+      
+      // 다른 에러는 그대로 throw
+      throw error
     }
-
-    // SUCCESS 또는 status 누락(성공) 처리: 모달/옵션 정리 후 진행
-    setAmbiguousOptions([])
-    setIsAmbiguousOpen(false)
-    return { status: 'SUCCESS' as const, response }
   }
 
   const handleGenerateItinerary = async () => {
