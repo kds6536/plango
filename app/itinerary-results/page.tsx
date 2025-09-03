@@ -387,6 +387,19 @@ export default function ItineraryResultsPage() {
                               <MapPin className="h-4 w-4 text-gray-500" />
                               <span className="text-gray-600 dark:text-gray-300">{place.address || `${place.category} 주소`}</span>
                             </div>
+                            {/* 웹사이트 링크 추가 */}
+                            {((place as any).website || (place as any).website_url) && (
+                              <div className="flex items-center gap-2 mt-1">
+                                <a
+                                  href={(place as any).website || (place as any).website_url}
+                                  target="_blank" 
+                                  rel="noopener noreferrer"
+                                  className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+                                >
+                                  🌐 웹사이트 방문
+                                </a>
+                              </div>
+                            )}
                             {place.rating && (
                               <div className="flex items-center gap-1 mt-1">
                                 <Star className="h-4 w-4 text-yellow-500" />
@@ -492,6 +505,17 @@ export default function ItineraryResultsPage() {
                             </p>
                             {place.address && (
                               <p className="text-sm text-gray-600 dark:text-gray-300">{place.address}</p>
+                            )}
+                            {/* 웹사이트 링크 추가 */}
+                            {((place as any).website || (place as any).website_url) && (
+                              <a
+                                href={(place as any).website || (place as any).website_url}
+                                target="_blank" 
+                                rel="noopener noreferrer"
+                                className="text-sm text-blue-600 hover:underline dark:text-blue-400"
+                              >
+                                🌐 웹사이트 방문
+                              </a>
                             )}
                             <div className="flex gap-2 pt-1">
                               <span className="text-[11px] px-2 py-0.5 rounded bg-amber-200/70 text-amber-900 dark:bg-amber-800/40 dark:text-amber-200">예상 1-2시간</span>
