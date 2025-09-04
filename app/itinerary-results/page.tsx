@@ -105,6 +105,15 @@ export default function ItineraryResultsPage() {
       
       const apiUrl = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
       
+      // ===== 🚨 [핵심 수정] 날짜별 시간 제약 조건 추가 =====
+      const timeConstraints = travelInfo.timeConstraints || []
+      
+      console.log("🚀 PAYLOAD TO BACKEND:", {
+        places: places.length,
+        timeConstraints,
+        travelInfo
+      })
+      
       const response = await axios.post(
         `${apiUrl}/api/v1/itinerary/optimize`,
         { 
@@ -112,7 +121,10 @@ export default function ItineraryResultsPage() {
           language_code: language,
           daily_start_time: travelInfo.dailyStartTime || "09:00",
           daily_end_time: travelInfo.dailyEndTime || "22:00",
-          duration: travelInfo.total_duration || 3
+          duration: travelInfo.total_duration || 3,
+          // ===== 🚨 [핵심] 날짜별 시간 제약 조건 전달 =====
+          timeConstraints: timeConstraints,
+          time_constraints: timeConstraints  // 백엔드 호환성을 위해 두 가지 형식 모두 전달
         },
         {
           headers: {
