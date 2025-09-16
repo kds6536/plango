@@ -13,6 +13,7 @@ import { useLanguageStore } from "@/lib/language-store"
 import { useTranslations } from "@/components/language-wrapper"
 import { Destination, ItineraryRequest } from "@/lib/types"
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/components/ui/dialog"
+import CityAutocomplete from "@/components/city-autocomplete"
 
 interface LocalDestination {
   id: string
@@ -20,6 +21,11 @@ interface LocalDestination {
   city: string
   startDate: string
   endDate: string
+  // Google Places Autocomplete 데이터
+  place_id?: string
+  formatted_address?: string
+  lat?: number
+  lng?: number
 }
 
 interface DayTimeConstraint {
@@ -67,6 +73,28 @@ export default function CreateItineraryPage() {
   const updateDestination = (id: string, field: keyof LocalDestination, value: string) => {
     setDestinations(prev => prev.map(dest => 
       dest.id === id ? { ...dest, [field]: value } : dest
+    ))
+  }
+
+  // Google Places Autocomplete에서 도시 선택 시 호출
+  const handleCitySelect = (id: string, cityData: {
+    name: string
+    formatted_address: string
+    place_id: string
+    lat: number
+    lng: number
+  }) => {
+    console.log('🏙️ [CITY_SELECT] 도시 선택됨:', cityData)
+    
+    setDestinations(prev => prev.map(dest => 
+      dest.id === id ? { 
+        ...dest, 
+        city: cityData.name,
+        place_id: cityData.place_id,
+        formatted_address: cityData.formatted_address,
+        lat: cityData.lat,
+        lng: cityData.lng
+      } : dest
     ))
   }
 
@@ -200,7 +228,9 @@ export default function CreateItineraryPage() {
       special_requests: "다양한 명소와 맛집을 포함해주세요",
       language_code: language || 'ko',
       daily_start_time: dailyStartTime || "09:00",
-      daily_end_time: dailyEndTime || "21:00"
+      daily_end_time: dailyEndTime || "21:00",
+      // Google Places Autocomplete에서 선택된 place_id 포함
+      place_id: firstDestination.place_id || null
     }
   }
 
@@ -531,20 +561,17 @@ export default function CreateItineraryPage() {
                     />
                   </div>
 
-                  {/* 도시 입력 */}
-                  <div className="space-y-2">
-                    <Label htmlFor={`city-${destination.id}`} className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                      {t.createItinerary.city}
-                    </Label>
-                    <Input
-                      id={`city-${destination.id}`}
-                      type="text"
-                      placeholder={t.createItinerary.cityPlaceholder}
-                      value={destination.city}
-                      onChange={(e) => updateDestination(destination.id, 'city', e.target.value)}
-                      className="w-full"
-                    />
-                  </div>
+                  {/* 도시 입력 - Google Places Autocomplete */}
+                  <CityAutocomplete
+                    id={`city-${destination.id}`}
+                    label={t.createItinerary.city}
+                    placeholder={t.createItinerary.cityPlaceholder}
+                    value={destination.city}
+                    country={destination.country}
+                    onCitySelect={(cityData) => handleCitySelect(destination.id, cityData)}
+                    onChange={(value) => updateDestination(destination.id, 'city', value)}
+                    className="w-full"
+                  />
                 </div>
 
                 {/* 날짜 범위 선택 (하나의 섹션으로 통합) */}
