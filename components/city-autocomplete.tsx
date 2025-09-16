@@ -94,8 +94,28 @@ export default function CityAutocomplete({
       const place = autocompleteRef.current.getPlace()
       
       if (place.geometry && place.geometry.location) {
+        // [핵심 수정] address_components에서 순수한 도시 이름만 추출
+        let cityName = place.name || ''
+        
+        if (place.address_components) {
+          // 'locality' (도시) 또는 'administrative_area_level_1' (시/도) 타입을 찾음
+          const cityComponent = place.address_components.find((component: any) =>
+            component.types.includes('locality') ||
+            component.types.includes('administrative_area_level_1')
+          )
+          
+          if (cityComponent) {
+            cityName = cityComponent.long_name
+          }
+        }
+        
+        // 만약 위 방법으로도 찾지 못했다면, formatted_address에서 첫 번째 부분 사용
+        if (!cityName && place.formatted_address) {
+          cityName = place.formatted_address.split(',')[0].trim()
+        }
+        
         const cityData = {
-          name: place.name || place.formatted_address?.split(',')[0] || '',
+          name: cityName, // 국가 이름이 제외된 순수한 도시 이름
           formatted_address: place.formatted_address || '',
           place_id: place.place_id || '',
           lat: place.geometry.location.lat(),
@@ -103,6 +123,12 @@ export default function CityAutocomplete({
         }
         
         console.log('🏙️ [CITY_SELECTED] 선택된 도시:', cityData)
+        
+        // 입력 필드 값도 순수한 도시 이름으로 업데이트
+        if (inputRef.current) {
+          inputRef.current.value = cityName
+        }
+        
         onCitySelect(cityData)
       }
     }
@@ -151,7 +177,13 @@ export default function CityAutocomplete({
         type="text"
         placeholder={isGoogleLoaded ? placeholder : "Google Maps 로딩 중..."}
         value={value}
-        onChange={(e) => onChange(e.target.value)}
+        onChange={(e) => {
+          onChange(e.target.value)
+          // 사용자가 직접 타이핑하는 경우 place_id 등 초기화
+          if (e.target.value !== value) {
+            console.log('🔄 [MANUAL_INPUT] 사용자가 직접 입력 중, 자동완성 데이터 초기화')
+          }
+        }}
         className={className}
         disabled={!isGoogleLoaded}
       />
