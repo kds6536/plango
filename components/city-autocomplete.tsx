@@ -129,6 +129,8 @@ export default function CityAutocomplete({
           inputRef.current.value = cityName
         }
         
+        // onChange도 호출하여 상태 동기화
+        onChange(cityName)
         onCitySelect(cityData)
       }
     }
