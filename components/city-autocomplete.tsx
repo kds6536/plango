@@ -125,9 +125,9 @@ export default function CityAutocomplete({
           console.log('🔄 [FALLBACK_ADDRESS] formatted_address 첫 부분 사용:', cityName)
         }
         
-        // [추가 정제] 도시명에서 국가명이 포함된 경우 제거
+        // [추가 정제] 도시명에서 국가명과 중복 지역명 제거
         if (cityName) {
-          // 일반적인 국가명 패턴 제거
+          // 1. 일반적인 국가명 패턴 제거
           const countryPatterns = [
             ', 대한민국', ', South Korea', ', Korea', ', 한국',
             ', 일본', ', Japan', ', 중국', ', China', ', 미국', ', United States', ', USA'
@@ -141,13 +141,34 @@ export default function CityAutocomplete({
             }
           }
           
-          // 추가로 끝에 오는 국가명 패턴도 제거
+          // 2. 끝에 오는 국가명 패턴도 제거
           const endPatterns = ['대한민국', 'South Korea', 'Korea', '한국', '일본', 'Japan', '중국', 'China', '미국', 'United States', 'USA']
           for (const pattern of endPatterns) {
             if (cityName.endsWith(pattern)) {
               cityName = cityName.replace(new RegExp(pattern + '$'), '').trim()
               console.log('🧹 [END_COUNTRY_REMOVED] 끝 국가명 제거 후:', cityName)
               break
+            }
+          }
+          
+          // 3. 중복된 지역명 제거 (예: "대한민국 광주광역시 광주" → "광주광역시")
+          const parts = cityName.split(' ').filter(part => part.trim() !== '')
+          if (parts.length > 1) {
+            // 마지막 부분이 앞의 부분에 포함되어 있으면 제거
+            const lastPart = parts[parts.length - 1]
+            const otherParts = parts.slice(0, -1)
+            
+            const isDuplicate = otherParts.some(part => 
+              part.includes(lastPart) || lastPart.includes(part)
+            )
+            
+            if (isDuplicate) {
+              // 더 구체적인 이름을 선택 (길이가 더 긴 것)
+              const longestPart = parts.reduce((longest, current) => 
+                current.length > longest.length ? current : longest
+              )
+              cityName = longestPart
+              console.log('🧹 [DUPLICATE_REMOVED] 중복 지역명 제거 후:', cityName)
             }
           }
         }
