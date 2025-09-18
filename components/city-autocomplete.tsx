@@ -118,10 +118,38 @@ export default function CityAutocomplete({
           console.log('🔄 [FALLBACK_NAME] place.name 사용:', cityName)
         }
         
-        // 최후의 수단: formatted_address에서 첫 번째 부분 사용
+        // 최후의 수단: formatted_address에서 첫 번째 부분 사용 (국가명 제거)
         if (!cityName && place.formatted_address) {
-          cityName = place.formatted_address.split(',')[0].trim()
+          const addressParts = place.formatted_address.split(',')
+          cityName = addressParts[0].trim()
           console.log('🔄 [FALLBACK_ADDRESS] formatted_address 첫 부분 사용:', cityName)
+        }
+        
+        // [추가 정제] 도시명에서 국가명이 포함된 경우 제거
+        if (cityName) {
+          // 일반적인 국가명 패턴 제거
+          const countryPatterns = [
+            ', 대한민국', ', South Korea', ', Korea', ', 한국',
+            ', 일본', ', Japan', ', 중국', ', China', ', 미국', ', United States', ', USA'
+          ]
+          
+          for (const pattern of countryPatterns) {
+            if (cityName.includes(pattern)) {
+              cityName = cityName.replace(pattern, '').trim()
+              console.log('🧹 [COUNTRY_REMOVED] 국가명 제거 후:', cityName)
+              break
+            }
+          }
+          
+          // 추가로 끝에 오는 국가명 패턴도 제거
+          const endPatterns = ['대한민국', 'South Korea', 'Korea', '한국', '일본', 'Japan', '중국', 'China', '미국', 'United States', 'USA']
+          for (const pattern of endPatterns) {
+            if (cityName.endsWith(pattern)) {
+              cityName = cityName.replace(new RegExp(pattern + '$'), '').trim()
+              console.log('🧹 [END_COUNTRY_REMOVED] 끝 국가명 제거 후:', cityName)
+              break
+            }
+          }
         }
         
         const cityData = {
