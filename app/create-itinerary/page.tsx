@@ -252,8 +252,8 @@ export default function CreateItineraryPage() {
   // 단일 책임: payload로만 API 호출/해석 (명확한 상태 분기)
   const fetchRecommendations = async (payload: any) => {
     const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
-    const endpoint = '/api/v1/place-recommendations/generate'
-    const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
+    const endpoint = '/api/v1/new-itinerary/generate-recommendations'
+    const url = apiBase.endsWith('/api/v1') ? `${apiBase}/new-itinerary/generate-recommendations` : `${apiBase}${endpoint}`
     
     try {
       const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
@@ -317,7 +317,7 @@ export default function CreateItineraryPage() {
       const requestBody = convertToPlaceRecommendationRequest()
 
       const apiBaseForLog = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
-      console.log("Request URL:", `${apiBaseForLog}/api/v1/place-recommendations/generate`)
+      console.log("Request URL:", `${apiBaseForLog}/api/v1/new-itinerary/generate-recommendations`)
       console.log("Request Body:", JSON.stringify(requestBody, null, 2))
 
       // v6.0 장소 추천 API 호출 (명확한 상태 분기)
