@@ -218,7 +218,7 @@ export default function CreateItineraryPage() {
       throw new Error("여행 기간을 올바르게 설정해주세요.")
     }
     
-    return {
+    const requestPayload = {
       country: firstDestination.country.trim(),
       city: firstDestination.city.trim(),
       total_duration: duration,
@@ -232,6 +232,11 @@ export default function CreateItineraryPage() {
       // Google Places Autocomplete에서 선택된 place_id 포함
       place_id: firstDestination.place_id || null
     }
+    
+    console.log('🚀 [REQUEST_PAYLOAD] 백엔드로 전송할 데이터:', JSON.stringify(requestPayload, null, 2))
+    console.log('🎯 [PLACE_ID_CHECK] place_id 값:', requestPayload.place_id)
+    
+    return requestPayload
   }
 
   // 날짜 입력 언어/플레이스홀더

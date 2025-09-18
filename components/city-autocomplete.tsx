@@ -95,23 +95,33 @@ export default function CityAutocomplete({
       
       if (place.geometry && place.geometry.location) {
         // [핵심 수정] address_components에서 순수한 도시 이름만 추출
-        let cityName = place.name || ''
+        let cityName = ''
         
         if (place.address_components) {
-          // 'locality' (도시) 또는 'administrative_area_level_1' (시/도) 타입을 찾음
-          const cityComponent = place.address_components.find((component: any) =>
-            component.types.includes('locality') ||
-            component.types.includes('administrative_area_level_1')
-          )
+          console.log('🔍 [ADDRESS_COMPONENTS]', place.address_components)
+          
+          // 우선순위: locality > administrative_area_level_1 > administrative_area_level_2
+          const cityComponent = 
+            place.address_components.find((component: any) => component.types.includes('locality')) ||
+            place.address_components.find((component: any) => component.types.includes('administrative_area_level_1')) ||
+            place.address_components.find((component: any) => component.types.includes('administrative_area_level_2'))
           
           if (cityComponent) {
             cityName = cityComponent.long_name
+            console.log('✅ [CITY_EXTRACTED] 추출된 도시명:', cityName)
           }
         }
         
-        // 만약 위 방법으로도 찾지 못했다면, formatted_address에서 첫 번째 부분 사용
+        // 만약 위 방법으로도 찾지 못했다면, place.name 사용
+        if (!cityName && place.name) {
+          cityName = place.name
+          console.log('🔄 [FALLBACK_NAME] place.name 사용:', cityName)
+        }
+        
+        // 최후의 수단: formatted_address에서 첫 번째 부분 사용
         if (!cityName && place.formatted_address) {
           cityName = place.formatted_address.split(',')[0].trim()
+          console.log('🔄 [FALLBACK_ADDRESS] formatted_address 첫 부분 사용:', cityName)
         }
         
         const cityData = {
@@ -122,14 +132,14 @@ export default function CityAutocomplete({
           lng: place.geometry.location.lng()
         }
         
-        console.log('🏙️ [CITY_SELECTED] 선택된 도시:', cityData)
+        console.log('🏙️ [CITY_SELECTED] 최종 선택된 도시 데이터:', cityData)
         
-        // 입력 필드 값도 순수한 도시 이름으로 업데이트
+        // 입력 필드 값을 순수한 도시 이름으로 강제 업데이트
         if (inputRef.current) {
           inputRef.current.value = cityName
         }
         
-        // onChange도 호출하여 상태 동기화
+        // onChange 호출하여 상태 동기화
         onChange(cityName)
         onCitySelect(cityData)
       }
