@@ -222,8 +222,12 @@ export default function CreateItineraryPage() {
     }
     
     const requestPayload = {
-      country: firstDestination.country.trim(),
-      city: firstDestination.city.trim(),
+      destinations: [{
+        country: firstDestination.country.trim(),
+        city: firstDestination.city.trim(),
+        start_date: firstDestination.startDate,
+        end_date: firstDestination.endDate
+      }],
       total_duration: duration,
       travelers_count: 2, // 기본값
       budget_range: "medium", // v6.0에 맞는 형식
