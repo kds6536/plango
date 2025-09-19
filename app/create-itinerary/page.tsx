@@ -26,6 +26,7 @@ interface LocalDestination {
   formatted_address?: string
   lat?: number
   lng?: number
+  isSelected?: boolean // 자동완성에서 선택되었는지 여부
 }
 
 interface DayTimeConstraint {
@@ -89,11 +90,13 @@ export default function CreateItineraryPage() {
     setDestinations(prev => prev.map(dest => 
       dest.id === id ? { 
         ...dest, 
-        city: cityData.name,
+        city: cityData.name, // 정제된 도시명 (예: "광주광역시")
         place_id: cityData.place_id,
         formatted_address: cityData.formatted_address,
         lat: cityData.lat,
-        lng: cityData.lng
+        lng: cityData.lng,
+        // 선택 완료 플래그 추가
+        isSelected: true
       } : dest
     ))
   }
@@ -252,8 +255,8 @@ export default function CreateItineraryPage() {
   // 단일 책임: payload로만 API 호출/해석 (명확한 상태 분기)
   const fetchRecommendations = async (payload: any) => {
     const apiBase = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
-    const endpoint = '/api/v1/new-itinerary/generate-recommendations'
-    const url = apiBase.endsWith('/api/v1') ? `${apiBase}/new-itinerary/generate-recommendations` : `${apiBase}${endpoint}`
+    const endpoint = '/api/v1/place-recommendations/generate'
+    const url = apiBase.endsWith('/api/v1') ? `${apiBase}/place-recommendations/generate` : `${apiBase}${endpoint}`
     
     try {
       const response = await axios.post(url, payload, { headers: { 'Content-Type': 'application/json' }, timeout: 30000 })
@@ -317,7 +320,7 @@ export default function CreateItineraryPage() {
       const requestBody = convertToPlaceRecommendationRequest()
 
       const apiBaseForLog = (process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000').replace(/\/$/, '')
-      console.log("Request URL:", `${apiBaseForLog}/api/v1/new-itinerary/generate-recommendations`)
+      console.log("Request URL:", `${apiBaseForLog}/api/v1/place-recommendations/generate`)
       console.log("Request Body:", JSON.stringify(requestBody, null, 2))
 
       // v6.0 장소 추천 API 호출 (명확한 상태 분기)
@@ -574,7 +577,12 @@ export default function CreateItineraryPage() {
                     value={destination.city}
                     country={destination.country}
                     onCitySelect={(cityData) => handleCitySelect(destination.id, cityData)}
-                    onChange={(value) => updateDestination(destination.id, 'city', value)}
+                    onChange={(value) => {
+                      // 자동완성에서 선택된 경우 onChange 무시
+                      if (!destination.isSelected) {
+                        updateDestination(destination.id, 'city', value)
+                      }
+                    }}
                     className="w-full"
                   />
                 </div>
