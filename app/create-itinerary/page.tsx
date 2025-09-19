@@ -316,6 +316,16 @@ export default function CreateItineraryPage() {
       return
     }
 
+    // Google Places Autocomplete 선택 검증
+    const unselectedDestinations = destinations.filter(dest => 
+      dest.city && (!dest.place_id || !dest.isSelected)
+    )
+    
+    if (unselectedDestinations.length > 0) {
+      alert("모든 도시를 Google Places 목록에서 정확하게 선택해주세요.")
+      return
+    }
+
     setIsLoading(true)
     setApiError(null) // 이전 에러 상태 초기화
 

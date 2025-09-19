@@ -40,6 +40,7 @@ export default function CityAutocomplete({
   const inputRef = useRef<HTMLInputElement>(null)
   const autocompleteRef = useRef<any>(null)
   const [isGoogleLoaded, setIsGoogleLoaded] = useState(false)
+  const [isPlaceSelected, setIsPlaceSelected] = useState(false) // 선택 완료 플래그
 
   // Google Maps API 로드 확인
   useEffect(() => {
@@ -188,7 +189,10 @@ export default function CityAutocomplete({
           inputRef.current.value = cityName
         }
         
-        // onChange 호출하여 상태 동기화
+        // 선택 완료 플래그 설정
+        setIsPlaceSelected(true)
+        
+        // 상태 업데이트
         onChange(cityName)
         onCitySelect(cityData)
       }
@@ -204,13 +208,13 @@ export default function CityAutocomplete({
     }
   }, [isGoogleLoaded, country, onCitySelect, onChange])
 
-  // value prop 변경 시 input field 동기화
+  // value prop 변경 시 input field 동기화 (선택 완료된 경우에만)
   useEffect(() => {
-    if (inputRef.current && inputRef.current.value !== value) {
+    if (inputRef.current && isPlaceSelected && inputRef.current.value !== value) {
       inputRef.current.value = value
       console.log('🔄 [VALUE_SYNC] input field 값 동기화:', value)
     }
-  }, [value])
+  }, [value, isPlaceSelected])
 
   // 국가 변경 시 Autocomplete 옵션 업데이트
   useEffect(() => {
@@ -245,19 +249,18 @@ export default function CityAutocomplete({
         id={id}
         type="text"
         placeholder={isGoogleLoaded ? `${placeholder} (목록에서 선택하세요)` : "Google Maps 로딩 중..."}
-        value={value}
-        readOnly={false} // Google Autocomplete가 작동하려면 readOnly는 false여야 함
+        defaultValue={value} // value 대신 defaultValue 사용 (uncontrolled)
         onChange={(e) => {
-          // 타이핑 시에는 임시로 허용하되, Autocomplete 선택을 유도
-          console.log('⚠️ [TYPING_WARNING] 정확한 지역 정보를 위해 드롭다운에서 선택해주세요.')
+          // 사용자가 타이핑을 시작하면 선택 상태 해제
+          if (isPlaceSelected) {
+            setIsPlaceSelected(false)
+            console.log('🔄 [TYPING_START] 사용자 타이핑 시작, 선택 상태 해제')
+          }
         }}
-        onBlur={(e) => {
-          // 포커스를 잃을 때 선택되지 않은 값은 초기화
-          if (!value || value.trim() === '') {
-            if (inputRef.current) {
-              inputRef.current.value = ''
-            }
-            console.log('🔄 [RESET_ON_BLUR] 선택되지 않은 값 초기화')
+        onFocus={() => {
+          // 포커스 시 선택 상태 해제 (새로운 입력 준비)
+          if (isPlaceSelected) {
+            setIsPlaceSelected(false)
           }
         }}
         className={className}
