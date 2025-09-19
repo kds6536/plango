@@ -202,7 +202,15 @@ export default function CityAutocomplete({
         window.google.maps.event.clearInstanceListeners(autocompleteRef.current)
       }
     }
-  }, [isGoogleLoaded, country, onCitySelect])
+  }, [isGoogleLoaded, country, onCitySelect, onChange])
+
+  // value prop 변경 시 input field 동기화
+  useEffect(() => {
+    if (inputRef.current && inputRef.current.value !== value) {
+      inputRef.current.value = value
+      console.log('🔄 [VALUE_SYNC] input field 값 동기화:', value)
+    }
+  }, [value])
 
   // 국가 변경 시 Autocomplete 옵션 업데이트
   useEffect(() => {
@@ -236,13 +244,20 @@ export default function CityAutocomplete({
         ref={inputRef}
         id={id}
         type="text"
-        placeholder={isGoogleLoaded ? placeholder : "Google Maps 로딩 중..."}
+        placeholder={isGoogleLoaded ? `${placeholder} (목록에서 선택하세요)` : "Google Maps 로딩 중..."}
         value={value}
+        readOnly={false} // Google Autocomplete가 작동하려면 readOnly는 false여야 함
         onChange={(e) => {
-          onChange(e.target.value)
-          // 사용자가 직접 타이핑하는 경우 place_id 등 초기화
-          if (e.target.value !== value) {
-            console.log('🔄 [MANUAL_INPUT] 사용자가 직접 입력 중, 자동완성 데이터 초기화')
+          // 타이핑 시에는 임시로 허용하되, Autocomplete 선택을 유도
+          console.log('⚠️ [TYPING_WARNING] 정확한 지역 정보를 위해 드롭다운에서 선택해주세요.')
+        }}
+        onBlur={(e) => {
+          // 포커스를 잃을 때 선택되지 않은 값은 초기화
+          if (!value || value.trim() === '') {
+            if (inputRef.current) {
+              inputRef.current.value = ''
+            }
+            console.log('🔄 [RESET_ON_BLUR] 선택되지 않은 값 초기화')
           }
         }}
         className={className}
@@ -251,6 +266,11 @@ export default function CityAutocomplete({
       {!isGoogleLoaded && (
         <p className="text-xs text-gray-500">
           Google Places API를 로딩하고 있습니다...
+        </p>
+      )}
+      {isGoogleLoaded && (
+        <p className="text-xs text-blue-600">
+          💡 정확한 지역 정보를 위해 드롭다운 목록에서 선택해주세요
         </p>
       )}
     </div>
